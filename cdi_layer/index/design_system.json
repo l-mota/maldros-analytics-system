@@ -1,0 +1,113 @@
+{
+  "_meta": {
+    "domain": "design_system",
+    "description": "Maldros Visual Design System (C-031) exposed as a continuously-queryable CDI domain. Every agent producing or modifying a visual artifact must query this domain before emitting output. A Capability Bundle that does not record a design_system query in its lineage trace, when the task produces visual output, is a Diagnostic Agent L1 failure.",
+    "schema_version": "1.0.0",
+    "last_updated": "2026-06-17T00:00:00Z",
+    "update_policy": "Updated via cdi_update.py only. Direct writes forbidden. Hex-token edits require simultaneous updates to lib/design_tokens.py and lib/design_tokens.css under the Maldros Visual Artifacts cluster rule.",
+    "authority_source": "Maldros_working_files/visual_design_system.md",
+    "governance": "D-6 (no deviation from sources); changes are operator-approved per D-7 and logged as C-NNN entries"
+  },
+
+  "communication_pattern": {
+    "_role": "Every artifact follows this reading order at document level, section level, and individual visualization level.",
+    "_locked": true,
+    "sequence": ["FINDING", "IMPACT", "EVIDENCE", "RECOMMENDATION"],
+    "descriptions": {
+      "FINDING":        "Lead with the primary conclusion. Narrative titles, never descriptive.",
+      "IMPACT":         "Immediately follow the finding with its significance — financial exposure, operational priority, strategic risk.",
+      "EVIDENCE":       "Supporting charts, KPIs, data breakdowns. Validates the finding — does not introduce it.",
+      "RECOMMENDATION": "Close every section with actions, decisions, or next steps."
+    }
+  },
+
+  "color_system": {
+    "_role": "Four data-meaning colors carry semantic meaning. Canvas/ink values are infrastructure (substrate/text) and are not counted as data colors.",
+    "_locked_slots": true,
+    "_implementation_source": {
+      "python": "lib/design_tokens.py",
+      "css":    "lib/design_tokens.css"
+    },
+    "data_meaning": {
+      "PRIMARY":   { "hex": "#0F2515", "name": "Forest",    "apply_to": "authority, structure, baseline, primary chart series, section headers" },
+      "SECONDARY": { "hex": "#C8882A", "name": "Amber",     "apply_to": "anomalies, risks, key findings, focal subject, call-out borders" },
+      "TERTIARY":  { "hex": "#EDE8D0", "name": "Parchment", "apply_to": "KPI surfaces, insight panel backgrounds, supporting content surfaces" },
+      "NEUTRAL":   { "hex": "#A8A092", "name": "Warm Gray", "apply_to": "gridlines, structural lines, idle/background indicators" }
+    },
+    "infrastructure": {
+      "CANVAS":    { "hex": "#FFFAFA", "role": "page background; never pure white" },
+      "INK":       { "hex": "#252525", "role": "primary body text; never pure black" },
+      "INK_MUTED": { "hex": "#6B6559", "role": "muted text, axis labels, footnote sources" },
+      "BORDER":    { "hex": "#D6CEB8", "role": "card and container borders, parchment-derived" }
+    },
+    "semantic_accents": {
+      "ACTION_GREEN": { "hex": "#2D5A3D", "apply_to": "Recommended Action section eyebrow" }
+    },
+    "prohibitions": [
+      "Never use pure white (#FFFFFF) or pure black (#000000).",
+      "Never introduce a fifth data-meaning color without documented justification.",
+      "Never use color decoratively — every applied color must carry semantic meaning.",
+      "Never add gradients, drop shadows on data elements, or decorative fills."
+    ]
+  },
+
+  "typography_hierarchy": {
+    "_locked": true,
+    "tiers": {
+      "Tier_1_Primary_Finding": { "weight": "bold", "size": "largest on page", "use_for": "the single most important statement; one per section" },
+      "Tier_2_KPI_Value":       { "weight": "bold", "size": "large numeric display", "use_for": "performance indicators, financial figures; always paired with Tier 3 label + Tier 4 context" },
+      "Tier_3_Section_Title":   { "weight": "bold", "size": "medium",    "use_for": "section headers, chart titles (narrative, never descriptive), KPI labels" },
+      "Tier_4_Annotation":      { "weight": "regular", "size": "small",  "use_for": "axis labels, footnotes, methodology notes, source references" }
+    }
+  },
+
+  "chart_construction_rules": {
+    "narrative_titles_required": true,
+    "comparison_charts": {
+      "focal_color":     "SECONDARY (Amber)",
+      "baseline_color":  "PRIMARY (Forest)",
+      "axes_start_at_zero": true,
+      "max_primary_colors": 2,
+      "decorative_fills_allowed": false
+    },
+    "trend_charts": {
+      "primary_color":   "PRIMARY (Forest)",
+      "secondary_series_differentiation": "opacity (100% / 60%), never new color",
+      "minimize_gridlines": true
+    },
+    "minimum_required_elements": ["narrative_title", "insight_summary_or_narrative_title_subsuming_it", "axis_labels"],
+    "approved_chart_types": ["time_series", "Pareto", "network", "stacked_bar", "bar", "venn"]
+  },
+
+  "information_hierarchy": {
+    "_locked": true,
+    "levels": {
+      "L1_Executive_Summary":   { "position": "top of every output",         "content": "primary finding, major changes, critical observations, most important KPIs" },
+      "L2_KPI_Metrics":         { "position": "immediately following L1",     "content": "quantified indicators validating L1 finding" },
+      "L3_Charts_Evidence":     { "position": "following L2",                 "content": "visualizations validating L1/L2 — not introducing new conclusions" },
+      "L4_Interpretation_Recs": { "position": "end of each section + end of document", "content": "observations, recommendations, decision guidance" }
+    }
+  },
+
+  "stakeholder_calibration": {
+    "Executives": "Emphasize L1; minimize chart complexity; recommendations state ROI or strategic priority.",
+    "Managers":   "Emphasize L2 + L4; include resource allocation and scale indicators.",
+    "Analysts":   "Emphasize L3; include methodology notes, confidence indicators, statistical validity.",
+    "Operators":  "Emphasize L4; convert recommendations to discrete executable actions."
+  },
+
+  "named_clusters_governed": [
+    "Maldros Visual Artifacts (see Maldros_working_files/reference_maldros_visual_artifacts.md)"
+  ],
+
+  "query_log": {
+    "_role": "Agents querying this domain are logged here. Agents producing visual output without a query are flagged for L1 review.",
+    "queries": []
+  },
+
+  "non_activation_policy": {
+    "trigger": "When a task produces any visual artifact (HTML, PNG, dashboard, presentation slide, etc.)",
+    "required_action": "Orchestrator (or downstream agent) MUST query this domain and record the query_id in the Capability Bundle lineage trace.",
+    "non_compliance_consequence": "Diagnostic Agent L1 failure; output blocked at Storyteller pre-submission gate (C7) when implemented in full (Phase 2)."
+  }
+}

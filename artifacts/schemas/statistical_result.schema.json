@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "maldros/statistical_result/1.0.0",
+  "title": "Statistical Result",
+  "description": "Produced by the Statistician Agent. Validates all inferences from the Evidence Bundle. Includes experiment analysis, SRM/novelty detection, and ship/no-ship verdicts.",
+  "type": "object",
+  "required": ["artifact_id","artifact_type","schema_version","phase_of_origin","producing_agent","timestamp_utc","provenance","content_hash","confidence_score","known_limitations","content"],
+  "properties": {
+    "artifact_id": { "type": "string", "format": "uuid" },
+    "artifact_type": { "type": "string", "const": "statistical_result" },
+    "schema_version": { "type": "string", "const": "1.0.0" },
+    "phase_of_origin": { "type": "integer", "minimum": 0, "maximum": 7 },
+    "producing_agent": { "type": "string", "const": "statistician" },
+    "timestamp_utc": { "type": "string", "format": "date-time" },
+    "provenance": { "type": "array", "items": { "type": "string", "format": "uuid" }, "minItems": 1 },
+    "content_hash": { "type": "string" },
+    "confidence_score": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+    "known_limitations": { "type": "array", "items": { "type": "string" } },
+    "content": {
+      "type": "object",
+      "required": ["task_id","validated_hypotheses","statistical_tests","cdi_lineage_trace","alternative_methods_considered","l1_veto_applied"],
+      "properties": {
+        "task_id": { "type": "string" },
+        "validated_hypotheses": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["hypothesis_id","validation_result","test_used","p_value","effect_size","ci_lower","ci_upper","sample_size_adequate"],
+            "properties": {
+              "hypothesis_id": { "type": "string" },
+              "validation_result": { "type": "string", "enum": ["supported", "refuted", "inconclusive"] },
+              "test_used": { "type": "string" },
+              "p_value": { "type": ["number", "null"] },
+              "effect_size": { "type": ["number", "null"] },
+              "ci_lower": { "type": ["number", "null"] },
+              "ci_upper": { "type": ["number", "null"] },
+              "sample_size_adequate": { "type": "boolean" },
+              "power": { "type": ["number", "null"] }
+            }
+          }
+        },
+        "statistical_tests": {
+          "type": "array",
+          "description": "All statistical tests executed in this validation",
+          "items": {
+            "type": "object",
+            "required": ["test_id","test_name","purpose","result"],
+            "properties": {
+              "test_id": { "type": "string" },
+              "test_name": { "type": "string" },
+              "purpose": { "type": "string" },
+              "result": { "type": "object" }
+            }
+          }
+        },
+        "experiment_analysis": {
+          "type": "object",
+          "description": "Present only for experiment-analysis tasks",
+          "properties": {
+            "experiment_id": { "type": "string" },
+            "srm_detected": { "type": "boolean" },
+            "srm_p_value": { "type": ["number", "null"] },
+            "novelty_effect_suspected": { "type": "boolean" },
+            "peeking_violations": { "type": "boolean" },
+            "ship_verdict": { "type": "string", "enum": ["ship", "no_ship", "inconclusive"] },
+            "ship_rationale": { "type": "string" }
+          }
+        },
+        "cdi_lineage_trace": {
+          "type": "object",
+          "required": ["domains_queried", "primary_method_selected", "alternatives_considered"],
+          "properties": {
+            "domains_queried": { "type": "array", "items": { "type": "string" } },
+            "primary_method_selected": { "type": "string" },
+            "alternatives_considered": {
+              "type": "array",
+              "description": "CEP_4 requirement: alternative statistical frameworks surfaced by CDI Layer",
+              "items": {
+                "type": "object",
+                "required": ["method", "reason_not_selected"],
+                "properties": {
+                  "method": { "type": "string" },
+                  "reason_not_selected": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "alternative_methods_considered": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "l1_veto_applied": {
+          "type": "boolean",
+          "description": "True if any L1 veto was triggered during validation — blocks downstream output"
+        },
+        "l1_veto_details": {
+          "type": "string",
+          "description": "Required if l1_veto_applied is true"
+        }
+      }
+    }
+  }
+}

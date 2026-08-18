@@ -1,0 +1,237 @@
+{
+  "_meta": {
+    "description": "Capability Registry: the 5 CDI Layer capability expansion properties. Each property is a binding operational requirement — not aspirational. Each has a precondition, required CDI query, and lineage trace requirement.",
+    "schema_version": "1.0.0",
+    "last_updated": "2026-06-20T01:56:22.306725+00:00",
+    "update_policy": "Updated via cdi_update.py when a property's usage_count or exercise_log changes."
+  },
+  "properties": [
+    {
+      "id": "CEP_1",
+      "name": "Novel Algorithmic Combinations",
+      "binding_requirement": "When The Forge generates an invention, it must query the CDI Layer for cross-domain analogues that have not previously been combined with the in-domain approach.",
+      "precondition": "Agent is generating a novel analytical framework or invention",
+      "required_cdi_query": "cross_domain_analogues — retrieve analogues not previously combined with the proposed in-domain approach",
+      "lineage_trace_requirement": "Invention Pipeline Report records: which combinations were evaluated, which were novel, which were adopted and why",
+      "applicable_agents": [
+        "analyst",
+        "orchestrator"
+      ],
+      "applicable_phases": [
+        5,
+        6,
+        7
+      ],
+      "exercise_log": [],
+      "usage_count": 0,
+      "last_exercised": null
+    },
+    {
+      "id": "CEP_2",
+      "name": "Alternative Solution Paths",
+      "binding_requirement": "Before any agent commits to a single analytical approach, it must query the CDI Layer for at least one structurally different alternative derived from a different discipline or reasoning framework.",
+      "precondition": "Agent is about to commit to a primary analytical approach",
+      "required_cdi_query": "disciplinary_methods OR cross_domain_analogues — retrieve at least one structurally different alternative",
+      "lineage_trace_requirement": "Evidence Bundle records: selected approach, rejected alternatives, selection rationale for each rejection",
+      "applicable_agents": [
+        "analyst",
+        "statistician",
+        "data_architect",
+        "orchestrator"
+      ],
+      "applicable_phases": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "exercise_log": [],
+      "usage_count": 0,
+      "last_exercised": null
+    },
+    {
+      "id": "CEP_3",
+      "name": "Non-Obvious Pattern Identification",
+      "binding_requirement": "The Analyst Agent must query the CDI Layer's cross_domain_analogues index before finalizing any hypothesis. A hypothesis that matches only in-domain precedents is flagged for CDI Layer review.",
+      "precondition": "Analyst Agent is finalizing a hypothesis about an observed pattern",
+      "required_cdi_query": "cross_domain_analogues — find what generative process from outside the domain would produce the same observable pattern",
+      "lineage_trace_requirement": "Evidence Bundle records: in-domain hypothesis, CDI-surfaced out-of-domain alternatives, argument for or against each",
+      "applicable_agents": [
+        "analyst"
+      ],
+      "applicable_phases": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "exercise_log": [],
+      "usage_count": 0,
+      "last_exercised": null
+    },
+    {
+      "id": "CEP_4",
+      "name": "Multi-Perspective Analytical Depth",
+      "binding_requirement": "The Statistician Agent must query the CDI Layer for alternative statistical frameworks before selecting a validation approach. Single-method validation is not acceptable when CDI surfaces a higher-power or more assumption-robust alternative.",
+      "precondition": "Statistician Agent is selecting a statistical validation method",
+      "required_cdi_query": "reasoning_frameworks + disciplinary_methods — retrieve alternative statistical frameworks with assumption comparison",
+      "lineage_trace_requirement": "Statistical Result artifact records: primary method, CDI-surfaced alternatives, power comparison and assumption comparison, selection rationale",
+      "applicable_agents": [
+        "statistician"
+      ],
+      "applicable_phases": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "exercise_log": [],
+      "usage_count": 0,
+      "last_exercised": null
+    },
+    {
+      "id": "CEP_5",
+      "name": "Multidimensional Problem Decomposition",
+      "binding_requirement": "For any problem that spans more than one agent mandate, the Orchestrator must query the CDI Layer for decomposition frameworks from adjacent problem-solving traditions before issuing task decomposition.",
+      "precondition": "Orchestrator is decomposing a task that spans more than one agent",
+      "required_cdi_query": "cross_domain_analogues + disciplinary_methods — retrieve multi-agent decomposition frameworks from adjacent traditions",
+      "lineage_trace_requirement": "Capability Bundle records: CDI decomposition query result, adopted decomposition structure, delta from default structure based on CDI query",
+      "applicable_agents": [
+        "orchestrator"
+      ],
+      "applicable_phases": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "exercise_log": [
+        {
+          "task_id": "00ffefde-e795-4aab-b484-6ce430e3490d",
+          "agent": "orchestrator",
+          "timestamp": "2026-06-08T20:46:30.985683+00:00",
+          "outcome": "Decomposition into 4 tasks"
+        },
+        {
+          "task_id": "55ae06ca-52b7-4d7e-b5fc-88c7c659c460",
+          "agent": "orchestrator",
+          "timestamp": "2026-06-09T23:59:12.503043+00:00",
+          "outcome": "Decomposition into 4 tasks"
+        },
+        {
+          "task_id": "1e818fa4-bc5c-499d-b394-bd9064b6dffa",
+          "agent": "orchestrator",
+          "timestamp": "2026-06-10T00:06:30.692471+00:00",
+          "outcome": "Decomposition into 4 tasks"
+        },
+        {
+          "task_id": "37b30ea9-6f96-4aac-8bb3-1b88693ff063",
+          "agent": "orchestrator",
+          "timestamp": "2026-06-19T01:42:04.526501+00:00",
+          "outcome": "Decomposition into 4 tasks"
+        },
+        {
+          "task_id": "3be9c0c0-4f9a-437b-a0f2-7203030a5e36",
+          "agent": "orchestrator",
+          "timestamp": "2026-06-19T01:43:31.049562+00:00",
+          "outcome": "Decomposition into 4 tasks"
+        },
+        {
+          "task_id": "4213ed1c-953b-4013-9661-ab3ede30ad09",
+          "agent": "orchestrator",
+          "timestamp": "2026-06-19T01:44:40.288997+00:00",
+          "outcome": "Decomposition into 4 tasks"
+        },
+        {
+          "task_id": "6fc44db9-072c-4dee-887d-139d8427fb75",
+          "agent": "orchestrator",
+          "timestamp": "2026-06-19T02:04:19.407566+00:00",
+          "outcome": "Decomposition into 4 tasks"
+        },
+        {
+          "task_id": "2fc89699-be23-4c12-82f8-49faada6134b",
+          "agent": "orchestrator",
+          "timestamp": "2026-06-19T02:05:37.727500+00:00",
+          "outcome": "Decomposition into 4 tasks"
+        },
+        {
+          "task_id": "6cc8cf70-8c06-4c03-925c-514c12c69d6c",
+          "agent": "orchestrator",
+          "timestamp": "2026-06-19T02:06:51.389570+00:00",
+          "outcome": "Decomposition into 4 tasks"
+        },
+        {
+          "task_id": "5ae55f85-29f8-4f62-ab1e-6d9c83b06ec6",
+          "agent": "orchestrator",
+          "timestamp": "2026-06-19T02:09:13.511903+00:00",
+          "outcome": "Decomposition into 4 tasks"
+        },
+        {
+          "task_id": "58160a44-923f-400b-a030-43a3d12829b2",
+          "agent": "orchestrator",
+          "timestamp": "2026-06-19T02:10:28.517491+00:00",
+          "outcome": "Decomposition into 4 tasks"
+        },
+        {
+          "task_id": "d79366ba-3a13-42bc-a6d8-5f97867e8763",
+          "agent": "orchestrator",
+          "timestamp": "2026-06-19T02:11:48.198342+00:00",
+          "outcome": "Decomposition into 4 tasks"
+        },
+        {
+          "task_id": "3bcb75c7-2d58-45f4-b532-5437f9b7e6ef",
+          "agent": "orchestrator",
+          "timestamp": "2026-06-19T02:14:21.970546+00:00",
+          "outcome": "Decomposition into 4 tasks"
+        },
+        {
+          "task_id": "a6d5479a-4f43-4c2d-9681-5f226d93ca6b",
+          "agent": "orchestrator",
+          "timestamp": "2026-06-19T02:15:37.604742+00:00",
+          "outcome": "Decomposition into 4 tasks"
+        },
+        {
+          "task_id": "022ae3ac-8d7a-437d-b6d3-fa684d603311",
+          "agent": "orchestrator",
+          "timestamp": "2026-06-19T02:18:35.027816+00:00",
+          "outcome": "Decomposition into 4 tasks"
+        },
+        {
+          "task_id": "0f735bfa-4d4a-49c2-b432-82c31de57531",
+          "agent": "orchestrator",
+          "timestamp": "2026-06-19T02:19:51.019816+00:00",
+          "outcome": "Decomposition into 4 tasks"
+        },
+        {
+          "task_id": "c0068509-c7f7-4935-a66d-8f1a8b015b65",
+          "agent": "orchestrator",
+          "timestamp": "2026-06-19T02:21:04.575225+00:00",
+          "outcome": "Decomposition into 4 tasks"
+        },
+        {
+          "task_id": "1c67023e-ca52-4c4e-8edb-24f5ee1f8415",
+          "agent": "orchestrator",
+          "timestamp": "2026-06-20T01:56:22.276452+00:00",
+          "outcome": "Decomposition into 4 tasks"
+        }
+      ],
+      "usage_count": 18,
+      "last_exercised": "2026-06-20T01:56:22.276452+00:00"
+    }
+  ],
+  "failure_protocol": {
+    "trigger": "Agent produces output without recorded CDI Layer query in lineage trace for a required query type",
+    "classification": "Diagnostic Agent L1 failure",
+    "escalation": "Repeated omission by same agent class → Phase 7 structural bottleneck report"
+  }
+}

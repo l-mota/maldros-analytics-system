@@ -1,0 +1,62 @@
+name: account_tier
+label: Account Tier
+description: >
+  The subscription tier of an API account. Tier determines rate limits, cost
+  structure, support level, and (importantly for fraud analysis) the expected
+  behavioral baseline for anomaly detection. Tier is a critical segmentation
+  variable because fraud patterns differ substantially across tiers.
+
+type: categorical
+grain: per-account
+
+values:
+  - value: free
+    label: Free
+    description: No payment on file; limited rate; highest proportion of trial abuse.
+    expected_api_calls_monthly: 100-1000
+    fraud_risk_relative: HIGH (no financial commitment; easy to create disposable accounts)
+    rate_limit: 1000 calls/day
+    proportion_of_accounts: 0.50
+
+  - value: pro
+    label: Pro
+    description: Paid subscription; moderate volume; most balanced risk/reward tier.
+    expected_api_calls_monthly: 2000-15000
+    fraud_risk_relative: MEDIUM (payment barrier; but worth abusing for high-value use cases)
+    rate_limit: 10000 calls/day
+    proportion_of_accounts: 0.30
+
+  - value: enterprise
+    label: Enterprise
+    description: >
+      Custom contract; high volume; highest per-incident financial impact when
+      compromised. Enterprise account takeover is the highest-severity event class.
+    expected_api_calls_monthly: 50000-500000
+    fraud_risk_relative: MEDIUM-HIGH (lower likelihood; catastrophic impact when it occurs)
+    rate_limit: custom
+    proportion_of_accounts: 0.10
+
+  - value: trial
+    label: Trial
+    description: >
+      Free trial (time-limited); no payment required; highest vulnerability to
+      automated account creation abuse. Trial accounts are the entry point for
+      coordinated abuse clusters that later escalate to pro tier.
+    expected_api_calls_monthly: 50-500
+    fraud_risk_relative: HIGHEST (zero friction; designed for automation abuse)
+    rate_limit: 500 calls/day
+    proportion_of_accounts: 0.10
+
+applicable_metrics:
+  - api_abuse_rate
+  - fraud_loss_direct
+  - account_takeover_volume
+  - safety_bypass_incidents
+  - compliance_cost_per_incident
+
+tables_containing_this_dimension:
+  - accounts (direct field: tier)
+  - api_events (joined via account_id → accounts.tier)
+  - fraud_incidents (joined via account_id → accounts.tier)
+
+version: "1.0.0"

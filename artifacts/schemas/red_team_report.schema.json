@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "maldros/red_team_report/1.0.0",
+  "title": "Red-Team Report",
+  "description": "Produced by the Red-Team Agent. Adversarial stress test of an artifact before stakeholder delivery. Verdict: Robust / Conditionally Robust / Brittle.",
+  "type": "object",
+  "required": ["artifact_id","artifact_type","schema_version","phase_of_origin","producing_agent","timestamp_utc","provenance","content_hash","confidence_score","known_limitations","content"],
+  "properties": {
+    "artifact_id": { "type": "string", "format": "uuid" },
+    "artifact_type": { "type": "string", "const": "red_team_report" },
+    "schema_version": { "type": "string", "const": "1.0.0" },
+    "phase_of_origin": { "type": "integer", "minimum": 0, "maximum": 7 },
+    "producing_agent": { "type": "string", "const": "red_team" },
+    "timestamp_utc": { "type": "string", "format": "date-time" },
+    "provenance": { "type": "array", "items": { "type": "string", "format": "uuid" }, "minItems": 1 },
+    "content_hash": { "type": "string" },
+    "confidence_score": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+    "known_limitations": { "type": "array", "items": { "type": "string" } },
+    "content": {
+      "type": "object",
+      "required": ["task_id","artifact_under_test","verdict","evasion_tests","vulnerabilities_found","cdi_lineage_trace"],
+      "properties": {
+        "task_id": { "type": "string" },
+        "artifact_under_test": { "type": "string", "format": "uuid" },
+        "verdict": {
+          "type": "string",
+          "enum": ["Robust", "Conditionally Robust", "Brittle"],
+          "description": "Robust: no significant vulnerabilities found. Conditionally Robust: vulnerabilities found but bounded. Brittle: significant vulnerabilities found — do not ship without remediation."
+        },
+        "verdict_rationale": { "type": "string" },
+        "conditions_for_robustness": {
+          "type": "array",
+          "description": "Required if verdict is Conditionally Robust — conditions under which the artifact is valid",
+          "items": { "type": "string" }
+        },
+        "required_remediations": {
+          "type": "array",
+          "description": "Required if verdict is Brittle — specific changes needed before re-testing",
+          "items": { "type": "string" }
+        },
+        "evasion_tests": {
+          "type": "array",
+          "description": "Results of 12 evasion category tests (E1-E12)",
+          "items": {
+            "type": "object",
+            "required": ["evasion_id","evasion_category","tested","passed","notes"],
+            "properties": {
+              "evasion_id": { "type": "string", "pattern": "^E([1-9]|1[0-2])$" },
+              "evasion_category": { "type": "string" },
+              "tested": { "type": "boolean" },
+              "passed": { "type": "boolean" },
+              "notes": { "type": "string" }
+            }
+          }
+        },
+        "vulnerabilities_found": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["vulnerability_id","description","severity","evasion_category","exploit_path"],
+            "properties": {
+              "vulnerability_id": { "type": "string" },
+              "description": { "type": "string" },
+              "severity": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+              "evasion_category": { "type": "string" },
+              "exploit_path": { "type": "string" },
+              "remediation_suggestion": { "type": "string" }
+            }
+          }
+        },
+        "cdi_lineage_trace": {
+          "type": "object",
+          "required": ["adversarial_frameworks_queried", "analogues_used"],
+          "properties": {
+            "adversarial_frameworks_queried": { "type": "array", "items": { "type": "string" } },
+            "analogues_used": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "sandbox_confirmation": {
+          "type": "boolean",
+          "const": true,
+          "description": "Confirms Red-Team operated in sandbox only — no live data, no production systems"
+        }
+      }
+    }
+  }
+}

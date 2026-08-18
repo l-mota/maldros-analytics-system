@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "description": "Judgment Metric Registry — Phase 0 deliverable 0.9. Documents all analyst-judgment-bound metrics with assigned handling mechanisms. Zero unresolved gating/gate-triggering metrics required for Phase 0 exit.",
+    "schema_version": "1.0.0",
+    "created": "2026-06-08",
+    "phase_0_exit_criterion_e_status": "PENDING_REVIEW"
+  },
+
+  "mechanism_definitions": {
+    "1": {
+      "label": "Fully Computable",
+      "description": "Computable from data without analyst judgment. Denominator stable. No allocation required.",
+      "phase_transition_gating": "PERMITTED",
+      "confirmation_gate_triggering": "PERMITTED"
+    },
+    "2": {
+      "label": "Computable with Documented Judgment",
+      "description": "Computable but specific parameters or allocation choices require analyst judgment. Judgment documented in AIMS Mode A.",
+      "phase_transition_gating": "PERMITTED (with judgment documented)",
+      "confirmation_gate_triggering": "PERMITTED (with judgment documented)"
+    },
+    "3": {
+      "label": "Escalation Flag",
+      "description": "Too uncertain for automated gating. Triggers human review when materiality threshold exceeded. Human decision is authoritative. CANNOT gate phase transitions or trigger Confirmation Gate automatically.",
+      "phase_transition_gating": "FORBIDDEN",
+      "confirmation_gate_triggering": "FORBIDDEN (may trigger human review request only)"
+    }
+  },
+
+  "metrics": [
+    {
+      "metric": "api_abuse_rate",
+      "judgment_mechanism": 1,
+      "gating_use": ["phase_transition"],
+      "confirmation_gate_use": ["yes — threshold breach triggers gate"],
+      "unresolved": false,
+      "documented_judgments": [],
+      "notes": "Fully computable. Denominator stable. Content_category classification is a known limitation but not an analyst judgment call."
+    },
+    {
+      "metric": "fraud_loss_direct",
+      "judgment_mechanism": 2,
+      "gating_use": ["phase_transition"],
+      "confirmation_gate_use": ["yes — above materiality threshold ($50k)"],
+      "unresolved": false,
+      "documented_judgments": [
+        {
+          "judgment": "For multi-vector incidents, primary attack_vector is assigned using detection_method as tiebreaker. If detection_method is inconclusive, classify as the vector with the highest financial_impact_usd precedent in the same period.",
+          "rationale": "Prevents arbitrary allocation; ties the decision to observable data",
+          "logged_to_aims_a": false
+        }
+      ],
+      "notes": "Mechanism 2 because multi-vector incident allocation requires judgment. Documented above."
+    },
+    {
+      "metric": "account_takeover_volume",
+      "judgment_mechanism": 2,
+      "gating_use": ["phase_transition"],
+      "confirmation_gate_use": ["no — count metric, not direct financial exposure"],
+      "unresolved": false,
+      "documented_judgments": [
+        {
+          "judgment": "Behavioral deviation threshold: 2σ on ≥2 dimensions simultaneously, within 7-day window of fraud_incident. Parameters validated quarterly by Statistician Agent.",
+          "rationale": "Threshold balances precision vs. recall. Lower threshold increases false positives during product changes.",
+          "logged_to_aims_a": false
+        }
+      ]
+    },
+    {
+      "metric": "safety_bypass_incidents",
+      "judgment_mechanism": 1,
+      "gating_use": ["phase_transition"],
+      "confirmation_gate_use": ["yes — trend escalation (SPRT positive) triggers gate"],
+      "unresolved": false,
+      "documented_judgments": [],
+      "notes": "Count metric, fully computable. SPRT configuration parameters (null/alternative hypothesis rates) are validated by Statistician Agent quarterly — not real-time judgment."
+    },
+    {
+      "metric": "downstream_harm_exposure",
+      "judgment_mechanism": 3,
+      "gating_use": ["FORBIDDEN — mechanism 3 cannot gate phase transitions"],
+      "confirmation_gate_use": ["FORBIDDEN — may trigger review request only when exposure > $500k"],
+      "unresolved": false,
+      "resolution": "MECHANISM_3_ACCEPTED",
+      "resolution_rationale": "Indirect and legal liability components are model estimates with 40-80% confidence intervals. Automating decisions on estimates of this uncertainty would be unsafe. Human review at $500k threshold is the correct governance.",
+      "documented_judgments": [
+        {
+          "judgment": "CI bounds set at [-40%, +80%] around point estimate, reflecting asymmetric uncertainty in downstream harm costs. Regulatory penalty component (actual enforced fines) is separated as a higher-confidence sub-component.",
+          "rationale": "Actual fines are confirmed; indirect/legal components are estimates. Separating them by confidence level makes the uncertainty transparent."
+        }
+      ],
+      "notes": "This is the only Mechanism 3 metric. It cannot gate phase transitions or trigger the Confirmation Gate automatically. This satisfies Phase 0 exit criterion (e)."
+    },
+    {
+      "metric": "compliance_cost_per_incident",
+      "judgment_mechanism": 2,
+      "gating_use": ["no — derived metric, used for investment prioritization, not gating"],
+      "confirmation_gate_use": ["no"],
+      "unresolved": false,
+      "documented_judgments": [
+        {
+          "judgment": "Cost allocation assumes uniform cost per incident within attack_vector × period. This understates cost for high-severity incidents and overstates it for low-severity ones. When used for investment decisions, always report with distribution (p50, p95) not just mean.",
+          "rationale": "The uniform allocation is known to be wrong but is the only tractable allocation method without per-incident cost tracking."
+        }
+      ]
+    }
+  ],
+
+  "phase_0_exit_criterion_check": {
+    "criterion": "(e) Judgment metric registry complete — zero unresolved gating/gate-triggering metrics",
+    "unresolved_gating_metrics": 0,
+    "unresolved_gate_triggering_metrics": 0,
+    "mechanism_3_metrics_in_gating_use": 0,
+    "criterion_met": true,
+    "note": "downstream_harm_exposure is Mechanism 3 but explicitly excluded from gating and gate-triggering. All other metrics are Mechanism 1 or 2 with documented judgments."
+  }
+}

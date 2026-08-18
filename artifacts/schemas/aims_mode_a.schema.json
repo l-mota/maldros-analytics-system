@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "maldros/aims_mode_a/1.0.0",
+  "title": "AIMS Mode A — Operational Log Entry",
+  "description": "Auto-logged operational entry. Covers routine pipeline self-heals, telemetry exemplar promotions, routine model generations with Robust verdict. 9 required assets. Always on — cannot be disabled.",
+  "type": "object",
+  "required": ["artifact_id","artifact_type","schema_version","phase_of_origin","producing_agent","timestamp_utc","provenance","content_hash","confidence_score","known_limitations","content"],
+  "properties": {
+    "artifact_id": { "type": "string", "format": "uuid" },
+    "artifact_type": { "type": "string", "const": "aims_mode_a" },
+    "schema_version": { "type": "string", "const": "1.0.0" },
+    "phase_of_origin": { "type": "integer", "minimum": 0, "maximum": 7 },
+    "producing_agent": { "type": "string" },
+    "timestamp_utc": { "type": "string", "format": "date-time" },
+    "provenance": { "type": "array", "items": { "type": "string" } },
+    "content_hash": { "type": "string" },
+    "confidence_score": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+    "known_limitations": { "type": "array", "items": { "type": "string" } },
+    "content": {
+      "type": "object",
+      "required": ["event_type","event_description","triggering_artifact","action_taken","outcome","l1_status","cdi_query_recorded","operator_notification_required","audit_trail_complete"],
+      "properties": {
+        "event_type": {
+          "type": "string",
+          "enum": [
+            "ROUTINE_PIPELINE_SELF_HEAL",
+            "TELEMETRY_EXEMPLAR_PROMOTED",
+            "ROUTINE_MODEL_GENERATION",
+            "L1_VETO_SET",
+            "L1_VETO_CLEARED",
+            "CONSTRAINT_OPENED",
+            "CONSTRAINT_CLOSED",
+            "CDI_BLIND_SPOT_DETECTED",
+            "OPERATOR_CONFIG_CHANGE",
+            "PHASE_TRANSITION",
+            "DATASET_REVIEW_DECISION",
+            "SANDBOXED_SQL_EXECUTION",
+            "JUDGMENT_CALL_DOCUMENTED",
+            "OTHER_OPERATIONAL"
+          ]
+        },
+        "event_description": { "type": "string" },
+        "triggering_artifact": { "type": ["string", "null"] },
+        "action_taken": { "type": "string" },
+        "outcome": { "type": "string", "enum": ["success", "partial", "failed", "pending"] },
+        "l1_status": {
+          "type": "object",
+          "required": ["nominal", "active_vetoes"],
+          "properties": {
+            "nominal": { "type": "boolean" },
+            "active_vetoes": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "cdi_query_recorded": { "type": "boolean", "description": "Was a CDI Layer query recorded in the lineage trace?" },
+        "operator_notification_required": { "type": "boolean" },
+        "operator_notification_sent": { "type": ["boolean", "null"] },
+        "audit_trail_complete": { "type": "boolean" },
+        "review_queue_depth_at_time": { "type": ["integer", "null"] },
+        "notes": { "type": "string" }
+      }
+    }
+  }
+}

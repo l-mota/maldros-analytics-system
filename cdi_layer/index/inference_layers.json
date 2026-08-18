@@ -1,0 +1,93 @@
+{
+  "_meta": {
+    "domain": "inference_layers",
+    "description": "Real-time status of all five inference layers (L1-L5) with current veto states and active signals. L1 veto states propagate directly to decision output — no higher layer can override. Updated on every agent action.",
+    "schema_version": "1.0.0",
+    "last_updated": "2026-06-08T00:00:00Z",
+    "update_policy": "Updated via cdi_update.py on every L1-L5 state change."
+  },
+  "arbitration_invariant": "Higher layers cannot override deterministic vetoes from lower layers. L1 vetoes propagate directly to the decision output, bypassing all higher layers. A known-bad data signature at L1 is not outvoted by the LLM's narrative assessment.",
+  "layers": [
+    {
+      "id": "L1",
+      "name": "Heuristic Layer",
+      "designation": "DETERMINISTIC — CAN VETO ALL HIGHER LAYERS",
+      "description": "Deterministic rules, schema contracts, known-bad data patterns. A regex match on a known-corrupt data signature is not overridden by the LLM's narrative assessment.",
+      "components": [
+        "Schema contracts: dbt tests — a known-null field in a not-null column is rejected",
+        "Artifact envelope validation: missing provenance field fails the hand-off regardless of content quality",
+        "Design Invariant checks: a proposal touching a locked invariant is auto-rejected regardless of Statistician confidence score",
+        "Known-bad data patterns: coordinated abuse signatures, SRM detection formula, PSI threshold crossings"
+      ],
+      "veto_classes": [
+        "SCHEMA_CONTRACT_FAILURE",
+        "ARTIFACT_ENVELOPE_MALFORMED",
+        "DESIGN_INVARIANT_VIOLATION",
+        "KNOWN_BAD_DATA_PATTERN"
+      ],
+      "current_state": "NOMINAL",
+      "active_vetoes": [],
+      "veto_history": []
+    },
+    {
+      "id": "L2",
+      "name": "Statistical Layer",
+      "designation": "PROBABILISTIC",
+      "description": "Bayesian belief networks for joint priors. Shannon entropy on data distributions. Graph centrality (PageRank-style) on entity networks. Significance testing, confidence intervals, effect sizes.",
+      "components": [
+        "Bayesian belief networks for data quality priors",
+        "Shannon entropy on data distributions",
+        "Graph centrality on entity networks",
+        "Significance testing: p-values, confidence intervals, effect sizes",
+        "Power analysis: minimum detectable effect and sample size bounds"
+      ],
+      "current_state": "NOMINAL",
+      "active_signals": [],
+      "last_computation": null
+    },
+    {
+      "id": "L3",
+      "name": "Physics-Based Layer",
+      "designation": "EMPIRICAL",
+      "description": "Power-law distribution fitting (Kolmogorov-Smirnov tested). Percolation theory for cluster growth and phase transitions. Entropy production rate as a data-quality and platform-health scalar.",
+      "components": [
+        "Power-law distribution fitting: KS-test on event count distributions",
+        "Percolation theory: cluster connectivity threshold monitoring",
+        "Entropy production rate: data health scalar, increasing entropy signals structural breakdown",
+        "Conservation law validation: input/output event count reconciliation"
+      ],
+      "current_state": "NOMINAL",
+      "active_signals": [],
+      "last_computation": null
+    },
+    {
+      "id": "L4",
+      "name": "State-Superposition Layer",
+      "designation": "ANTICIPATORY",
+      "description": "Monte Carlo Tree Search over analysis decision trees. Sequential Probability Ratio Testing per branch. Anticipatory analysis: pre-stages hypotheses for most-likely paths before evidence fully arrives. Compresses time-to-insight.",
+      "components": [
+        "Monte Carlo Tree Search over analysis decision trees",
+        "Sequential Probability Ratio Test (SPRT) per hypothesis branch",
+        "Anticipatory pre-staging of hypotheses for most-likely paths",
+        "Branch pruning based on L1 veto states and L2 significance thresholds"
+      ],
+      "current_state": "NOMINAL",
+      "active_branches": [],
+      "last_computation": null
+    },
+    {
+      "id": "L5",
+      "name": "LLM Orchestrator",
+      "designation": "SYNTHESIS",
+      "description": "Synthesis across all lower layers. Proposes actions. Cannot override L1 vetoes. Produces the final analytical narrative.",
+      "components": [
+        "Cross-layer synthesis: integrates L1-L4 signals into a coherent analytical narrative",
+        "Action proposals: routes to appropriate agents based on synthesized state",
+        "Uncertainty quantification: declares confidence score with methodology stated"
+      ],
+      "constraint": "CANNOT override L1 vetoes. A narrative that contradicts a deterministic L1 ruling is auto-flagged as a Storyteller L1 violation.",
+      "current_state": "NOMINAL",
+      "last_synthesis": null
+    }
+  ]
+}

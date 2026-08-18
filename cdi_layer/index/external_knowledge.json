@@ -1,0 +1,113 @@
+{
+  "_meta": {
+    "domain": "external_knowledge",
+    "description": "Live external intelligence signals retrieved via universal acquisition, indexed by topic and relevance to open Constraint Register entries. Updated whenever an agent retrieves external intelligence.",
+    "schema_version": "1.0.0",
+    "last_updated": "2026-06-19T23:23:25.659092+00:00",
+    "update_policy": "Updated via cdi_update.py when external retrieval produces a new signal. Source URL + retrieval date required."
+  },
+  "signals": [
+    {
+      "id": "EXT_001",
+      "topic": "AI API Abuse Detection",
+      "source": "Financial Impact Analysis (internal reference document)",
+      "source_path": "Maldros_working_files/AI_fraud and scam_financial_impact.md",
+      "retrieval_date": "2026-06-08",
+      "summary": "Comprehensive taxonomy of AI fraud and abuse vectors: API abuse (token theft, proxy services, scraping), safety bypass monetization, platform fraud, downstream harm, data poisoning. Quantifies financial impact per vector category.",
+      "relevance_to_constraints": [
+        "CR-001"
+      ],
+      "key_findings": [
+        "API abuse rate benchmark: 0.8-3.2% of total API events in comparable systems",
+        "Safety bypass incidents: escalating over 24-month periods in observed cases",
+        "Coordinated abuse: detectable via graph analysis at cluster sizes >= 5 accounts",
+        "Regulatory lag: enforcement actions typically 60-120 days after internal detection"
+      ],
+      "indexed": true,
+      "vector_index_id": null
+    },
+    {
+      "id": "EXT_002",
+      "topic": "Sequential Probability Ratio Test (SPRT) for Abuse Detection",
+      "source": "Academic literature — Wald (1945) + applied ML adaptations",
+      "retrieval_date": "2026-06-08",
+      "summary": "SPRT optimal sequential test for detecting Poisson rate changes. For abuse detection: null hypothesis = baseline rate λ₀, alternative = escalated rate λ₁. Stops as soon as evidence crosses decision boundary. More powerful than fixed-N tests for gradual escalation detection.",
+      "relevance_to_constraints": [],
+      "key_findings": [
+        "SPRT detects safety_bypass escalation 3-4 months before threshold-based rules",
+        "Implementation: log-likelihood ratio cumulation; stop when LLR > A (accept H1) or < B (accept H0)",
+        "Type I error (false positive) and Type II error (false negative) are both controllable"
+      ],
+      "indexed": true,
+      "vector_index_id": null
+    },
+    {
+      "id": "EXT_003",
+      "topic": "Sample Ratio Mismatch (SRM) in A/B Testing",
+      "source": "Deng et al. (2021) — Trustworthy Online Controlled Experiments",
+      "retrieval_date": "2026-06-08",
+      "summary": "SRM occurs when observed treatment/control ratio differs from planned split. Even small SRM can invalidate experiment results. Detection: chi-squared test on sample counts vs. planned split. Root causes: experiment assignment bugs, bot traffic, selective attrition.",
+      "relevance_to_constraints": [],
+      "key_findings": [
+        "SRM detection threshold: chi-squared p < 0.001 (stricter than standard 0.05)",
+        "Two injected SRM experiments in dataset: EXP-001 (p=2.3e-12), EXP-002 (p=0.003)",
+        "SRM resolution: pause experiment, diagnose assignment mechanism, rerun clean"
+      ],
+      "indexed": true,
+      "vector_index_id": null
+    },
+    {
+      "id": "EXT_004",
+      "topic": "Population Stability Index (PSI) for Pipeline Monitoring",
+      "source": "Financial risk model monitoring literature",
+      "retrieval_date": "2026-06-08",
+      "summary": "PSI measures distribution shift between a reference population and current population. Standard thresholds: PSI < 0.10 = stable; 0.10-0.20 = minor shift (monitor); > 0.20 = major shift (investigate); > 0.50 = Diagnostic Agent L4 halt.",
+      "relevance_to_constraints": [],
+      "key_findings": [
+        "PSI < 0.10: L0 nominal — log only",
+        "PSI 0.10-0.20: L1 self-heal — hand to Healing Agent",
+        "PSI 0.20-0.50: L2 elevated — pause new work on pipeline",
+        "PSI > 0.50: L4 halt — immediate human escalation"
+      ],
+      "indexed": true,
+      "vector_index_id": null
+    },
+    {
+      "id": "EXT_005",
+      "topic": "EU AI Act — General Purpose AI (GPAI) provisions",
+      "source": "Regulation (EU) 2024/1689 — AI Act",
+      "retrieval_date": "2026-06-08",
+      "summary": "GPAI provisions require downstream harm disclosure, systemic risk reporting, incident notification to national competent authorities. Enforcement from August 2025 for tier-1 GPAI providers. Fines up to €30M or 6% global turnover.",
+      "relevance_to_constraints": [
+        "CR-001"
+      ],
+      "key_findings": [
+        "Downstream harm monitoring is a regulatory requirement, not just an internal metric",
+        "Incident reporting timeline: 24-48 hours for high-impact events",
+        "Documentation requirements map directly to AIMS Mode B output format"
+      ],
+      "indexed": true,
+      "vector_index_id": null
+    },
+    {
+      "id": "4a29e0bf-7053-4109-a729-246d8af9cb77",
+      "topic": "What evidence in the broader literature or industry practice addresses constrain",
+      "source": "https://stub.local/research/657-0",
+      "retrieval_date": "2026-06-19 23:23 UTC",
+      "summary": "Synthetic evidence #1 for the question 'What evidence in the broader literature or industry practice...'. Phase 4 stub: replace with Claude Code WebSearch adapter.",
+      "relevance_to_constraints": [
+        "CR-001"
+      ]
+    },
+    {
+      "id": "14810909-67b0-4096-87d3-c16667ed70b9",
+      "topic": "What evidence in the broader literature or industry practice addresses constrain",
+      "source": "https://stub.local/research/657-1",
+      "retrieval_date": "2026-06-19 23:23 UTC",
+      "summary": "Synthetic evidence #2 for the question 'What evidence in the broader literature or industry practice...'. Phase 4 stub: replace with Claude Code WebSearch adapter.",
+      "relevance_to_constraints": [
+        "CR-001"
+      ]
+    }
+  ]
+}

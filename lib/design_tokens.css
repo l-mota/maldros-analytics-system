@@ -1,0 +1,39 @@
+/*
+ * Maldros Visual Design System (C-031) — design tokens.
+ *
+ * SINGLE SOURCE OF TRUTH for all data-meaning colors and canvas/ink values
+ * used across every Maldros HTML artifact.
+ *
+ * HTML renderers (render_aims_report.py, operator_ui_mockup.html, future
+ * dashboards/briefings/presentations) inline this file at render time.
+ * Python consumers import equivalent constants from lib/design_tokens.py.
+ *
+ * Spec authority: Maldros_working_files/visual_design_system.md
+ * Change control: any modification requires explicit operator approval (D-7)
+ * and a new C-NNN entry in Maldros_Change_Tracker.md. Never hand-edit color
+ * tokens in a consumer file — update this source instead.
+ */
+
+:root {
+    /* ── Data-meaning colors (the four) ─────────────────────── */
+    --forest:    #0F2515;   /* PRIMARY:  authority, structure, baseline */
+    --amber:     #C8882A;   /* SECONDARY: finding, focal subject */
+    --parchment: #EDE8D0;   /* TERTIARY: supporting surfaces */
+    --neutral:   #A8A092;   /* NEUTRAL:  gridlines, structural lines */
+
+    /* ── Canvas / ink infrastructure ────────────────────────── */
+    --canvas:    #FFFAFA;   /* page background (never pure white) */
+    --ink:       #252525;   /* primary body text (never pure black) */
+    --ink-muted: #6B6559;   /* muted text, axis labels, captions */
+    --border:    #D6CEB8;   /* card/container borders */
+
+    /* ── Semantic accents ───────────────────────────────────── */
+    --action-green: #2D5A3D;  /* Recommended Action section eyebrow */
+
+    /* ── Typography ─────────────────────────────────────────── */
+    --mono: 'Courier New', Courier, monospace;
+
+    /* ── Layout primitives ──────────────────────────────────── */
+    --radius: 6px;
+    --shadow: 0 1px 4px rgba(0,0,0,0.07);
+}

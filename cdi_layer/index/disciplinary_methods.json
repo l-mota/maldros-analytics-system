@@ -1,0 +1,125 @@
+{
+  "_meta": {
+    "domain": "disciplinary_methods",
+    "description": "Eight cross-disciplinary knowledge domains available to all agents. Each domain contains analytics translations — how the discipline's methods apply to the Financial Impact Analysis context.",
+    "schema_version": "1.0.0",
+    "last_updated": "2026-06-08T00:00:00Z",
+    "update_policy": "Updated via cdi_update.py only."
+  },
+  "disciplines": [
+    {
+      "id": "DISC_1",
+      "name": "Advanced Mathematics",
+      "analytics_translations": [
+        "Optimization of metric definitions under multi-objective constraints (e.g., precision/recall Pareto front for fraud detection thresholds)",
+        "Convex relaxations for experiment design problems (sample size optimization under budget constraints)",
+        "Topological data analysis for detecting structural changes in abuse pattern shape",
+        "Information geometry for comparing probability distributions in data quality monitoring"
+      ],
+      "primary_agents": ["analyst", "statistician", "data_architect"],
+      "activation_state": "AVAILABLE",
+      "query_count": 0,
+      "last_queried": null
+    },
+    {
+      "id": "DISC_2",
+      "name": "Physics (First Principles)",
+      "analytics_translations": [
+        "Conservation laws applied to data flow: events_in = events_recorded + losses + sampling_error — use to detect silent data loss",
+        "Entropy production rate as a data-quality scalar: high entropy = structural breakdown, not just noise",
+        "Percolation theory for cluster growth and phase transitions in abuse networks",
+        "Thermodynamic equilibrium framing: abuse detection as a system trying to return to low-entropy state"
+      ],
+      "primary_agents": ["analyst", "diagnostic", "statistician"],
+      "activation_state": "AVAILABLE",
+      "query_count": 0,
+      "last_queried": null
+    },
+    {
+      "id": "DISC_3",
+      "name": "Computational Theory",
+      "analytics_translations": [
+        "Hardness bounds on what analytical questions are tractable at scale (NP-hardness of exact cluster enumeration)",
+        "Complexity analysis of pipeline designs (time complexity of each transformation step)",
+        "Approximation algorithm selection for graph-analysis tasks (spectral clustering vs. exact partitioning)",
+        "Information-theoretic bounds on detection: minimum description length of coordinated abuse signal"
+      ],
+      "primary_agents": ["data_architect", "analyst", "red_team"],
+      "activation_state": "AVAILABLE",
+      "query_count": 0,
+      "last_queried": null
+    },
+    {
+      "id": "DISC_4",
+      "name": "Programming Logic",
+      "analytics_translations": [
+        "Type-theoretic metric specifications — metrics as formal types, query generation as type-checking",
+        "Formal verification of pipeline correctness (dbt test suites as executable specifications)",
+        "Dependent types for artifact schemas (artifact_type determines which fields are required)",
+        "Logic programming for constraint propagation in governance rule enforcement"
+      ],
+      "primary_agents": ["data_architect", "diagnostic"],
+      "activation_state": "AVAILABLE",
+      "query_count": 0,
+      "last_queried": null
+    },
+    {
+      "id": "DISC_5",
+      "name": "Network Science",
+      "analytics_translations": [
+        "Graph motif detection for coordinated abuse cluster topology (star, chain, bipartite core-periphery)",
+        "Percolation threshold monitoring on account connectivity graphs",
+        "PageRank-style centrality for identifying orchestrators within abuse clusters",
+        "Community detection algorithms (Louvain, spectral) for cluster identification",
+        "Temporal graph analysis: edge appearance timing correlates with coordinated behavior"
+      ],
+      "primary_agents": ["analyst", "statistician"],
+      "activation_state": "AVAILABLE",
+      "query_count": 0,
+      "last_queried": null
+    },
+    {
+      "id": "DISC_6",
+      "name": "Game Theory",
+      "analytics_translations": [
+        "Stackelberg framing for metric design: if we publish this KPI, what behavior does it incentivize at equilibrium?",
+        "Mechanism design for fraud detection thresholds: set thresholds to minimize total exploitation, not just catch detected violators",
+        "Adversarial game trees for experiment design: model how malicious actors would optimize against the proposed detection system",
+        "Nash equilibria in abuse/detection arms race: characterize long-run behavior"
+      ],
+      "primary_agents": ["analyst", "red_team", "statistician"],
+      "activation_state": "AVAILABLE",
+      "query_count": 0,
+      "last_queried": null
+    },
+    {
+      "id": "DISC_7",
+      "name": "Cryptography",
+      "analytics_translations": [
+        "Commitment schemes for pre-registered experiment hypotheses (prevent p-hacking post-hoc)",
+        "Zero-knowledge attestations for data access patterns (prove a query was valid without revealing query content)",
+        "Hash-chaining for artifact immutability verification",
+        "Secure computation for multi-party metric computation (Phase 7+)"
+      ],
+      "primary_agents": ["statistician", "diagnostic", "red_team"],
+      "activation_state": "AVAILABLE",
+      "query_count": 0,
+      "last_queried": null
+    },
+    {
+      "id": "DISC_8",
+      "name": "Historical Precedent",
+      "analytics_translations": [
+        "Defense-in-depth applied to data pipeline architecture: multiple independent quality checks, not a single gate",
+        "Least-privilege access model: agents have bounded toolsets, not general-purpose access",
+        "Fail-secure defaults: when in doubt, gate for human review rather than auto-approve",
+        "Post-mortem culture: every pipeline failure produces a documented postmortem with root-cause, remediation, prevention triad",
+        "Red-teaming as standard pre-shipment practice (analogous to pre-production code review)"
+      ],
+      "primary_agents": ["diagnostic", "healing", "orchestrator"],
+      "activation_state": "AVAILABLE",
+      "query_count": 0,
+      "last_queried": null
+    }
+  ]
+}

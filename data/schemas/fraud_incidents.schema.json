@@ -1,0 +1,44 @@
+{
+  "table": "fraud_incidents",
+  "full_dataset_row_count": 475,
+  "sample_row_count": 100,
+  "note": "Schema derived from the generated dataset. The row sample in data/samples/ is illustrative only and is NOT the dataset the case-study figures were computed from.",
+  "columns": [
+    {
+      "name": "incident_id",
+      "type": "string"
+    },
+    {
+      "name": "account_id",
+      "type": "string"
+    },
+    {
+      "name": "detected_date",
+      "type": "timestamp"
+    },
+    {
+      "name": "attack_vector",
+      "type": "string"
+    },
+    {
+      "name": "severity",
+      "type": "string"
+    },
+    {
+      "name": "financial_impact_usd",
+      "type": "number"
+    },
+    {
+      "name": "detection_method",
+      "type": "string"
+    },
+    {
+      "name": "resolved",
+      "type": "boolean"
+    },
+    {
+      "name": "cluster_id",
+      "type": "string"
+    }
+  ]
+}

@@ -1,0 +1,271 @@
+{
+  "_meta": {
+    "domain": "cross_domain_analogues",
+    "description": "Continuously updated index of solved problems from adjacent fields, keyed by problem structure. Agents query this before finalizing hypotheses to surface non-obvious analytical paths.",
+    "schema_version": "1.0.0",
+    "last_updated": "2026-06-08T00:00:00Z",
+    "update_policy": "Updated via cdi_update.py when external retrieval, analyst mid-task discovery, or Phase 7 imports a new analogue."
+  },
+  "analogues": [
+    {
+      "id": "XDA_001",
+      "problem_structure": "Detecting coordinated behavior in a large population where individual actors appear normal",
+      "source_domain": "Epidemiology",
+      "source_solution": "Contact-tracing + SEIR model transmission network analysis. Treat actors as nodes; shared temporal activity creates edges; compute reproduction number R₀ for spread.",
+      "analytics_translation": "API accounts as nodes; correlated activity windows create edges in a temporal graph; R₀ for abuse spread characterizes cluster coherence and growth potential",
+      "structural_isomorphism": "Individual API calls look like random noise; coordinated abuse looks like disease spread — clusters, temporal correlation, superspreaders",
+      "first_used": null,
+      "use_count": 0,
+      "agents_accessed": []
+    },
+    {
+      "id": "XDA_002",
+      "problem_structure": "Detecting the moment a cluster crosses a threshold at which collective behavior becomes self-sustaining",
+      "source_domain": "Materials Science",
+      "source_solution": "Percolation threshold: the critical density at which a random network transitions from disconnected components to a spanning cluster. Below threshold: isolated behaviors. Above threshold: coordinated, self-reinforcing behavior.",
+      "analytics_translation": "Monitor the connectivity of the account graph. When cluster density crosses the percolation threshold, coordinated abuse becomes self-reinforcing. The threshold is a leading indicator, not a lagging one.",
+      "structural_isomorphism": "Abuse cluster formation has the same phase-transition signature as percolation in a random graph",
+      "first_used": null,
+      "use_count": 0,
+      "agents_accessed": []
+    },
+    {
+      "id": "XDA_003",
+      "problem_structure": "Detecting gradual drift in a system before threshold breach",
+      "source_domain": "Systems Biology",
+      "source_solution": "Critical slowing down: as a dynamical system approaches a tipping point, its recovery rate from small perturbations slows. This slowdown is detectable before the actual transition.",
+      "analytics_translation": "Monitor autocorrelation in pipeline PSI scores. Increasing autocorrelation is an early warning of impending structural break — detectable weeks before PSI threshold is crossed.",
+      "structural_isomorphism": "Gradual pipeline degradation = approach to tipping point; PSI autocorrelation = critical slowing down signal",
+      "first_used": null,
+      "use_count": 0,
+      "agents_accessed": []
+    },
+    {
+      "id": "XDA_004",
+      "problem_structure": "Sequential detection of a change in a rate process before a fixed threshold is crossed",
+      "source_domain": "Industrial Quality Control",
+      "source_solution": "CUSUM (Cumulative Sum Control Chart): accumulates deviations from a target rate; detects subtle rate shifts that individual observations miss. SPRT is the Bayesian generalization.",
+      "analytics_translation": "Apply SPRT to safety_bypass incident rate per cluster_b account. Detect rate change at month 4 before threshold-based rules trigger at month 7.",
+      "structural_isomorphism": "Safety bypass escalation = mean shift in a Poisson process; SPRT is the optimal sequential test for Poisson mean shifts",
+      "first_used": null,
+      "use_count": 0,
+      "agents_accessed": []
+    },
+    {
+      "id": "XDA_005",
+      "problem_structure": "Distinguishing genuine long-term signal from novelty-driven short-term effect",
+      "source_domain": "Behavioral Economics",
+      "source_solution": "Hawthorne effect decay model: initial response to change decays as novelty wears off. Model decay curve explicitly; estimate long-run steady-state.",
+      "analytics_translation": "Fit exponential decay model to week-by-week experiment effect sizes. If fitted decay rate is significant and asymptote is near zero, report as novelty effect rather than genuine treatment effect.",
+      "structural_isomorphism": "Experiment novelty effect = Hawthorne effect; same decay structure, same confounding mechanism",
+      "first_used": null,
+      "use_count": 0,
+      "agents_accessed": []
+    },
+    {
+      "id": "XDA_006",
+      "problem_structure": "Characterizing the financial impact of low-frequency, high-severity events",
+      "source_domain": "Actuarial Science",
+      "source_solution": "Extreme value theory (EVT): fit a generalized Pareto distribution to the tail of loss events. Estimate Value at Risk (VaR) and Conditional Value at Risk (CVaR) at 95th/99th percentiles.",
+      "analytics_translation": "Fit GPD to financial_impact tail. Report 99th-percentile single-event loss and expected annual maximum loss. More informative than mean + standard deviation for fat-tailed distributions.",
+      "structural_isomorphism": "Financial fraud losses are fat-tailed (power-law or Pareto distributed); standard mean/variance is misleading for risk quantification",
+      "first_used": null,
+      "use_count": 0,
+      "agents_accessed": []
+    },
+    {
+      "id": "XDA_007",
+      "problem_structure": "Designing a detection system that adversaries will try to game",
+      "source_domain": "Military Intelligence / OSINT",
+      "source_solution": "Mosaic theory: no single source is conclusive; the pattern formed by combining many individually innocent data points reveals the target. Adversaries can suppress individual signals but cannot suppress the mosaic.",
+      "analytics_translation": "Anti-abuse detection should not rely on any single metric crossing a threshold. Combine: timing correlation, token count similarity, content category drift, spend pattern, session clustering. Each individually gameable; collectively not.",
+      "structural_isomorphism": "Coordinated abuse = adversarial actor trying to hide in normal population; mosaic detection = game-theoretic-robust signal combination",
+      "first_used": null,
+      "use_count": 0,
+      "agents_accessed": []
+    },
+    {
+      "id": "XDA_008",
+      "problem_structure": "Estimating the causal effect of a policy change when randomized assignment was not possible",
+      "source_domain": "Econometrics",
+      "source_solution": "Difference-in-differences (DiD) or synthetic control method. Use control group whose trend matched treatment group pre-intervention to construct the counterfactual.",
+      "analytics_translation": "When a regulatory event changes behavior for accounts in one jurisdiction, use accounts in other jurisdictions as the control group. Estimate causal effect of regulation on abuse rates.",
+      "structural_isomorphism": "Regulatory event = natural experiment; jurisdictional variation = treatment/control assignment",
+      "first_used": null,
+      "use_count": 0,
+      "agents_accessed": []
+    },
+    {
+      "id": "XDA_009",
+      "problem_structure": "Understanding why an automated system behaves differently from its reference specification",
+      "source_domain": "Aerospace Engineering",
+      "source_solution": "Fault tree analysis (FTA): top-down deductive failure analysis. Start from the observed failure, decompose into all possible causing events, trace to root causes. Used in aircraft incident investigation.",
+      "analytics_translation": "When a pipeline behaves unexpectedly (PSI spike, schema drift, row count delta), build a fault tree from the observed failure. Each branch is a testable hypothesis. Prune by data evidence.",
+      "structural_isomorphism": "Unexpected pipeline behavior = system failure event; fault tree decomposition = root-cause analysis protocol",
+      "first_used": null,
+      "use_count": 0,
+      "agents_accessed": []
+    },
+    {
+      "id": "XDA_010",
+      "problem_structure": "Compounding improvement across multiple cycles using exploration vs. exploitation tradeoff",
+      "source_domain": "Immunology",
+      "source_solution": "Somatic hypermutation in B-cell affinity maturation: during germinal center response, B-cells undergo mutation rates 10^6x higher than baseline. Forced exploration by biological law — even successful antibodies are mutated to find better variants.",
+      "analytics_translation": "The Algorithmic Rule's 10% exploration budget is this mechanism. Exploration cycles draw from Constraint Register (currently-disbelieved hypotheses). Specified design target, not a measured result: the model projects capability plateauing at ~1.65x without exploration versus ~11.5x at cycle 50 with it. Projection only \u2014 not an observed outcome.",
+      "structural_isomorphism": "Analytical capability accumulation = affinity maturation; exploration budget = hypermutation rate; Constraint Register = population of dispreferred variants to try",
+      "first_used": null,
+      "use_count": 0,
+      "agents_accessed": []
+    },
+    {
+      "id": "XDA_011",
+      "problem_structure": "Diagnosing the underlying cause of a pipeline failure when symptoms could fit multiple disease states",
+      "source_domain": "Medicine",
+      "source_solution": "Differential diagnosis: enumerate every disease that could produce the observed presentation, rank by prior probability conditioned on context, run ordered cheapest-first tests that maximally separate the hypotheses, treat the highest posterior. Triage by severity-vs-time-window; first-do-no-harm (primum non nocere) — when the cure is riskier than the disease, observe rather than intervene.",
+      "analytics_translation": "Healing Agent: enumerate failure hypotheses (schema drift, upstream skew, generator regression, scale change), rank by prior on this pipeline class, run quickest-to-execute test that separates them (row count vs. PSI vs. schema hash). Apply lowest-risk-reversible remedy first. If candidate remedy is destructive and the failure is non-degrading, observe one more cycle before acting.",
+      "structural_isomorphism": "Failure presentation in a pipeline = clinical presentation in a patient; PSI/schema/latency signals = diagnostic tests; remediation = treatment; first-do-no-harm = reversibility-weighted scoring; triage = L0–L4 severity ladder",
+      "failure_classes": ["structural_break", "gradual_degradation", "contamination", "ambiguity"],
+      "repair_strategies": [
+        {
+          "name": "differential_diagnosis_triage",
+          "description": "Enumerate hypotheses, run cheapest discriminating test, treat highest posterior",
+          "prior_success": 0.78,
+          "reversibility": 0.95,
+          "blast_radius": 0.15,
+          "preconditions": ["multiple candidate failure classes", "low-cost discriminating tests available"]
+        },
+        {
+          "name": "first_do_no_harm_observe",
+          "description": "When candidate remedy is destructive and failure is non-degrading, observe one more cycle",
+          "prior_success": 0.65,
+          "reversibility": 1.0,
+          "blast_radius": 0.0,
+          "preconditions": ["failure is non-degrading", "remedy is destructive", "observation cycle is cheap"]
+        }
+      ],
+      "first_used": null,
+      "use_count": 0,
+      "agents_accessed": []
+    },
+    {
+      "id": "XDA_012",
+      "problem_structure": "Localizing a failure to its stress concentrator and routing around the weak point",
+      "source_domain": "Materials Science",
+      "source_solution": "Stress-concentrator localization: catastrophic failures originate at micro-defects where stress accumulates non-uniformly (notches, voids, grain boundaries). Find the concentrator; redesign so that load redistributes around it. Pair with fail-safe defaults: when load exceeds spec, fall back to a known-good state rather than progress past the elastic limit.",
+      "analytics_translation": "Healing Agent: when a pipeline fails, identify the single component (transformation step, schema field, parameter) where the failure originates. Quarantine that step and route around it with a fail-safe default value (last known good, or median). The downstream pipeline degrades gracefully rather than cascading.",
+      "structural_isomorphism": "Pipeline failure cascade = stress-concentrator-driven fracture; quarantine + default = load redistribution + fail-safe; the weakest link sets the system's effective tolerance",
+      "failure_classes": ["structural_break", "cascade", "capacity_overload"],
+      "repair_strategies": [
+        {
+          "name": "stress_concentrator_quarantine",
+          "description": "Identify the failing step, quarantine, route around with fail-safe default",
+          "prior_success": 0.72,
+          "reversibility": 0.85,
+          "blast_radius": 0.25,
+          "preconditions": ["failure localizable to single component", "fail-safe default exists"]
+        },
+        {
+          "name": "fail_safe_default_substitution",
+          "description": "Replace the failed value/row with last known good or median",
+          "prior_success": 0.80,
+          "reversibility": 1.0,
+          "blast_radius": 0.10,
+          "preconditions": ["historical baseline available", "downstream consumers tolerate substituted values"]
+        }
+      ],
+      "first_used": null,
+      "use_count": 0,
+      "agents_accessed": []
+    },
+    {
+      "id": "XDA_013",
+      "problem_structure": "Restoring homeostasis after a perturbation without losing memory of the perturbation",
+      "source_domain": "Systems Biology",
+      "source_solution": "Homeostatic restoration: living systems detect departures from setpoint and apply negative-feedback corrections proportional to the deviation. Coupled with isolate-and-remember: when an invading pattern is detected, immune system isolates it (granuloma, neutrophil swarm) and retains a record (memory B-cells) for faster future response. Graceful apoptosis: when a cell is irrecoverable, it self-destructs without spilling damage into neighbors.",
+      "analytics_translation": "Healing Agent: when a metric drifts, apply a proportional correction (smoothing, re-baselining) that returns the system to setpoint without erasing the drift signal. Log the drift signature for future faster recognition. When a record is fully corrupted (cannot be coerced), drop it cleanly with an audit log rather than letting it propagate NaN/null cascades downstream.",
+      "structural_isomorphism": "Metric drift = perturbation from homeostatic setpoint; smoothing correction = negative feedback; drift signature log = immune memory; clean-drop of corrupted records = graceful apoptosis",
+      "failure_classes": ["gradual_degradation", "contamination", "ambiguity"],
+      "repair_strategies": [
+        {
+          "name": "homeostatic_smoothing_correction",
+          "description": "Proportional re-baselining toward setpoint, log signature for future recognition",
+          "prior_success": 0.70,
+          "reversibility": 0.90,
+          "blast_radius": 0.20,
+          "preconditions": ["drift is gradual and bounded", "setpoint is well-defined"]
+        },
+        {
+          "name": "graceful_apoptosis_record_drop",
+          "description": "Cleanly drop irrecoverable records with audit log; prevent NaN cascades",
+          "prior_success": 0.85,
+          "reversibility": 0.50,
+          "blast_radius": 0.15,
+          "preconditions": ["affected records are isolable", "audit log captures the drop"]
+        }
+      ],
+      "first_used": null,
+      "use_count": 0,
+      "agents_accessed": []
+    },
+    {
+      "id": "XDA_014",
+      "problem_structure": "Maintaining operational capability when part of the system is degraded or non-functional",
+      "source_domain": "Military Logistics",
+      "source_solution": "Graceful degradation: design for partial failure. When a node falls offline, fall back to next-best routing rather than halting the convoy. OODA loop (Observe-Orient-Decide-Act): cycle faster than the failure can propagate. Pre-positioned alternatives: every primary route has a documented fallback route exercised regularly so it's not theoretical.",
+      "analytics_translation": "Healing Agent: when a primary data path fails (parquet read, semantic-layer dimension resolution), fall back to a secondary path (older snapshot, alternate dimension) with reduced fidelity but functional output. Mark the output as degraded so downstream consumers can decide. Run the failure-detection loop faster than failure propagation rate.",
+      "structural_isomorphism": "Primary data path failure = supply line interruption; fallback = alternate route; OODA cycle time < failure propagation rate = system stays ahead of the failure",
+      "failure_classes": ["cascade", "structural_break", "capacity_overload"],
+      "repair_strategies": [
+        {
+          "name": "fallback_routing_degraded_mode",
+          "description": "Switch to secondary data path, mark output as degraded",
+          "prior_success": 0.75,
+          "reversibility": 0.95,
+          "blast_radius": 0.20,
+          "preconditions": ["secondary path exists and is current", "downstream consumers handle degraded flag"]
+        },
+        {
+          "name": "ooda_accelerated_monitoring",
+          "description": "Increase Diagnostic poll frequency to outpace failure propagation",
+          "prior_success": 0.60,
+          "reversibility": 1.0,
+          "blast_radius": 0.05,
+          "preconditions": ["monitoring capacity available", "failure propagation rate is observable"]
+        }
+      ],
+      "first_used": null,
+      "use_count": 0,
+      "agents_accessed": []
+    },
+    {
+      "id": "XDA_015",
+      "problem_structure": "Establishing the chain of causation between an observed harm and its origin for adjudication",
+      "source_domain": "Law",
+      "source_solution": "Proximate-and-root cause tracing: distinguish the proximate cause (most immediate trigger) from the root cause (underlying condition that made the trigger consequential). Precedent retrieval: identify the closest analogous prior case and its resolution. Evidentiary thresholds: don't act on insufficient proof — preponderance of evidence vs. beyond reasonable doubt, calibrated to the severity of the action.",
+      "analytics_translation": "Healing Agent: when a failure cascades through multiple steps, distinguish the immediate trigger (which row first violated schema) from the root condition (which upstream change introduced the schema drift). Search the Few-Shot Bank for prior healing records on similar failures. Require evidentiary threshold matched to remedy severity — a destructive remedy needs higher confidence than a reversible one.",
+      "structural_isomorphism": "Failure cascade = chain of causation; proximate-cause = immediate trigger; root-cause = upstream origin; evidentiary threshold = confidence requirement scaled to remedy reversibility",
+      "failure_classes": ["cascade", "structural_break", "contamination", "ambiguity"],
+      "repair_strategies": [
+        {
+          "name": "proximate_root_cause_tracing",
+          "description": "Walk failure chain backward to first violation; remediate at root, not symptom",
+          "prior_success": 0.82,
+          "reversibility": 0.90,
+          "blast_radius": 0.30,
+          "preconditions": ["failure chain is reconstructable from logs", "upstream access is available"]
+        },
+        {
+          "name": "precedent_retrieval_remediation",
+          "description": "Retrieve closest prior healing record from Few-Shot Bank; replay with adjustments",
+          "prior_success": 0.68,
+          "reversibility": 0.95,
+          "blast_radius": 0.20,
+          "preconditions": ["matching precedent exists in Few-Shot Bank", "context is similar enough to replay"]
+        }
+      ],
+      "first_used": null,
+      "use_count": 0,
+      "agents_accessed": []
+    }
+  ]
+}

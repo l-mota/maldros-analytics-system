@@ -1,0 +1,21 @@
+experiment_id,start_date,end_date,metric,control_n,treatment_n,effect_size,p_value,ci_lower,ci_upper,srm_detected,novelty_effect_suspected,ship_decision,analyst_notes
+EXP-001,2024-01-31 00:00:00,2024-02-21 00:00:00,fraud_loss_direct,2000,1274,0.0289,0.10115,-0.0211,0.0789,True,False,inconclusive,SRM detected — control/treatment ratio deviates from 50/50 plan.
+EXP-002,2024-02-25 00:00:00,2024-03-17 00:00:00,account_takeover_volume,5000,3233,0.0056,0.09616,-0.0444,0.0556,True,False,inconclusive,SRM detected — control/treatment ratio deviates from 50/50 plan.
+EXP-003,2024-03-21 00:00:00,2024-04-11 00:00:00,compliance_cost_per_incident,500,496,0.0886,0.02252,0.0586,0.1486,False,True,no_ship,Novelty effect suspected — early-adopter cohort over-represented in treatment.
+EXP-004,2024-04-15 00:00:00,2024-05-06 00:00:00,safety_bypass_incidents,2000,1997,0.0954,0.00484,0.0572,0.1335,False,False,ship,Genuine significant effect. Passed all quality checks.
+EXP-005,2024-05-10 00:00:00,2024-05-31 00:00:00,compliance_cost_per_incident,5000,4969,0.02,0.16885,-0.04,0.08,False,False,no_ship,
+EXP-006,2024-06-04 00:00:00,2024-06-25 00:00:00,compliance_cost_per_incident,2000,2007,-0.0364,0.07084,-0.0964,0.0236,False,False,no_ship,
+EXP-007,2024-06-29 00:00:00,2024-07-20 00:00:00,compliance_cost_per_incident,1000,1010,0.0309,0.48853,-0.0291,0.0909,False,False,no_ship,
+EXP-008,2024-07-24 00:00:00,2024-08-14 00:00:00,safety_bypass_incidents,1000,1011,0.1106,0.11054,0.0506,0.1706,False,False,no_ship,
+EXP-009,2024-08-18 00:00:00,2024-09-08 00:00:00,compliance_cost_per_incident,5000,4945,-0.0155,0.40682,-0.0755,0.0445,False,False,no_ship,
+EXP-010,2024-09-12 00:00:00,2024-10-03 00:00:00,safety_bypass_incidents,500,501,-0.0086,0.11915,-0.0686,0.0514,False,False,no_ship,
+EXP-011,2024-10-07 00:00:00,2024-10-28 00:00:00,account_takeover_volume,1000,1003,0.0818,0.11581,0.0218,0.1418,False,False,no_ship,
+EXP-012,2024-11-01 00:00:00,2024-11-22 00:00:00,account_takeover_volume,2000,1935,0.105,0.24109,0.045,0.165,False,False,no_ship,
+EXP-013,2024-11-26 00:00:00,2024-12-17 00:00:00,fraud_loss_direct,500,500,0.0996,0.31935,0.0396,0.1596,False,False,no_ship,
+EXP-014,2024-12-21 00:00:00,2025-01-11 00:00:00,compliance_cost_per_incident,5000,4859,0.0069,0.30595,-0.0531,0.0669,False,False,no_ship,
+EXP-015,2025-01-15 00:00:00,2025-02-05 00:00:00,account_takeover_volume,2000,1983,0.0827,0.25611,0.0227,0.1427,False,False,no_ship,
+EXP-016,2025-02-09 00:00:00,2025-03-02 00:00:00,api_abuse_rate,2000,1893,0.1015,0.22412,0.0415,0.1615,False,False,no_ship,
+EXP-017,2025-03-06 00:00:00,2025-03-27 00:00:00,compliance_cost_per_incident,1000,1004,0.0958,0.31525,0.0358,0.1558,False,False,no_ship,
+EXP-018,2025-03-31 00:00:00,2025-04-21 00:00:00,safety_bypass_incidents,2000,1993,-0.0324,0.11652,-0.0924,0.0276,False,False,no_ship,
+EXP-019,2025-04-25 00:00:00,2025-05-16 00:00:00,account_takeover_volume,500,514,0.0403,0.29665,-0.0197,0.1003,False,False,no_ship,
+EXP-020,2025-05-20 00:00:00,2025-06-10 00:00:00,account_takeover_volume,500,505,0.1148,0.2174,0.0548,0.1748,False,False,no_ship,

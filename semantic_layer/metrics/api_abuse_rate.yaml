@@ -1,0 +1,82 @@
+name: api_abuse_rate
+label: API Abuse Rate
+description: >
+  Share of API call events classified as policy violations or borderline,
+  over total API call events in the period. Primary operational metric for
+  Vector 1 (Content Generation) and Vector 2 (Operational Scaling) threat
+  classes per Financial Impact Analysis §1.1–1.2.
+
+type: ratio
+grain: daily (default); hourly (incident investigation mode)
+
+computation_logic: |
+  # Python pseudocode — not SQL
+  # abuse_events: api_events where content_category IN ('policy_violation', 'borderline')
+  # total_events: all api_events in the period
+
+  abuse_count = api_events[
+      (api_events['content_category'].isin(['policy_violation', 'borderline']))
+      & (api_events['timestamp'] >= period_start)
+      & (api_events['timestamp'] < period_end)
+  ].shape[0]
+
+  total_count = api_events[
+      (api_events['timestamp'] >= period_start)
+      & (api_events['timestamp'] < period_end)
+  ].shape[0]
+
+  api_abuse_rate = abuse_count / total_count if total_count > 0 else None
+
+applicable_filters:
+  - attack_vector (filter to api_abuse for vector-specific view)
+  - account_tier (free/pro/enterprise/trial)
+  - region (US/EU/APAC/LATAM)
+  - time_period (daily/weekly/monthly)
+  - is_flagged (True to focus on known-bad accounts)
+  - cluster_id (cluster_a/cluster_b/cluster_c — for cluster-specific investigation)
+
+dimensions:
+  - attack_vector
+  - account_tier
+  - region
+  - time_period
+
+owner: analyst
+team: fraud_abuse_analytics
+
+policy_rationale: >
+  This metric is the primary leading indicator for API abuse. A sustained rate
+  above 3% in any 7-day window triggers Confirmation Gate review. A rate above
+  5% triggers AIMS Mode B notification. The borderline category is included
+  because borderline events are material precursors to confirmed policy violations
+  — excluding them understates abuse exposure.
+
+  Segment borderline separately from policy_violation when analyzing precision
+  of the classification system itself — they are combined here for exposure measurement.
+
+benchmark:
+  industry_low: 0.008   # 0.8% — well-managed platforms
+  industry_high: 0.032  # 3.2% — elevated abuse environment
+  alert_threshold: 0.050  # 5% — Confirmation Gate trigger
+  critical_threshold: 0.100  # 10% — AIMS Mode B + team escalation
+
+known_limitations:
+  - content_category classification depends on model output which may drift over time
+    (monitor PSI on content_category distribution as a proxy for classifier drift)
+  - borderline category has lower precision than policy_violation; segment separately
+    when analyzing classifier performance
+  - does not capture abuse that successfully evades content classification — this is
+    the unknown_category, which should be monitored separately for anomalous volume
+  - at high query volumes, borderline events can be temporarily misclassified due to
+    model rate limits causing degraded output quality; check for correlation between
+    high-volume periods and borderline spikes
+
+judgment_mechanism: 1
+  # Mechanism 1: computable from data without analyst judgment
+  # Denominator is stable; numerator has known classification limitations
+
+version_history:
+  - version: "1.0.0"
+    date: "2026-06-08"
+    change: "Initial definition — Phase 0"
+    author: analyst

@@ -1,0 +1,95 @@
+name: fraud_incident
+label: Fraud Incident
+description: >
+  A confirmed or suspected instance of fraud or abuse. The fraud_incident entity
+  is the central record for the Financial Impact Analysis — it captures
+  what happened, when it was detected, how it was detected, what it cost, and
+  whether it was resolved.
+
+primary_key: incident_id
+format: "INC-{5-digit zero-padded integer}"
+
+fields:
+  incident_id:
+    type: string
+    required: true
+    unique: true
+
+  account_id:
+    type: string
+    foreign_key: api_account.account_id
+    required: true
+
+  detected_date:
+    type: timestamp
+    description: When the incident was detected (not when it occurred — detection lag is expected)
+    required: true
+
+  attack_vector:
+    type: categorical
+    values: [api_abuse, safety_bypass, platform_fraud, downstream_harm, data_poisoning]
+    dimension: attack_vector
+    required: true
+
+  severity:
+    type: categorical
+    values: [low, medium, high, critical]
+    required: true
+
+  financial_impact_usd:
+    type: float
+    description: >
+      Estimated direct financial impact of this specific incident. For resolved
+      incidents this is confirmed; for unresolved it is an estimate.
+    nullable: false
+    confidence: CONFIRMED_IF_RESOLVED, ESTIMATED_IF_UNRESOLVED
+
+  detection_method:
+    type: categorical
+    values: [automated_threshold, automated_ml, human_review, external_report]
+    required: true
+
+  resolved:
+    type: boolean
+    description: True if the incident has been fully investigated and remediated
+    default: false
+
+  cluster_id:
+    type: categorical
+    values: [cluster_a, cluster_b, cluster_c, null]
+    description: Validation metadata — cluster membership for signal verification
+
+incident_severity_thresholds:
+  low:
+    financial_impact_range_usd: [100, 2000]
+    escalation: "AIMS Mode A log only"
+    review_required: false
+  medium:
+    financial_impact_range_usd: [2000, 15000]
+    escalation: "AIMS Mode A + analyst notification"
+    review_required: false
+  high:
+    financial_impact_range_usd: [15000, 80000]
+    escalation: "AIMS Mode A + Confirmation Gate consideration"
+    review_required: true_if_novel
+  critical:
+    financial_impact_range_usd: [80000, null]
+    escalation: "AIMS Mode B + Confirmation Gate + immediate notification"
+    review_required: true
+
+relationships:
+  - entity: api_account
+    relationship: many-to-one
+    join_key: account_id
+
+  - entity: regulatory_action
+    relationship: many-to-many (via jurisdiction and time period)
+    join_key: "attack_vector + period (lag join)"
+
+sprt_monitoring:
+  description: >
+    The safety_bypass_incidents metric runs SPRT monitoring on the monthly incident
+    rate per account. The fraud_incident entity is the input data source.
+    Cluster B accounts in the dataset show the required gradual escalation signal.
+
+version: "1.0.0"

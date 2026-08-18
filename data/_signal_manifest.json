@@ -1,0 +1,67 @@
+{
+  "generated_at": "2026-06-09T13:04:06.666525",
+  "scale": 1.0,
+  "seed": 42,
+  "table_row_counts": {
+    "accounts": 2000,
+    "api_events": 750000,
+    "fraud_incidents": 475,
+    "financial_impact": 198,
+    "experiments": 20,
+    "pipeline_health": 7500,
+    "regulatory_events": 50
+  },
+  "signal_1_coordinated_clusters": {
+    "cluster_a_accounts": 8,
+    "cluster_b_accounts": 6,
+    "cluster_c_accounts": 5,
+    "cluster_a_events": 30000,
+    "cluster_b_events": 27000,
+    "cluster_c_events": 15000,
+    "cluster_pct_of_events": 9.6,
+    "validation": "Graph analysis should find 3 connected components; individual account metrics do not exceed is_flagged threshold trivially."
+  },
+  "signal_2_safety_bypass_escalation": {
+    "cluster_b_total_incidents": 223,
+    "month_0_3_rate": 6.5,
+    "month_4_11_rate": 12.6,
+    "month_12_17_rate": 16.0,
+    "escalation_ratio": 2.5,
+    "validation": "SPRT detects rate change starting ~month 4. Fixed threshold does not trigger until month 8+."
+  },
+  "signal_3_experiment_pathologies": {
+    "srm_experiments": [
+      "EXP-001",
+      "EXP-002"
+    ],
+    "novelty_effect_experiments": [
+      "EXP-003"
+    ],
+    "genuine_significant": [
+      "EXP-004"
+    ]
+  },
+  "signal_4_pipeline_failures": {
+    "structural_break_records": 248,
+    "cascade_records": 233,
+    "gradual_degradation_records": 96,
+    "validation": "All 3 injected failure types present."
+  },
+  "signal_5_regulatory_lag": {
+    "high_relevance_events": 7,
+    "lag_correlated_pairs": [
+      {
+        "lag_from_internal_event": "March 2024 api_abuse spike",
+        "lag_days": 102.0
+      },
+      {
+        "lag_from_internal_event": "August 2024 safety_bypass peak",
+        "lag_days": 99.0
+      }
+    ]
+  },
+  "phase_0_acceptance_criteria": {
+    "all_5_signals_present": true,
+    "row_counts_meet_minimums": true
+  }
+}

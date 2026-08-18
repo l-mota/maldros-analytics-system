@@ -1,0 +1,48 @@
+{
+  "table": "financial_impact",
+  "full_dataset_row_count": 198,
+  "sample_row_count": 100,
+  "note": "Schema derived from the generated dataset. The row sample in data/samples/ is illustrative only and is NOT the dataset the case-study figures were computed from.",
+  "columns": [
+    {
+      "name": "period",
+      "type": "string"
+    },
+    {
+      "name": "attack_vector",
+      "type": "string"
+    },
+    {
+      "name": "region",
+      "type": "string"
+    },
+    {
+      "name": "direct_loss_usd",
+      "type": "number"
+    },
+    {
+      "name": "indirect_cost_usd",
+      "type": "number"
+    },
+    {
+      "name": "regulatory_penalty_usd",
+      "type": "number"
+    },
+    {
+      "name": "legal_liability_usd",
+      "type": "number"
+    },
+    {
+      "name": "remediation_cost_usd",
+      "type": "number"
+    },
+    {
+      "name": "compute_overhead_usd",
+      "type": "number"
+    },
+    {
+      "name": "total_impact_usd",
+      "type": "number"
+    }
+  ]
+}

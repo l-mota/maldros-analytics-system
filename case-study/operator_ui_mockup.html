@@ -1,0 +1,1945 @@
+<!DOCTYPE html>
+<!-- You are looking at the SOURCE of this page. GitHub displays .html as text.
+     Read it rendered here:
+     https://l-mota.github.io/maldros-analytics-system/case-study/operator_ui_mockup.html -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maldros — Operator Interface</title>
+<style>
+:root {
+  /* ─ Operator UI Design Language (Option D · Apple-style editorial)
+     Scope: this file only. Stakeholder artifacts (reports, charts,
+     briefings) remain under C-031. Operator UI exempted by C-035.
+     C-034 Critical-color conflict resolved: red #A12E1F reserved for
+     L4 / Design Invariant / safety-class only.                       */
+
+  /* surface + ink */
+  --bg-app:        #F2F2EF;
+  --bg-surface:    #FFFFFF;
+  --bg-surface-2:  #FBFBF9;
+  --bg-elevated:   #FFFFFF;
+  --border-quiet:  rgba(0,0,0,0.06);
+  --border-strong: rgba(0,0,0,0.10);
+
+  --ink:    #1D1D1F;
+  --ink-2:  #5C5C60;
+  --ink-3:  #8E8E93;
+
+  /* state colors (data-meaning) */
+  --brand:         #0F3528;
+  --info:          #0F3528;
+  --info-bg:       rgba(15,53,40,0.07);
+  --info-text:     #0F3528;
+
+  --action:        #B07315;
+  --action-bg:     #F6ECDA;
+  --action-text:   #7A4E0E;
+  --action-border: rgba(176,115,21,0.20);
+
+  --nominal:       #2D5A3D;
+  --nominal-bg:    #E5EBE3;
+  --nominal-text:  #1E3D29;
+  --nominal-border:rgba(45,90,61,0.20);
+
+  --critical:        #A12E1F;
+  --critical-bg:     #F5E3DF;
+  --critical-text:   #7D2117;
+  --critical-border: rgba(161,46,31,0.25);
+
+  --idle:    #8E8E93;
+  --idle-bg: rgba(0,0,0,0.04);
+
+  /* type */
+  --font-sans:  -apple-system, "SF Pro Display", "SF Pro Text", "Inter", "Segoe UI", system-ui, sans-serif;
+  --font-mono:  "SF Mono", "Cascadia Code", "Fira Code", ui-monospace, monospace;
+
+  --t-xs:  11px;
+  --t-sm:  13px;
+  --t-md:  15px;
+  --t-lg:  18px;
+  --t-xl:  22px;
+  --t-display: 32px;
+
+  --w-r: 400;
+  --w-m: 500;
+  --w-sb:600;
+  --w-b: 700;
+
+  /* spacing — 4px grid */
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 20px;
+  --s6: 24px;
+  --s7: 32px;
+  --s8: 40px;
+
+  /* radius */
+  --r-sm:   8px;
+  --r-md:   12px;
+  --r-lg:   16px;
+  --r-xl:   20px;
+  --r-pill: 100px;
+
+  /* layout */
+  --sidebar-w: 240px;
+  --topbar-h:  56px;
+
+  /* motion */
+  --ease: cubic-bezier(.4,0,.2,1);
+  --dur-fast: 80ms;
+  --dur-med:  220ms;
+
+  /* sidebar dark theme */
+  --sb-bg:        #0A1F13;
+  --sb-ink:       rgba(255,255,255,0.92);
+  --sb-ink-2:     rgba(255,255,255,0.58);
+  --sb-ink-3:     rgba(255,255,255,0.35);
+  --sb-active-bg: rgba(255,255,255,0.10);
+  --sb-hover-bg:  rgba(255,255,255,0.07);
+  --sb-border:    rgba(255,255,255,0.08);
+
+  font-family: var(--font-sans);
+  font-size: var(--t-sm);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.01em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg-app);
+  color: var(--ink);
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+}
+
+button { font: inherit; cursor: pointer; }
+
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════════════════════════════ */
+
+.sidebar {
+  width: var(--sidebar-w);
+  min-width: var(--sidebar-w);
+  background: var(--sb-bg);
+  border-right: 1px solid var(--sb-border);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.sb-brand {
+  padding: var(--s5) var(--s4) var(--s4);
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+}
+.sb-mark {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.12);
+  display: flex; align-items: center; justify-content: center;
+  color: #FFFAFA;
+  font-weight: var(--w-sb);
+  font-size: var(--t-md);
+  letter-spacing: -0.6px;
+  flex-shrink: 0;
+}
+.sb-brand-text { display: flex; flex-direction: column; gap: 1px; }
+.sb-brand-name {
+  font-size: var(--t-lg);
+  font-weight: var(--w-sb);
+  letter-spacing: -0.5px;
+  color: var(--sb-ink);
+}
+.sb-brand-sub {
+  font-size: var(--t-xs);
+  color: var(--sb-ink-3);
+  font-weight: var(--w-m);
+  letter-spacing: 0;
+}
+
+.sb-workspace { padding: 0 var(--s3) var(--s3); }
+.ws-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  padding: var(--s2) var(--s3);
+  border-radius: var(--r-md);
+  border: 1px solid var(--sb-border);
+  background: var(--sb-hover-bg);
+  transition: background var(--dur-fast) var(--ease);
+}
+.ws-btn:hover { background: var(--sb-active-bg); }
+.ws-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--nominal);
+  flex-shrink: 0;
+}
+.ws-label {
+  font-size: var(--t-sm);
+  font-weight: var(--w-m);
+  color: var(--sb-ink);
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ws-chev { font-size: 11px; color: var(--sb-ink-3); }
+
+.sb-nav {
+  flex: 1;
+  padding: var(--s3) var(--s2);
+  overflow-y: auto;
+}
+.nav-section-label {
+  font-size: 10.5px;
+  font-weight: var(--w-sb);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sb-ink-3);
+  padding: var(--s3) var(--s3) var(--s2);
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  padding: var(--s2) var(--s3);
+  margin-bottom: 2px;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  color: var(--sb-ink-2);
+  font-size: var(--t-sm);
+  font-weight: var(--w-m);
+  transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+  border: 0;
+  width: 100%;
+  background: transparent;
+  text-align: left;
+}
+.nav-item:hover { background: var(--sb-hover-bg); color: var(--sb-ink); }
+.nav-item.active {
+  background: var(--sb-active-bg);
+  color: var(--sb-ink);
+  font-weight: var(--w-sb);
+}
+.nav-icon {
+  width: 18px;
+  font-size: var(--t-md);
+  flex-shrink: 0;
+  color: var(--sb-ink-3);
+  text-align: center;
+  transition: color var(--dur-fast) var(--ease);
+}
+.nav-item:hover .nav-icon { color: var(--sb-ink-2); }
+.nav-item.active .nav-icon { color: var(--sb-ink); }
+.nav-label { flex: 1; }
+.nav-badge {
+  font-size: var(--t-xs);
+  font-weight: var(--w-sb);
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  background: var(--action-bg);
+  color: var(--action-text);
+  min-width: 22px;
+  text-align: center;
+}
+.nav-badge.crit { background: var(--critical-bg); color: var(--critical-text); }
+
+/* ═══════════════════════════════════════════════════════════════
+   MAIN
+═══════════════════════════════════════════════════════════════ */
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  min-width: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TOPBAR
+═══════════════════════════════════════════════════════════════ */
+
+.topbar {
+  height: var(--topbar-h);
+  min-height: var(--topbar-h);
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-quiet);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--s6);
+  gap: var(--s4);
+}
+.tb-crumb {
+  font-size: var(--t-md);
+  color: var(--ink-2);
+  font-weight: var(--w-m);
+}
+.tb-crumb .tb-active {
+  color: var(--ink);
+  font-weight: var(--w-sb);
+}
+.tb-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+}
+.tb-status {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  font-size: var(--t-sm);
+  color: var(--nominal-text);
+  font-weight: var(--w-m);
+  padding: 6px var(--s3);
+  background: var(--nominal-bg);
+  border-radius: var(--r-pill);
+}
+.tb-status.action { color: var(--action-text); background: var(--action-bg); }
+.tb-status.critical { color: var(--critical-text); background: var(--critical-bg); }
+.pulse-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--nominal);
+  flex-shrink: 0;
+  animation: pulse 2.4s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+.tb-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px var(--s3);
+  border-radius: var(--r-pill);
+  font-size: var(--t-sm);
+  font-weight: var(--w-m);
+  background: var(--bg-app);
+  color: var(--ink-2);
+}
+.tb-chip.run { color: var(--info-text); }
+.tb-chip.run::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--info);
+  animation: pulse 2s ease-in-out infinite;
+}
+.tb-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--brand);
+  color: #FFFAFA;
+  font-size: var(--t-sm);
+  font-weight: var(--w-sb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: -0.3px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CONTENT
+═══════════════════════════════════════════════════════════════ */
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--s6) var(--s7);
+  background: var(--bg-app);
+}
+
+.panel {
+  display: none;
+  animation: fadeIn var(--dur-med) var(--ease);
+}
+.panel.active { display: block; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* page header */
+.pg-title {
+  font-size: var(--t-xl);
+  font-weight: var(--w-sb);
+  letter-spacing: -0.6px;
+  color: var(--ink);
+}
+.pg-sub {
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+  margin-top: var(--s1);
+  margin-bottom: var(--s6);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LAYOUT GRIDS
+═══════════════════════════════════════════════════════════════ */
+
+.g-kpis { display: grid; grid-template-columns: repeat(4,1fr); gap: var(--s4); }
+.g-survey { display: grid; grid-template-columns: 2fr 1fr; gap: var(--s4); }
+.g-cdi    { display: grid; grid-template-columns: repeat(4,1fr); gap: var(--s3); }
+.g-detail-aims { display: grid; grid-template-columns: 280px 1fr; gap: var(--s4); height: calc(100vh - 168px); }
+.g-detail-ph0  { display: grid; grid-template-columns: 1.6fr 1fr; gap: var(--s4); }
+.g-pair { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s4); }
+
+/* ═══════════════════════════════════════════════════════════════
+   SHARED COMPONENTS
+═══════════════════════════════════════════════════════════════ */
+
+/* card — Apple-style: no border, soft surface, generous radius */
+.card {
+  background: var(--bg-surface);
+  border-radius: var(--r-lg);
+  padding: var(--s5);
+}
+.card-flush { padding: 0; overflow: hidden; }
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--s4);
+}
+.card-head.flush { padding: var(--s4) var(--s5) var(--s3); margin-bottom: 0; }
+.card-title {
+  font-size: var(--t-md);
+  font-weight: var(--w-sb);
+  color: var(--ink);
+  letter-spacing: -0.2px;
+}
+.card-link {
+  font-size: var(--t-sm);
+  color: var(--info);
+  font-weight: var(--w-m);
+  cursor: pointer;
+}
+.card-link:hover { text-decoration: underline; }
+
+/* KPI card — Apple-style: big confident number */
+.kpi {
+  background: var(--bg-surface);
+  border-radius: var(--r-lg);
+  padding: var(--s5);
+}
+.kpi-label {
+  font-size: var(--t-sm);
+  font-weight: var(--w-m);
+  color: var(--ink-2);
+}
+.kpi-num {
+  font-size: var(--t-display);
+  font-weight: var(--w-sb);
+  letter-spacing: -1.4px;
+  line-height: 1;
+  margin-top: var(--s2);
+  color: var(--ink);
+}
+.kpi-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: var(--s4);
+  font-size: var(--t-xs);
+  font-weight: var(--w-m);
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+}
+.kpi-pill::before { content: ""; width: 5px; height: 5px; border-radius: 50%; }
+.kpi-pill.nominal { background: var(--nominal-bg); color: var(--nominal-text); }
+.kpi-pill.nominal::before { background: var(--nominal); }
+.kpi-pill.info    { background: var(--info-bg);    color: var(--info-text); }
+.kpi-pill.info::before { background: var(--info); }
+.kpi-pill.action  { background: var(--action-bg);  color: var(--action-text); }
+.kpi-pill.action::before { background: var(--action); }
+.kpi-pill.critical{ background: var(--critical-bg);color: var(--critical-text); }
+.kpi-pill.critical::before { background: var(--critical); }
+.kpi-pill.muted   { background: var(--idle-bg);    color: var(--idle); }
+.kpi-pill.muted::before { background: var(--idle); }
+
+/* badge — pill style, two-axis differentiated */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--t-xs);
+  font-weight: var(--w-sb);
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  letter-spacing: -0.01em;
+}
+.badge.nominal  { background: var(--nominal-bg);  color: var(--nominal-text); }
+.badge.action   { background: var(--action-bg);   color: var(--action-text); }
+.badge.critical { background: var(--critical-bg); color: var(--critical-text); }
+.badge.info     { background: var(--info-bg);     color: var(--info-text); }
+.badge.muted    { background: var(--idle-bg);     color: var(--idle); }
+
+/* table */
+.tbl { width: 100%; border-collapse: collapse; }
+.tbl th {
+  font-size: var(--t-xs);
+  font-weight: var(--w-sb);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding: var(--s3) var(--s4);
+  text-align: left;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--border-quiet);
+}
+.tbl td {
+  font-size: var(--t-sm);
+  padding: var(--s3) var(--s4);
+  color: var(--ink);
+  border-bottom: 1px solid var(--border-quiet);
+  vertical-align: middle;
+}
+.tbl tr:last-child td { border-bottom: none; }
+.tbl tr:hover td { background: var(--bg-surface-2); }
+.tbl .ts { color: var(--ink-3); font-size: var(--t-xs); white-space: nowrap; }
+.tbl .mono { font-family: var(--font-mono); font-size: var(--t-xs); color: var(--ink-3); }
+
+/* divider */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border-quiet);
+  margin: var(--s4) 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PANEL 1 — OPERATIONS CENTER
+═══════════════════════════════════════════════════════════════ */
+
+/* Top priority callout — the "what needs you" prompt */
+.priority {
+  display: flex;
+  align-items: center;
+  gap: var(--s4);
+  background: var(--bg-surface);
+  border-radius: var(--r-lg);
+  padding: var(--s4) var(--s5);
+  margin-bottom: var(--s4);
+  border-left: 4px solid var(--action);
+}
+.priority-icon {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--action-bg);
+  color: var(--action-text);
+  display: flex; align-items: center; justify-content: center;
+  font-size: var(--t-lg);
+  font-weight: var(--w-b);
+  flex-shrink: 0;
+}
+.priority-body { flex: 1; }
+.priority-title { font-size: var(--t-md); font-weight: var(--w-sb); color: var(--ink); }
+.priority-sub   { font-size: var(--t-sm); color: var(--ink-2); margin-top: 2px; }
+.priority-action {
+  font-size: var(--t-sm);
+  font-weight: var(--w-sb);
+  color: #FFFAFA;
+  background: var(--brand);
+  padding: var(--s2) var(--s4);
+  border-radius: var(--r-pill);
+  border: 0;
+  white-space: nowrap;
+  transition: opacity var(--dur-fast) var(--ease);
+}
+.priority-action:hover { opacity: 0.85; }
+
+/* agent activity */
+.agent-row {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  padding: var(--s3) 0;
+  border-bottom: 1px solid var(--border-quiet);
+}
+.agent-row:last-child { border-bottom: none; }
+.agent-name {
+  font-size: var(--t-sm);
+  font-weight: var(--w-sb);
+  min-width: 108px;
+  color: var(--ink);
+}
+.agent-task {
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+  flex: 1;
+  line-height: 1.5;
+}
+.agent-stat {
+  font-size: var(--t-xs);
+  font-weight: var(--w-sb);
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  white-space: nowrap;
+}
+.agent-stat.run  { background: var(--info-bg);    color: var(--info-text); }
+.agent-stat.idle { background: var(--idle-bg);    color: var(--idle); }
+.agent-stat.done { background: var(--nominal-bg); color: var(--nominal-text); }
+
+/* CDI mini tiles */
+.cdi-mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s2); }
+.cdi-mini {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  background: var(--bg-surface-2);
+  border-radius: var(--r-md);
+  padding: var(--s3);
+}
+.cdi-mini-text .n {
+  font-size: var(--t-sm);
+  font-weight: var(--w-sb);
+  color: var(--ink);
+  line-height: 1.3;
+}
+.cdi-mini-text .s {
+  font-size: var(--t-xs);
+  color: var(--ink-3);
+  margin-top: 2px;
+}
+.cdi-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+.cdi-dot.nom  { background: var(--nominal); }
+.cdi-dot.act  { background: var(--action); }
+.cdi-dot.crit { background: var(--critical); }
+.cdi-dot.off  { background: var(--idle); }
+
+/* alert items */
+.alert-item { display: flex; gap: var(--s3); align-items: flex-start; padding: var(--s2) 0; }
+.alert-body { flex: 1; }
+.alert-title { font-size: var(--t-sm); font-weight: var(--w-sb); color: var(--ink); }
+.alert-meta  { font-size: var(--t-xs); color: var(--ink-3); margin-top: 2px; }
+
+/* metric health row */
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--s2) 0;
+}
+.metric-name { font-size: var(--t-sm); color: var(--ink-2); }
+
+/* ═══════════════════════════════════════════════════════════════
+   PANEL 2 — REVIEW QUEUE
+═══════════════════════════════════════════════════════════════ */
+
+.qdepth {
+  display: flex;
+  align-items: center;
+  gap: var(--s4);
+  background: var(--bg-surface);
+  border-radius: var(--r-lg);
+  padding: var(--s4) var(--s5);
+  margin-bottom: var(--s4);
+}
+.qdepth-label { font-size: var(--t-sm); font-weight: var(--w-sb); color: var(--nominal-text); white-space: nowrap; }
+.qdepth-track {
+  flex: 1;
+  height: 6px;
+  background: var(--idle-bg);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.qdepth-fill { height: 100%; border-radius: 3px; }
+.qdepth-fill.nom  { background: var(--nominal); }
+.qdepth-fill.act  { background: var(--action); }
+.qdepth-fill.crit { background: var(--critical); }
+.qdepth-count { font-size: var(--t-sm); font-weight: var(--w-sb); color: var(--nominal-text); white-space: nowrap; }
+
+/* Confirmation Gate card — restructured per design review:
+   header → plain-language summary (FIRST, largest) → sticky actions
+   → no-auto-approve banner → collapsible technical findings */
+.gate {
+  background: var(--bg-surface);
+  border-radius: var(--r-xl);
+  max-width: 760px;
+  margin: 0 auto;
+  position: relative;
+}
+.gate-head {
+  padding: var(--s6) var(--s6) var(--s4);
+  border-bottom: 1px solid var(--border-quiet);
+}
+.gate-meta-row {
+  display: flex;
+  gap: var(--s2);
+  align-items: center;
+  margin-bottom: var(--s3);
+  flex-wrap: wrap;
+}
+.gate-type {
+  font-size: var(--t-xs);
+  font-weight: var(--w-sb);
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+}
+.gate-type.ship    { background: var(--action-bg); color: var(--action-text); }
+.gate-type.brittle { background: var(--critical-bg); color: var(--critical-text); }
+.gate-type.arch    { background: var(--info-bg); color: var(--info-text); }
+.gate-title {
+  font-size: var(--t-lg);
+  font-weight: var(--w-sb);
+  letter-spacing: -0.4px;
+  color: var(--ink);
+}
+.gate-sub  { font-size: var(--t-sm); color: var(--ink-3); margin-top: var(--s1); }
+
+/* Plain-language summary — promoted to top per review */
+.gate-plain {
+  padding: var(--s5) var(--s6);
+  background: var(--bg-surface-2);
+}
+.gate-plain-label {
+  font-size: var(--t-xs);
+  font-weight: var(--w-sb);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+  margin-bottom: var(--s2);
+}
+.gate-plain-body {
+  font-size: var(--t-md);
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+/* Sticky no-auto-approve + actions */
+.gate-decision {
+  position: sticky;
+  bottom: 0;
+  background: var(--bg-surface);
+  padding: var(--s4) var(--s6) var(--s5);
+  border-top: 1px solid var(--border-quiet);
+  border-radius: 0 0 var(--r-xl) var(--r-xl);
+}
+.gate-warn {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  background: var(--critical-bg);
+  border-radius: var(--r-md);
+  padding: var(--s3) var(--s4);
+  font-size: var(--t-sm);
+  font-weight: var(--w-m);
+  color: var(--critical-text);
+  margin-bottom: var(--s3);
+}
+.gate-warn::before {
+  content: "";
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--critical);
+  flex-shrink: 0;
+}
+.gate-actions { display: flex; gap: var(--s2); }
+.btn {
+  padding: var(--s3) var(--s5);
+  border-radius: var(--r-md);
+  font-size: var(--t-sm);
+  font-weight: var(--w-sb);
+  border: 0;
+  transition: opacity var(--dur-fast) var(--ease);
+}
+.btn:hover { opacity: 0.85; }
+.btn-approve { background: var(--nominal); color: #FFFAFA; flex: 1; }
+.btn-reject  { background: var(--critical); color: #FFFAFA; flex: 1; }
+.btn-revise  {
+  background: var(--bg-surface);
+  color: var(--ink-2);
+  border: 1px solid var(--border-strong);
+}
+
+/* Collapsible technical sections */
+.gate-collapsible {
+  padding: 0 var(--s6);
+}
+.gate-section { margin-bottom: var(--s5); }
+.gate-section:last-child { margin-bottom: var(--s5); }
+.gate-section-head {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  padding: var(--s3) 0;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  width: 100%;
+  text-align: left;
+}
+.gate-section-label {
+  font-size: var(--t-sm);
+  font-weight: var(--w-sb);
+  color: var(--ink);
+  letter-spacing: -0.1px;
+}
+.gate-section-chev {
+  font-size: var(--t-xs);
+  color: var(--ink-3);
+  transition: transform var(--dur-fast) var(--ease);
+}
+.gate-section.open .gate-section-chev { transform: rotate(90deg); }
+.gate-section-body {
+  display: none;
+  padding: var(--s2) 0 var(--s3) var(--s4);
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+.gate-section.open .gate-section-body { display: block; }
+.gate-bullets { list-style: none; display: flex; flex-direction: column; gap: var(--s2); }
+.gate-bullets li {
+  font-size: var(--t-sm);
+  color: var(--ink);
+  padding-left: var(--s3);
+  position: relative;
+  line-height: 1.5;
+}
+.gate-bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--ink-3);
+}
+
+.queue-footnote {
+  margin-top: var(--s4);
+  font-size: var(--t-xs);
+  color: var(--ink-3);
+  text-align: center;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PANEL 3 — INTELLIGENCE MONITOR
+═══════════════════════════════════════════════════════════════ */
+
+.cdi-domain {
+  background: var(--bg-surface);
+  border-radius: var(--r-lg);
+  padding: var(--s4);
+}
+.cdi-d-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--s2); }
+.cdi-d-name { font-size: var(--t-sm); font-weight: var(--w-sb); color: var(--ink); }
+.cdi-d-stat { font-size: 26px; font-weight: var(--w-sb); letter-spacing: -0.8px; color: var(--ink); line-height: 1; }
+.cdi-d-label { font-size: var(--t-xs); color: var(--ink-3); margin-top: 4px; }
+
+.na-item {
+  padding: var(--s3) var(--s4);
+  border-radius: var(--r-md);
+  margin-bottom: var(--s2);
+}
+.na-item:last-child { margin-bottom: 0; }
+.na-item.warn { background: var(--action-bg); }
+.na-item.info { background: var(--bg-surface-2); }
+.na-item .title { font-size: var(--t-sm); font-weight: var(--w-sb); margin-bottom: var(--s1); }
+.na-item.warn .title { color: var(--action-text); }
+.na-item.info .title { color: var(--ink); }
+.na-item .detail { font-size: var(--t-xs); color: var(--ink-2); line-height: 1.5; }
+.na-item .meta   { font-size: var(--t-xs); color: var(--ink-3); margin-top: var(--s2); }
+
+/* ═══════════════════════════════════════════════════════════════
+   PANEL 4 — DECISION HISTORY
+═══════════════════════════════════════════════════════════════ */
+
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  margin-bottom: var(--s4);
+  flex-wrap: wrap;
+}
+.filter-group {
+  display: flex;
+  background: var(--bg-surface);
+  border-radius: var(--r-md);
+  padding: 3px;
+  gap: 2px;
+}
+.filter-btn {
+  padding: 5px var(--s3);
+  font-size: var(--t-sm);
+  font-weight: var(--w-m);
+  color: var(--ink-2);
+  background: transparent;
+  border: 0;
+  border-radius: var(--r-sm);
+  transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+.filter-btn.active {
+  background: var(--info-bg);
+  color: var(--info-text);
+  font-weight: var(--w-sb);
+}
+.filter-btn:hover:not(.active) { background: var(--bg-app); }
+.filter-count {
+  margin-left: auto;
+  font-size: var(--t-sm);
+  color: var(--ink-3);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PANEL 5 — AIMS BRIEFING
+═══════════════════════════════════════════════════════════════ */
+
+.aims-list {
+  background: var(--bg-surface);
+  border-radius: var(--r-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.aims-tabs {
+  display: flex;
+  padding: var(--s3) var(--s4) 0;
+  gap: 2px;
+  border-bottom: 1px solid var(--border-quiet);
+}
+.aims-tab {
+  padding: var(--s2) var(--s3) var(--s3);
+  font-size: var(--t-sm);
+  font-weight: var(--w-sb);
+  color: var(--ink-3);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  background: transparent;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+}
+.aims-tab.active {
+  color: var(--info);
+  border-bottom-color: var(--info);
+}
+.aims-report-list { flex: 1; overflow-y: auto; }
+.aims-report-item {
+  padding: var(--s3) var(--s4);
+  border-bottom: 1px solid var(--border-quiet);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease);
+}
+.aims-report-item:last-child { border-bottom: none; }
+.aims-report-item:hover { background: var(--bg-surface-2); }
+.aims-report-item.active {
+  background: var(--info-bg);
+  border-left: 3px solid var(--info);
+  padding-left: calc(var(--s4) - 3px);
+}
+.ari-title { font-size: var(--t-sm); font-weight: var(--w-sb); color: var(--ink); margin-bottom: var(--s2); }
+.ari-row   { display: flex; gap: var(--s1); margin-bottom: var(--s2); flex-wrap: wrap; }
+.ari-meta  { font-size: var(--t-xs); color: var(--ink-3); }
+
+.aims-viewer {
+  background: var(--bg-surface);
+  border-radius: var(--r-lg);
+  padding: var(--s6);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.av-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: var(--s5); gap: var(--s4); }
+.av-title { font-size: var(--t-lg); font-weight: var(--w-sb); letter-spacing: -0.4px; color: var(--ink); }
+.av-meta  { font-size: var(--t-xs); color: var(--ink-3); margin-top: var(--s1); }
+.av-toggle {
+  display: flex;
+  background: var(--bg-surface-2);
+  border-radius: var(--r-md);
+  padding: 3px;
+  gap: 2px;
+}
+.layer-btn {
+  padding: 5px var(--s3);
+  font-size: var(--t-xs);
+  font-weight: var(--w-sb);
+  border: 0;
+  background: transparent;
+  color: var(--ink-2);
+  border-radius: var(--r-sm);
+}
+.layer-btn.active {
+  background: var(--bg-surface);
+  color: var(--ink);
+}
+.av-section { margin-bottom: var(--s5); }
+.av-sec-label {
+  font-size: var(--t-xs);
+  font-weight: var(--w-sb);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+  margin-bottom: var(--s2);
+}
+.av-sec-body { font-size: var(--t-sm); color: var(--ink); line-height: 1.7; }
+.av-conf { display: flex; align-items: center; gap: var(--s3); }
+.av-conf-bar { flex: 1; height: 6px; background: var(--idle-bg); border-radius: 3px; overflow: hidden; position: relative; }
+.av-conf-fill { height: 100%; background: var(--nominal); border-radius: 3px; }
+.av-conf-threshold {
+  position: absolute;
+  top: -3px;
+  width: 2px; height: 12px;
+  background: var(--ink-3);
+  border-radius: 1px;
+}
+.av-conf-val  { font-size: var(--t-sm); font-weight: var(--w-sb); color: var(--ink); }
+.av-conf-note { font-size: var(--t-xs); color: var(--ink-3); margin-top: var(--s2); }
+
+/* ═══════════════════════════════════════════════════════════════
+   PANEL 6 — PHASE 0 WORKSPACE
+═══════════════════════════════════════════════════════════════ */
+
+.check-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s3);
+  padding: var(--s3) 0;
+  border-bottom: 1px solid var(--border-quiet);
+}
+.check-row:last-child { border-bottom: none; }
+.check-icon {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--t-xs);
+  font-weight: var(--w-b);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.check-icon.pass { background: var(--nominal-bg); color: var(--nominal-text); }
+.check-icon.warn { background: var(--action-bg);  color: var(--action-text); }
+.check-icon.fail { background: var(--critical-bg); color: var(--critical-text); }
+.check-name   { font-size: var(--t-sm); font-weight: var(--w-sb); color: var(--ink); }
+.check-detail { font-size: var(--t-sm); color: var(--ink-2); margin-top: var(--s1); line-height: 1.5; }
+
+.profile-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--s2) 0;
+  border-bottom: 1px solid var(--border-quiet);
+}
+.profile-row:last-child { border-bottom: none; }
+.pr-label { font-size: var(--t-sm); color: var(--ink-2); }
+.pr-value { font-size: var(--t-sm); font-weight: var(--w-sb); color: var(--ink); }
+.pr-value.pass { color: var(--nominal-text); }
+
+.exit-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--s2) 0;
+}
+.exit-label { font-size: var(--t-sm); color: var(--ink-2); }
+
+.signoff {
+  display: flex;
+  align-items: center;
+  gap: var(--s4);
+  background: var(--bg-surface);
+  border-radius: var(--r-xl);
+  padding: var(--s5);
+  margin-top: var(--s5);
+  border-left: 4px solid var(--nominal);
+}
+.signoff-icon {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--nominal-bg);
+  color: var(--nominal-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--t-xl);
+  font-weight: var(--w-b);
+  flex-shrink: 0;
+}
+.signoff-body  { flex: 1; }
+.signoff-title { font-size: var(--t-md); font-weight: var(--w-sb); color: var(--ink); }
+.signoff-sub   { font-size: var(--t-sm); color: var(--ink-2); margin-top: var(--s1); line-height: 1.5; }
+.signoff-tag {
+  background: var(--nominal);
+  color: #FFFAFA;
+  font-size: var(--t-xs);
+  font-weight: var(--w-sb);
+  padding: var(--s2) var(--s4);
+  border-radius: var(--r-pill);
+  white-space: nowrap;
+}
+
+.pill-pass {
+  background: var(--nominal-bg);
+  color: var(--nominal-text);
+  font-size: var(--t-xs);
+  font-weight: var(--w-sb);
+  padding: 3px var(--s3);
+  border-radius: var(--r-pill);
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SIDEBAR
+═══════════════════════════════════════════════════════════════ -->
+<nav class="sidebar" aria-label="Primary navigation">
+  <div class="sb-brand">
+    <div class="sb-mark" aria-hidden="true">M</div>
+    <div class="sb-brand-text">
+      <div class="sb-brand-name">Maldros</div>
+      <div class="sb-brand-sub">Analytics Intelligence</div>
+    </div>
+  </div>
+
+  <div class="sb-workspace">
+    <button class="ws-btn" aria-label="Switch workspace">
+      <div class="ws-dot" aria-hidden="true"></div>
+      <span class="ws-label">Platform Analytics</span>
+      <span class="ws-chev" aria-hidden="true">▾</span>
+    </button>
+  </div>
+
+  <div class="sb-nav">
+    <div class="nav-section-label">Dashboards</div>
+
+    <button class="nav-item active" onclick="show('ops')" aria-label="Operations Center">
+      <span class="nav-icon" aria-hidden="true">⌂</span>
+      <span class="nav-label">Operations Center</span>
+    </button>
+    <button class="nav-item" onclick="show('queue')" aria-label="Review Queue, 1 item">
+      <span class="nav-icon" aria-hidden="true">⊙</span>
+      <span class="nav-label">Review Queue</span>
+      <span class="nav-badge">1</span>
+    </button>
+    <button class="nav-item" onclick="show('intel')" aria-label="Intelligence Monitor">
+      <span class="nav-icon" aria-hidden="true">◈</span>
+      <span class="nav-label">Intelligence Monitor</span>
+    </button>
+    <button class="nav-item" onclick="show('history')" aria-label="Decision History">
+      <span class="nav-icon" aria-hidden="true">⧗</span>
+      <span class="nav-label">Decision History</span>
+    </button>
+    <button class="nav-item" onclick="show('aims')" aria-label="AIMS Briefing">
+      <span class="nav-icon" aria-hidden="true">≡</span>
+      <span class="nav-label">AIMS Briefing</span>
+    </button>
+    <button class="nav-item" onclick="show('workspace')" aria-label="Phase 0 Workspace">
+      <span class="nav-icon" aria-hidden="true">◎</span>
+      <span class="nav-label">Phase 0 Workspace</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     MAIN
+═══════════════════════════════════════════════════════════════ -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <span class="tb-crumb" id="tb-crumb">
+      <span class="tb-active">Operations Center</span>
+    </span>
+    <div class="tb-right">
+      <div class="tb-status" role="status" aria-label="System status: all systems nominal">
+        <div class="pulse-dot" aria-hidden="true"></div>
+        <span>All systems nominal</span>
+      </div>
+      <div class="tb-chip run">2 agents running</div>
+      <div class="tb-chip">Queue 1 / 12</div>
+      <div class="tb-avatar" aria-label="Operator: Luis">L</div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ═══════════════════════════════════════════════════════════
+         PANEL 1 — OPERATIONS CENTER
+    ════════════════════════════════════════════════════════════ -->
+    <div class="panel active" id="ops">
+      <div class="pg-title">Operations Center</div>
+      <div class="pg-sub">System overview · 2026-06-09</div>
+
+      <!-- Top priority callout -->
+      <div class="priority" role="region" aria-label="Top priority action">
+        <div class="priority-icon" aria-hidden="true">!</div>
+        <div class="priority-body">
+          <div class="priority-title">1 decision pending — EXP-004 ship recommendation</div>
+          <div class="priority-sub">Statistician · waiting on operator since Jun 8, 14:22 UTC</div>
+        </div>
+        <button class="priority-action" onclick="show('queue')">Review now →</button>
+      </div>
+
+      <!-- KPIs -->
+      <div class="g-kpis" style="margin-bottom: var(--s4);">
+        <div class="kpi">
+          <div class="kpi-label">Active analyses</div>
+          <div class="kpi-num">2</div>
+          <div class="kpi-pill info">2 agents running</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Open reviews</div>
+          <div class="kpi-num">1</div>
+          <div class="kpi-pill action">Decision pending</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">CDI Layer</div>
+          <div class="kpi-num">9 / 9</div>
+          <div class="kpi-pill nominal">Domains nominal</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Metric definitions</div>
+          <div class="kpi-num">6 / 6</div>
+          <div class="kpi-pill nominal">All current</div>
+        </div>
+      </div>
+
+      <div class="g-survey">
+
+        <!-- Left column -->
+        <div style="display: flex; flex-direction: column; gap: var(--s4);">
+
+          <div class="card">
+            <div class="card-head">
+              <span class="card-title">Agent activity</span>
+              <span class="card-link">All agents</span>
+            </div>
+            <div class="agent-row">
+              <div class="agent-name">Orchestrator</div>
+              <div class="agent-task">Decomposing — "What drove the API abuse rate spike in Q1 2024?"</div>
+              <div class="agent-stat run">Running</div>
+            </div>
+            <div class="agent-row">
+              <div class="agent-name">Analyst</div>
+              <div class="agent-task">Graph analysis — abuse cluster attribution · tables: api_events, fraud_incidents</div>
+              <div class="agent-stat run">Running</div>
+            </div>
+            <div class="agent-row">
+              <div class="agent-name">Statistician</div>
+              <div class="agent-task">Idle · last run: EXP-004 ship verdict · Jun 8, 14:22</div>
+              <div class="agent-stat idle">Idle</div>
+            </div>
+            <div class="agent-row">
+              <div class="agent-name">Storyteller</div>
+              <div class="agent-task">Idle · last: pipeline health summary briefing · Jun 7, 09:45</div>
+              <div class="agent-stat idle">Idle</div>
+            </div>
+            <div class="agent-row">
+              <div class="agent-name">Diagnostic</div>
+              <div class="agent-task">Monitoring · 0 escalations active · PSI watch: pipeline_002 (0.38)</div>
+              <div class="agent-stat run">Monitoring</div>
+            </div>
+            <div class="agent-row">
+              <div class="agent-name">Red Team</div>
+              <div class="agent-task">Inactive · Phase 3 target · 0 open adversarial assessments</div>
+              <div class="agent-stat idle">Inactive</div>
+            </div>
+            <div class="agent-row">
+              <div class="agent-name">Healing</div>
+              <div class="agent-task">Idle · last: pipeline_002 remediation script Jun 7 · status: verified</div>
+              <div class="agent-stat idle">Idle</div>
+            </div>
+            <div class="agent-row">
+              <div class="agent-name">Data Architect</div>
+              <div class="agent-task">Idle · semantic layer current · 6 metric definitions, 4 dimensions, 3 entities</div>
+              <div class="agent-stat idle">Idle</div>
+            </div>
+          </div>
+
+          <div class="card card-flush">
+            <div class="card-head flush">
+              <span class="card-title">Recent analyses</span>
+              <span class="card-link">All analyses</span>
+            </div>
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th>Analysis</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Lead agent</th>
+                  <th>Updated</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>API abuse rate — Q1 2024 spike attribution</td>
+                  <td><span class="badge info">Attribution</span></td>
+                  <td><span class="badge info">Running</span></td>
+                  <td>Analyst</td>
+                  <td class="ts">Now</td>
+                </tr>
+                <tr>
+                  <td>EXP-004 — safety bypass treatment validation</td>
+                  <td><span class="badge muted">Experiment</span></td>
+                  <td><span class="badge action">Pending decision</span></td>
+                  <td>Statistician</td>
+                  <td class="ts">Jun 8</td>
+                </tr>
+                <tr>
+                  <td>pipeline_002 gradual degradation — PSI trend</td>
+                  <td><span class="badge muted">Pipeline</span></td>
+                  <td><span class="badge nominal">Healed</span></td>
+                  <td>Diagnostic</td>
+                  <td class="ts">Jun 7</td>
+                </tr>
+                <tr>
+                  <td>EDPB filing regulatory lag correlation</td>
+                  <td><span class="badge muted">Compliance</span></td>
+                  <td><span class="badge nominal">Complete</span></td>
+                  <td>Analyst</td>
+                  <td class="ts">Jun 6</td>
+                </tr>
+                <tr>
+                  <td>Account cluster detection — graph centrality</td>
+                  <td><span class="badge muted">Clustering</span></td>
+                  <td><span class="badge nominal">Complete</span></td>
+                  <td>Analyst</td>
+                  <td class="ts">Jun 5</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right column -->
+        <div style="display: flex; flex-direction: column; gap: var(--s4);">
+
+          <div class="card">
+            <div class="card-head">
+              <span class="card-title">CDI Layer</span>
+              <span class="card-link">Monitor</span>
+            </div>
+            <div class="cdi-mini-grid">
+              <div class="cdi-mini"><div class="cdi-mini-text"><div class="n">Reasoning Frameworks</div><div class="s">8 active · 4 queried</div></div><div class="cdi-dot nom" aria-hidden="true"></div></div>
+              <div class="cdi-mini"><div class="cdi-mini-text"><div class="n">Inference Layers</div><div class="s">L1–L5 nominal</div></div><div class="cdi-dot nom" aria-hidden="true"></div></div>
+              <div class="cdi-mini"><div class="cdi-mini-text"><div class="n">Disciplinary Methods</div><div class="s">6 indexed</div></div><div class="cdi-dot nom" aria-hidden="true"></div></div>
+              <div class="cdi-mini"><div class="cdi-mini-text"><div class="n">Cross-domain Analogues</div><div class="s">12 indexed</div></div><div class="cdi-dot nom" aria-hidden="true"></div></div>
+              <div class="cdi-mini"><div class="cdi-mini-text"><div class="n">External Knowledge</div><div class="s">FIA loaded</div></div><div class="cdi-dot nom" aria-hidden="true"></div></div>
+              <div class="cdi-mini"><div class="cdi-mini-text"><div class="n">Second Brain Signal</div><div class="s">48 notes linked</div></div><div class="cdi-dot nom" aria-hidden="true"></div></div>
+              <div class="cdi-mini" style="opacity: .55;"><div class="cdi-mini-text"><div class="n">Exemplar Surface</div><div class="s">Phase 4 target</div></div><div class="cdi-dot off" aria-hidden="true"></div></div>
+              <div class="cdi-mini"><div class="cdi-mini-text"><div class="n">Non-activation Log</div><div class="s">3 blind spots</div></div><div class="cdi-dot act" aria-hidden="true"></div></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <span class="card-title">Alerts</span>
+              <span class="card-link">View all</span>
+            </div>
+            <div class="alert-item">
+              <span class="badge action">Action</span>
+              <div class="alert-body">
+                <div class="alert-title">pipeline_002 PSI crossing 0.40 threshold</div>
+                <div class="alert-meta">Diagnostic · Jun 7, 16:04 · L2 escalation</div>
+              </div>
+            </div>
+            <div class="alert-item">
+              <span class="badge info">Info</span>
+              <div class="alert-body">
+                <div class="alert-title">CEP_5 exercised — analysis cycle 039</div>
+                <div class="alert-meta">Orchestrator · Jun 9, 09:11</div>
+              </div>
+            </div>
+            <div class="alert-item">
+              <span class="badge muted">Info</span>
+              <div class="alert-body">
+                <div class="alert-title">api_abuse_rate updated — v1.0 → v1.1</div>
+                <div class="alert-meta">Data Architect · Jun 6, 11:30</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <span class="card-title">Metric health</span>
+              <span class="card-link">Semantic layer</span>
+            </div>
+            <div class="metric-row"><span class="metric-name">api_abuse_rate</span><span class="badge nominal">v1.1</span></div>
+            <div class="metric-row"><span class="metric-name">fraud_loss_direct</span><span class="badge nominal">v1.0</span></div>
+            <div class="metric-row"><span class="metric-name">safety_bypass_incidents</span><span class="badge nominal">v1.0</span></div>
+            <div class="metric-row"><span class="metric-name">account_takeover_volume</span><span class="badge nominal">v1.0</span></div>
+            <div class="metric-row"><span class="metric-name">downstream_harm_exposure</span><span class="badge action">Judgment required</span></div>
+            <div class="metric-row"><span class="metric-name">compliance_cost_per_incident</span><span class="badge nominal">v1.0</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         PANEL 2 — REVIEW QUEUE
+    ════════════════════════════════════════════════════════════ -->
+    <div class="panel" id="queue">
+      <div class="pg-title">Review Queue</div>
+      <div class="pg-sub">Decisions requiring explicit operator authorization · 1 of 12 capacity used</div>
+
+      <div class="qdepth">
+        <span class="qdepth-label">Queue depth: Green</span>
+        <div class="qdepth-track"><div class="qdepth-fill nom" style="width: 8.3%;"></div></div>
+        <span class="qdepth-count">1 / 12 · 11 remaining</span>
+      </div>
+
+      <div class="gate">
+        <div class="gate-head">
+          <div class="gate-meta-row">
+            <span class="gate-type ship">Ship recommendation</span>
+            <span class="badge info">Experiment</span>
+            <span class="badge muted">Statistician → Orchestrator</span>
+          </div>
+          <div class="gate-title">EXP-004 — Safety bypass detection treatment</div>
+          <div class="gate-sub">Artifact a4c7e291 · Jun 8, 14:22 UTC</div>
+        </div>
+
+        <!-- Plain-language summary FIRST (dual-layer mandate; primary read) -->
+        <div class="gate-plain">
+          <div class="gate-plain-label">Plain-language summary</div>
+          <div class="gate-plain-body">
+            The treatment reduced harmful API calls by about 1 in 7 compared to the control group. The experiment is clean — randomization worked correctly and there is no sign the result is driven by novelty. The Statistician recommends shipping. This recommendation does not take effect without your explicit approval.
+          </div>
+        </div>
+
+        <!-- Collapsible technical sections -->
+        <div class="gate-collapsible">
+
+          <div class="gate-section open">
+            <button class="gate-section-head" onclick="toggleSection(this)" aria-expanded="true">
+              <span class="gate-section-chev">▸</span>
+              <span class="gate-section-label">Statistical findings</span>
+            </button>
+            <div class="gate-section-body">
+              <ul class="gate-bullets">
+                <li>Effect size: +14.2% reduction in safety bypass incidents (95% CI: +9.1% to +19.7%)</li>
+                <li>p-value: 0.0003 · two-sided t-test · N_control = 1,000 · N_treatment = 1,002</li>
+                <li>SRM check: <strong>PASS</strong> — assignment ratio 0.499 / 0.501 (planned 0.500)</li>
+                <li>Novelty effect screen: <strong>PASS</strong> — effect stable across weeks 2–3</li>
+                <li>Statistician verdict: <strong>SHIP</strong></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="gate-section">
+            <button class="gate-section-head" onclick="toggleSection(this)" aria-expanded="false">
+              <span class="gate-section-chev">▸</span>
+              <span class="gate-section-label">Known limitations</span>
+            </button>
+            <div class="gate-section-body">
+              <ul class="gate-bullets">
+                <li>Observation window: 21 days. Long-run treatment durability not confirmed.</li>
+                <li>Downstream harm exposure (Mechanism 3 metric) not included in ship criteria.</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Sticky decision row: warning + symmetric actions -->
+        <div class="gate-decision">
+          <div class="gate-warn">
+            No auto-approve. Explicit operator decision required. Silence does not constitute approval.
+          </div>
+          <div class="gate-actions">
+            <button class="btn btn-approve">Approve · Ship EXP-004</button>
+            <button class="btn btn-reject">Reject</button>
+            <button class="btn btn-revise">Revise</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="queue-footnote">
+        1 item in queue · Queue state: Green (0–4 = Green, 5–7 = Yellow, 8–10 = Orange, 11–12 = Red, 13+ = Critical)
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         PANEL 3 — INTELLIGENCE MONITOR
+    ════════════════════════════════════════════════════════════ -->
+    <div class="panel" id="intel">
+      <div class="pg-title">Intelligence Monitor</div>
+      <div class="pg-sub">CDI Layer domain status · Capability Bundle log · Non-activation log</div>
+
+      <div class="g-cdi" style="margin-bottom: var(--s4);">
+        <div class="cdi-domain">
+          <div class="cdi-d-head"><div class="cdi-d-name">Reasoning Frameworks</div><div class="cdi-dot nom" aria-hidden="true"></div></div>
+          <div class="cdi-d-stat">8</div>
+          <div class="cdi-d-label">frameworks active · 4 queried last cycle</div>
+        </div>
+        <div class="cdi-domain">
+          <div class="cdi-d-head"><div class="cdi-d-name">Inference Layer Status</div><div class="cdi-dot nom" aria-hidden="true"></div></div>
+          <div class="cdi-d-stat">5</div>
+          <div class="cdi-d-label">L1–L5 nominal · 0 active L1 vetoes</div>
+        </div>
+        <div class="cdi-domain">
+          <div class="cdi-d-head"><div class="cdi-d-name">Disciplinary Methods</div><div class="cdi-dot nom" aria-hidden="true"></div></div>
+          <div class="cdi-d-stat">6</div>
+          <div class="cdi-d-label">indexed · graph analysis in use</div>
+        </div>
+        <div class="cdi-domain">
+          <div class="cdi-d-head"><div class="cdi-d-name">Cross-domain Analogues</div><div class="cdi-dot nom" aria-hidden="true"></div></div>
+          <div class="cdi-d-stat">12</div>
+          <div class="cdi-d-label">indexed · 3 applied last cycle</div>
+        </div>
+        <div class="cdi-domain">
+          <div class="cdi-d-head"><div class="cdi-d-name">External Knowledge</div><div class="cdi-dot nom" aria-hidden="true"></div></div>
+          <div class="cdi-d-stat">1</div>
+          <div class="cdi-d-label">corpus · FIA (full document)</div>
+        </div>
+        <div class="cdi-domain">
+          <div class="cdi-d-head"><div class="cdi-d-name">Second Brain Signal</div><div class="cdi-dot nom" aria-hidden="true"></div></div>
+          <div class="cdi-d-stat">48</div>
+          <div class="cdi-d-label">notes linked · 6 updated this week</div>
+        </div>
+        <div class="cdi-domain" style="opacity: .55;">
+          <div class="cdi-d-head"><div class="cdi-d-name">Exemplar Surface</div><div class="cdi-dot off" aria-hidden="true"></div></div>
+          <div class="cdi-d-stat" style="color: var(--idle);">0</div>
+          <div class="cdi-d-label">Phase 4 target · not yet active</div>
+        </div>
+        <div class="cdi-domain">
+          <div class="cdi-d-head"><div class="cdi-d-name">Non-activation Log</div><div class="cdi-dot act" aria-hidden="true"></div></div>
+          <div class="cdi-d-stat" style="color: var(--action-text);">3</div>
+          <div class="cdi-d-label">blind spots logged · Phase 0</div>
+        </div>
+      </div>
+
+      <div class="g-pair">
+
+        <div class="card card-flush">
+          <div class="card-head flush">
+            <span class="card-title">Capability Bundle log</span>
+            <span class="card-link">All bundles</span>
+          </div>
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th>Bundle</th>
+                <th>Task</th>
+                <th>CDI domains</th>
+                <th>CEP exercised</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="mono">cb-0039</td>
+                <td>API abuse Q1 attribution</td>
+                <td>4</td>
+                <td><span class="badge info">CEP_5</span></td>
+                <td class="ts">09:11</td>
+              </tr>
+              <tr>
+                <td class="mono">cb-0038</td>
+                <td>EXP-004 statistical validation</td>
+                <td>3</td>
+                <td><span class="badge muted">—</span></td>
+                <td class="ts">Jun 8</td>
+              </tr>
+              <tr>
+                <td class="mono">cb-0037</td>
+                <td>pipeline_002 PSI investigation</td>
+                <td>5</td>
+                <td><span class="badge info">CEP_2</span></td>
+                <td class="ts">Jun 7</td>
+              </tr>
+              <tr>
+                <td class="mono">cb-0036</td>
+                <td>Regulatory lag correlation</td>
+                <td>4</td>
+                <td><span class="badge muted">—</span></td>
+                <td class="ts">Jun 6</td>
+              </tr>
+              <tr>
+                <td class="mono">cb-0035</td>
+                <td>Algorithmic cycle 10 — constraint audit</td>
+                <td>6</td>
+                <td><span class="badge info">CEP_1, CEP_3</span></td>
+                <td class="ts">Jun 5</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">Non-activation log — blind spots</span>
+            <span class="card-link">Constraint Register</span>
+          </div>
+          <div class="na-item warn">
+            <div class="title">Exemplar surface unavailable</div>
+            <div class="detail">CEP_4 evaluated-but-not-met — Exemplar Surface not active until Phase 4. Capability logged; omission recorded per invariant.</div>
+            <div class="meta">Bundle cb-0035 · Jun 5 · Constraint: open</div>
+          </div>
+          <div class="na-item warn">
+            <div class="title">No analogues for data_poisoning vector</div>
+            <div class="detail">Zero cross-domain analogues indexed for data poisoning. Gap registered in Constraint Register for Phase 1 resolution.</div>
+            <div class="meta">Bundle cb-0036 · Jun 6 · Constraint: open</div>
+          </div>
+          <div class="na-item info">
+            <div class="title">Phase 7 signals empty</div>
+            <div class="detail">phase7_signals.json initialized but no signals defined. Expected Phase 5+. No action required.</div>
+            <div class="meta">Bundle cb-0038 · Jun 8 · Constraint: deferred</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         PANEL 4 — DECISION HISTORY
+    ════════════════════════════════════════════════════════════ -->
+    <div class="panel" id="history">
+      <div class="pg-title">Decision History</div>
+      <div class="pg-sub">All operator decisions · logged to AIMS Mode A · immutable audit trail</div>
+
+      <div class="filter-bar">
+        <div class="filter-group">
+          <button class="filter-btn active">All</button>
+          <button class="filter-btn">Approved</button>
+          <button class="filter-btn">Rejected</button>
+          <button class="filter-btn">Revised</button>
+        </div>
+        <div class="filter-group">
+          <button class="filter-btn">Experiments</button>
+          <button class="filter-btn">Pipelines</button>
+          <button class="filter-btn">Analyses</button>
+          <button class="filter-btn">Governance</button>
+        </div>
+        <span class="filter-count">7 decisions on record</span>
+      </div>
+
+      <div class="card card-flush">
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Item</th>
+              <th>Decision</th>
+              <th>Operator</th>
+              <th>Outcome</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="ts">Jun 9 · 09:33</td>
+              <td><span class="badge muted">Governance</span></td>
+              <td>Phase 0 governance test — artifact verification</td>
+              <td><span class="badge critical">Rejected</span></td>
+              <td>Luis</td>
+              <td style="color: var(--ink-3); font-size: var(--t-xs);">Test artifact — audit trail confirmed</td>
+            </tr>
+            <tr>
+              <td class="ts">Jun 8 · 14:22</td>
+              <td><span class="badge info">Experiment</span></td>
+              <td>EXP-004 — ship/no-ship · safety bypass detection</td>
+              <td><span class="badge action">Pending</span></td>
+              <td>—</td>
+              <td style="color: var(--ink-3); font-size: var(--t-xs);">In Review Queue</td>
+            </tr>
+            <tr>
+              <td class="ts">Jun 7 · 16:30</td>
+              <td><span class="badge muted">Pipeline</span></td>
+              <td>pipeline_002 healing strategy — gradual degradation</td>
+              <td><span class="badge nominal">Approved</span></td>
+              <td>Luis</td>
+              <td style="color: var(--nominal-text); font-size: var(--t-xs);">PSI stable at 0.38 post-heal</td>
+            </tr>
+            <tr>
+              <td class="ts">Jun 6 · 11:30</td>
+              <td><span class="badge muted">Metric</span></td>
+              <td>api_abuse_rate v1.0 → v1.1 definition update</td>
+              <td><span class="badge nominal">Approved</span></td>
+              <td>Luis</td>
+              <td style="color: var(--nominal-text); font-size: var(--t-xs);">Deployed to semantic layer</td>
+            </tr>
+            <tr>
+              <td class="ts">Jun 5 · 10:45</td>
+              <td><span class="badge muted">Analysis</span></td>
+              <td>Cluster graph analysis — ship discovery report</td>
+              <td><span class="badge nominal">Approved</span></td>
+              <td>Luis</td>
+              <td style="color: var(--nominal-text); font-size: var(--t-xs);">Routed to AIMS Mode B</td>
+            </tr>
+            <tr>
+              <td class="ts">Jun 4 · 09:00</td>
+              <td><span class="badge muted">Governance</span></td>
+              <td>Phase 0 dataset review — C-013 spec (750K / 18mo)</td>
+              <td><span class="badge nominal">Approved</span></td>
+              <td>Luis</td>
+              <td style="color: var(--nominal-text); font-size: var(--t-xs);">Criterion f confirmed</td>
+            </tr>
+            <tr>
+              <td class="ts">Jun 3 · 14:15</td>
+              <td><span class="badge muted">Experiment</span></td>
+              <td>EXP-001 — SRM detected, investigation opened</td>
+              <td><span class="badge nominal">Approved</span></td>
+              <td>Luis</td>
+              <td style="color: var(--nominal-text); font-size: var(--t-xs);">Experiment invalidated per SRM policy</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         PANEL 5 — AIMS BRIEFING
+    ════════════════════════════════════════════════════════════ -->
+    <div class="panel" id="aims">
+      <div class="pg-title">AIMS Briefing</div>
+      <div class="pg-sub">Mode A — Operational log &nbsp;·&nbsp; Mode B — Stakeholder briefings</div>
+
+      <div class="g-detail-aims">
+
+        <div class="aims-list">
+          <div class="aims-tabs">
+            <button class="aims-tab">Mode A</button>
+            <button class="aims-tab active">Mode B</button>
+          </div>
+          <div class="aims-report-list">
+            <div class="aims-report-item active">
+              <div class="ari-title">Coordinated cluster analysis — discovery report</div>
+              <div class="ari-row">
+                <span class="badge info">Discovery</span>
+                <span class="badge nominal">Approved</span>
+              </div>
+              <div class="ari-meta">Analyst + Statistician · Jun 5, 2026</div>
+            </div>
+            <div class="aims-report-item">
+              <div class="ari-title">pipeline_002 degradation briefing</div>
+              <div class="ari-row">
+                <span class="badge muted">Pipeline</span>
+                <span class="badge action">Review needed</span>
+              </div>
+              <div class="ari-meta">Diagnostic + Healing · Jun 7, 2026</div>
+            </div>
+            <div class="aims-report-item">
+              <div class="ari-title">EXP-004 ship recommendation</div>
+              <div class="ari-row">
+                <span class="badge info">Experiment</span>
+                <span class="badge action">Pending decision</span>
+              </div>
+              <div class="ari-meta">Statistician · Jun 8, 2026</div>
+            </div>
+            <div class="aims-report-item">
+              <div class="ari-title">EDPB regulatory lag correlation</div>
+              <div class="ari-row">
+                <span class="badge muted">Compliance</span>
+                <span class="badge nominal">Approved</span>
+              </div>
+              <div class="ari-meta">Analyst · Jun 6, 2026</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="aims-viewer">
+          <div class="av-head">
+            <div>
+              <div class="av-title">Coordinated cluster analysis — discovery report</div>
+              <div class="av-meta">Jun 5, 2026 · Analyst + Statistician · Artifact dr-0024 · Approved · Logged AIMS Mode B</div>
+            </div>
+            <div class="av-toggle">
+              <button class="layer-btn active">Technical</button>
+              <button class="layer-btn">Plain language</button>
+            </div>
+          </div>
+
+          <div class="av-section">
+            <div class="av-sec-label">Finding</div>
+            <div class="av-sec-body">Three coordinated abuse clusters were identified via graph centrality analysis on api_events and fraud_incidents. Cluster A (8 accounts) exhibits correlated weekday-morning activity patterns with homogeneous token distributions (μ = 2,800 ± 300 tokens). Cluster B (6 accounts) shows a gradual safety_bypass escalation beginning month 4 — detectable by SPRT at log-likelihood ratio 5.0, not triggered by fixed thresholds until month 8+. Cluster C (5 accounts) exhibits synchronized high-token calls in US/LATAM business hours with elevated platform_fraud incident rates.</div>
+          </div>
+
+          <div class="av-section">
+            <div class="av-sec-label">Confidence (threshold: 0.70)</div>
+            <div class="av-conf">
+              <div class="av-conf-bar">
+                <div class="av-conf-fill" style="width: 82%;"></div>
+                <div class="av-conf-threshold" style="left: 70%;" aria-label="operator-acceptable threshold"></div>
+              </div>
+              <span class="av-conf-val">0.82</span>
+            </div>
+            <div class="av-conf-note">Network density and temporal correlation support cluster validity. Confidence limited by: single 18-month observation window; no external corroboration for Cluster C.</div>
+          </div>
+
+          <div class="av-section">
+            <div class="av-sec-label">Limitations (citation-linked per Storyteller L1 rule)</div>
+            <div class="av-sec-body">
+              <ul class="gate-bullets" style="gap: var(--s2);">
+                <li>Analysis uses account-level adjacency only — transaction-level graph not yet implemented [artifact: ev-0019]</li>
+                <li>No causal claim between cluster membership and fraud incidents — association only [stat: sr-0031]</li>
+                <li>Cluster B escalation is a statistical rate change observation, not an intent determination [stat: sr-0031]</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="av-section">
+            <div class="av-sec-label">Recommended next analysis</div>
+            <div class="av-sec-body">SPRT sequential monitoring on Cluster B safety_bypass rate. Reference rate: 0.5 incidents/account/month (months 0–3 baseline). Alert threshold: SPRT log-likelihood ratio ≥ 5.0.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         PANEL 6 — PHASE 0 WORKSPACE
+    ════════════════════════════════════════════════════════════ -->
+    <div class="panel" id="workspace">
+      <div class="pg-title">Phase 0 Workspace</div>
+      <div class="pg-sub">Automated signal checks · Dataset profile · Operator sign-off</div>
+
+      <div class="g-detail-ph0">
+
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">Automated signal checks</span>
+            <span class="pill-pass">5 / 5 pass</span>
+          </div>
+          <div class="check-row">
+            <div class="check-icon pass">✓</div>
+            <div>
+              <div class="check-name">Signal 1 — Coordinated abuse clusters</div>
+              <div class="check-detail">3 clusters detected. A: 8 accts / 30,000 events &nbsp;·&nbsp; B: 6 accts / 27,000 events &nbsp;·&nbsp; C: 5 accts / 15,000 events. Cluster share = 9.6% of api_events — sits in hard-signal territory, not threshold-trivial.</div>
+            </div>
+          </div>
+          <div class="check-row">
+            <div class="check-icon pass">✓</div>
+            <div>
+              <div class="check-name">Signal 2 — Safety bypass escalation (SPRT-detectable)</div>
+              <div class="check-detail">Cluster B safety_bypass rate: months 0–3 avg 6.5/mo → months 12–17 avg 16.0/mo. Exponential growth phase months 4–11 (avg 12.6/mo). SPRT detects rate change ~month 4–5. Fixed threshold does not fire until month 8+.</div>
+            </div>
+          </div>
+          <div class="check-row">
+            <div class="check-icon pass">✓</div>
+            <div>
+              <div class="check-name">Signal 3 — Experiment pathologies (all 3 types)</div>
+              <div class="check-detail">SRM injected: EXP-001, EXP-002 &nbsp;·&nbsp; Novelty effect: EXP-003 &nbsp;·&nbsp; Genuine significant effect: EXP-004 (p = 0.0003, CI: +9.1% to +19.7%)</div>
+            </div>
+          </div>
+          <div class="check-row">
+            <div class="check-icon pass">✓</div>
+            <div>
+              <div class="check-name">Signal 4 — Pipeline failure classes (all 3 types)</div>
+              <div class="check-detail">structural_break — pipeline_001: 248 failed records &nbsp;·&nbsp; cascade — pipeline_003: 233 failed records &nbsp;·&nbsp; gradual_degradation — pipeline_002: 96 degraded / 7,500 total</div>
+            </div>
+          </div>
+          <div class="check-row">
+            <div class="check-icon pass">✓</div>
+            <div>
+              <div class="check-name">Signal 5 — Regulatory lag correlation</div>
+              <div class="check-detail">2 confirmed pairs: EDPB investigation (102-day lag from Q1 api_abuse spike) &nbsp;·&nbsp; FTC inquiry (99-day lag from Aug 2024 safety_bypass escalation peak)</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: var(--s4);">
+
+          <div class="card">
+            <div class="card-head">
+              <span class="card-title">Dataset profile</span>
+            </div>
+            <div class="profile-row"><span class="pr-label">Spec version</span><span class="pr-value">C-013</span></div>
+            <div class="profile-row"><span class="pr-label">Time horizon</span><span class="pr-value">18 mo · Jan 2024 – Jun 2025</span></div>
+            <div class="profile-row"><span class="pr-label">Scale</span><span class="pr-value">MALDROS_SCALE = 1.0 · seed 42</span></div>
+            <div class="profile-row"><span class="pr-label">api_events</span><span class="pr-value pass">750,000 ✓</span></div>
+            <div class="profile-row"><span class="pr-label">accounts</span><span class="pr-value pass">2,000 ✓</span></div>
+            <div class="profile-row"><span class="pr-label">fraud_incidents</span><span class="pr-value pass">475 ✓</span></div>
+            <div class="profile-row"><span class="pr-label">financial_impact</span><span class="pr-value pass">198 ✓</span></div>
+            <div class="profile-row"><span class="pr-label">pipeline_health</span><span class="pr-value pass">7,500 ✓</span></div>
+            <div class="profile-row"><span class="pr-label">experiments</span><span class="pr-value pass">20 ✓</span></div>
+            <div class="profile-row"><span class="pr-label">regulatory_events</span><span class="pr-value pass">50 ✓</span></div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <span class="card-title">Phase 0 exit criteria</span>
+            </div>
+            <div class="exit-row"><span class="exit-label">a · CDI query in lineage trace</span><span class="badge nominal">✓</span></div>
+            <div class="exit-row"><span class="exit-label">b · CEP exercised and recorded</span><span class="badge nominal">✓</span></div>
+            <div class="exit-row"><span class="exit-label">c · CDI update cycle confirmed</span><span class="badge nominal">✓</span></div>
+            <div class="exit-row"><span class="exit-label">d · Operator config complete</span><span class="badge nominal">✓</span></div>
+            <div class="exit-row"><span class="exit-label">e · Judgment metric registry clean</span><span class="badge nominal">✓</span></div>
+            <div class="exit-row"><span class="exit-label">f · Dataset review signed off</span><span class="badge nominal">✓</span></div>
+            <div class="exit-row"><span class="exit-label">g · Notification mechanism live</span><span class="badge nominal">✓</span></div>
+            <div class="exit-row"><span class="exit-label">h · Confirmation Gate operational</span><span class="badge nominal">✓</span></div>
+            <div class="exit-row"><span class="exit-label">i · UI design confirmed</span><span class="badge action">Pending</span></div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="signoff">
+        <div class="signoff-icon" aria-hidden="true">✓</div>
+        <div class="signoff-body">
+          <div class="signoff-title">Operator sign-off on record — criterion f confirmed</div>
+          <div class="signoff-sub">Luis · Jun 9, 2026 · Logged to AIMS Mode A · aims/mode_a/phase0_dataset_review.jsonl &nbsp;·&nbsp; 5 / 5 signals verified · C-013 spec</div>
+        </div>
+        <div class="signoff-tag">Criterion f: ✓</div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<script>
+const LABELS = {
+  ops:       'Operations Center',
+  queue:     'Review Queue',
+  intel:     'Intelligence Monitor',
+  history:   'Decision History',
+  aims:      'AIMS Briefing',
+  workspace: 'Phase 0 Workspace',
+};
+
+function show(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.getAttribute('onclick') === `show('${id}')`) n.classList.add('active');
+  });
+  document.getElementById('tb-crumb').innerHTML =
+    `<span class="tb-active">${LABELS[id]}</span>`;
+}
+
+function toggleSection(btn) {
+  const section = btn.closest('.gate-section');
+  const isOpen = section.classList.toggle('open');
+  btn.setAttribute('aria-expanded', String(isOpen));
+}
+</script>
+
+</body>
+</html>

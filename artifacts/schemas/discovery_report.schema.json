@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "maldros/discovery_report/1.0.0",
+  "title": "Discovery Report",
+  "description": "Produced by the Storyteller Agent. Dual-layer output: technical layer + plain-language layer. 7 required sections. Routes to AIMS Mode B for novel findings.",
+  "type": "object",
+  "required": ["artifact_id","artifact_type","schema_version","phase_of_origin","producing_agent","timestamp_utc","provenance","content_hash","confidence_score","known_limitations","content"],
+  "properties": {
+    "artifact_id": { "type": "string", "format": "uuid" },
+    "artifact_type": { "type": "string", "const": "discovery_report" },
+    "schema_version": { "type": "string", "const": "1.0.0" },
+    "phase_of_origin": { "type": "integer", "minimum": 0, "maximum": 7 },
+    "producing_agent": { "type": "string", "const": "storyteller" },
+    "timestamp_utc": { "type": "string", "format": "date-time" },
+    "provenance": { "type": "array", "items": { "type": "string", "format": "uuid" }, "minItems": 1 },
+    "content_hash": { "type": "string" },
+    "confidence_score": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+    "known_limitations": { "type": "array", "items": { "type": "string" } },
+    "content": {
+      "type": "object",
+      "required": [
+        "executive_summary",
+        "question_and_context",
+        "methodology",
+        "findings_technical",
+        "findings_plain_language",
+        "recommendations",
+        "discovery_path",
+        "l1_compliance_checks",
+        "citation_index"
+      ],
+      "properties": {
+        "executive_summary": {
+          "type": "object",
+          "required": ["headline", "key_finding", "action_required", "confidence"],
+          "properties": {
+            "headline": { "type": "string", "maxLength": 120 },
+            "key_finding": { "type": "string", "maxLength": 500 },
+            "action_required": { "type": "string" },
+            "confidence": { "type": "string", "enum": ["low", "medium", "high"] }
+          }
+        },
+        "question_and_context": {
+          "type": "object",
+          "required": ["original_question", "scope", "period_covered"],
+          "properties": {
+            "original_question": { "type": "string" },
+            "scope": { "type": "string" },
+            "period_covered": { "type": "string" }
+          }
+        },
+        "methodology": {
+          "type": "object",
+          "required": ["reasoning_mode", "analytical_approach", "data_sources", "statistical_methods"],
+          "properties": {
+            "reasoning_mode": { "type": "string" },
+            "analytical_approach": { "type": "string" },
+            "data_sources": { "type": "array", "items": { "type": "string" } },
+            "statistical_methods": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "findings_technical": {
+          "type": "array",
+          "description": "Technical-layer findings — for analyst audience",
+          "items": {
+            "type": "object",
+            "required": ["finding_id", "statement", "supporting_evidence", "materiality"],
+            "properties": {
+              "finding_id": { "type": "string" },
+              "statement": { "type": "string" },
+              "supporting_evidence": { "type": "array", "items": { "type": "string" } },
+              "materiality": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+              "citation_refs": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        },
+        "findings_plain_language": {
+          "type": "array",
+          "description": "Plain-language-layer findings — comprehensible to non-technical stakeholder",
+          "items": {
+            "type": "object",
+            "required": ["finding_id", "plain_statement", "why_it_matters"],
+            "properties": {
+              "finding_id": { "type": "string" },
+              "plain_statement": { "type": "string", "description": "No technical jargon. A CFO should understand this." },
+              "why_it_matters": { "type": "string" }
+            }
+          }
+        },
+        "recommendations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["recommendation_id", "action", "expected_impact", "confidence", "timeline"],
+            "properties": {
+              "recommendation_id": { "type": "string" },
+              "action": { "type": "string" },
+              "expected_impact": { "type": "string" },
+              "confidence": { "type": "string" },
+              "timeline": { "type": "string" }
+            }
+          }
+        },
+        "discovery_path": {
+          "type": "object",
+          "description": "Reproducibility record — a third party should be able to reproduce the finding from this section alone",
+          "required": ["artifact_chain", "queries_executed", "code_references"],
+          "properties": {
+            "artifact_chain": { "type": "array", "items": { "type": "string", "format": "uuid" } },
+            "queries_executed": { "type": "array", "items": { "type": "string" } },
+            "code_references": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "l1_compliance_checks": {
+          "type": "object",
+          "required": ["causal_language_check", "citation_coverage_check", "omission_audit_check"],
+          "properties": {
+            "causal_language_check": {
+              "type": "object",
+              "required": ["passed", "causal_claims_count", "all_claims_have_causal_evidence"],
+              "properties": {
+                "passed": { "type": "boolean" },
+                "causal_claims_count": { "type": "integer" },
+                "all_claims_have_causal_evidence": { "type": "boolean" }
+              }
+            },
+            "citation_coverage_check": {
+              "type": "object",
+              "required": ["passed", "total_factual_claims", "cited_claims", "coverage_pct"],
+              "properties": {
+                "passed": { "type": "boolean" },
+                "total_factual_claims": { "type": "integer" },
+                "cited_claims": { "type": "integer" },
+                "coverage_pct": { "type": "number", "minimum": 0, "maximum": 100 }
+              }
+            },
+            "omission_audit_check": {
+              "type": "object",
+              "required": ["passed", "material_findings_from_reviewer", "all_material_findings_included"],
+              "properties": {
+                "passed": { "type": "boolean" },
+                "material_findings_from_reviewer": { "type": "integer" },
+                "all_material_findings_included": { "type": "boolean" },
+                "omitted_finding_ids": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          }
+        },
+        "citation_index": {
+          "type": "array",
+          "description": "All citations referenced in the report — 100% coverage required",
+          "items": {
+            "type": "object",
+            "required": ["citation_id", "source", "claim_text"],
+            "properties": {
+              "citation_id": { "type": "string" },
+              "source": { "type": "string" },
+              "claim_text": { "type": "string" },
+              "artifact_ref": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

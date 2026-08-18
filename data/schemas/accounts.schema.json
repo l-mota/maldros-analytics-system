@@ -1,0 +1,48 @@
+{
+  "table": "accounts",
+  "full_dataset_row_count": 2000,
+  "sample_row_count": 100,
+  "note": "Schema derived from the generated dataset. The row sample in data/samples/ is illustrative only and is NOT the dataset the case-study figures were computed from.",
+  "columns": [
+    {
+      "name": "account_id",
+      "type": "string"
+    },
+    {
+      "name": "created_date",
+      "type": "timestamp"
+    },
+    {
+      "name": "tier",
+      "type": "string"
+    },
+    {
+      "name": "region",
+      "type": "string"
+    },
+    {
+      "name": "is_flagged",
+      "type": "boolean"
+    },
+    {
+      "name": "flag_reason",
+      "type": "string"
+    },
+    {
+      "name": "total_api_calls",
+      "type": "integer"
+    },
+    {
+      "name": "total_spend_usd",
+      "type": "number"
+    },
+    {
+      "name": "account_status",
+      "type": "string"
+    },
+    {
+      "name": "cluster_id",
+      "type": "string"
+    }
+  ]
+}

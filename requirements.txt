@@ -1,0 +1,17 @@
+# Maldros — runtime dependencies
+#
+# This list is derived from the imports actually present in the shipped source,
+# not from the system's specification documents. Where the two differ, this file
+# reflects the code.
+#
+# Note: the vector-index retrieval component referenced by the Orchestrator
+# (lib/vector_index.py) is not included in this repository, so its embedding
+# dependency is not listed here.
+
+anthropic>=0.40.0      # language-model client, isolated behind lib/llm_wrapper.py
+duckdb>=1.0.0          # in-memory analytical SQL over Parquet
+pandas>=2.0.0          # tabular manipulation
+numpy>=1.24.0          # numerics
+scipy>=1.11.0          # statistical tests
+networkx>=3.0          # co-occurrence graph construction and cluster analysis
+matplotlib>=3.7.0      # chart rendering (Storyteller Agent, design-token bound)

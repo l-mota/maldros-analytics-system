@@ -1,0 +1,73 @@
+name: metric_governance
+label: Metric Governance Policy
+description: >
+  Governs how metrics are defined, changed, and versioned in the Maldros system.
+  All metric definitions live in semantic_layer/metrics/. Changes require the
+  process below. This policy is enforced by the Data Architect Agent.
+
+governance_rules:
+  new_metric:
+    steps:
+      1: "Define metric in YAML with all required fields (name, description, computation_logic, grain, applicable_filters, dimensions, owner, policy_rationale, known_limitations, judgment_mechanism, version_history)"
+      2: "Assign judgment_mechanism (1, 2, or 3) — if 3, metric cannot gate phase transitions or trigger Confirmation Gate"
+      3: "Data Architect Agent generates dbt semantic layer equivalent YAML"
+      4: "Statistician Agent validates computation logic for statistical soundness"
+      5: "Change logged to Maldros_Change_Tracker.md"
+      6: "Second Brain entry created with [[wikilinks]] to related metrics, dimensions, entities"
+    authorization: "Operator approval required for metrics in judgment_mechanism category 3 that will be used in AIMS Mode B reports"
+
+  metric_change:
+    steps:
+      1: "New YAML version created — never edit computation_logic in place"
+      2: "Version history updated with previous version as prior"
+      3: "Statistician Agent runs backwards compatibility check: does new version change historical results?"
+      4: "If backwards-incompatible: Confirmation Gate required"
+      5: "If backwards-compatible: AIMS Mode A log sufficient"
+      6: "Change Tracker updated"
+    protection: "Metrics gating phase transitions or triggering Confirmation Gate require explicit operator approval for any change"
+
+  metric_deprecation:
+    steps:
+      1: "Mark metric as deprecated in YAML"
+      2: "All downstream consumers identified (via Second Brain [[wikilinks]])"
+      3: "Replacement metric specified or absence acknowledged"
+      4: "AIMS Mode B report if deprecated metric was in any active governance gate"
+
+judgment_mechanism_definitions:
+  1:
+    label: "Fully Computable"
+    description: "Computable from data without analyst judgment. Denominator stable. No allocation required."
+    phase_transition_gating: PERMITTED
+    confirmation_gate_triggering: PERMITTED
+    examples: [api_abuse_rate, safety_bypass_incidents]
+
+  2:
+    label: "Computable with Documented Judgment"
+    description: "Computable, but specific parameters or allocation choices require analyst judgment. Judgment documented in AIMS Mode A."
+    phase_transition_gating: PERMITTED (with judgment documented)
+    confirmation_gate_triggering: PERMITTED (with judgment documented)
+    examples: [fraud_loss_direct, account_takeover_volume, compliance_cost_per_incident]
+
+  3:
+    label: "Escalation Flag"
+    description: "Too uncertain for automated gating. Triggers human review when materiality threshold exceeded. Human decision is authoritative."
+    phase_transition_gating: FORBIDDEN
+    confirmation_gate_triggering: FORBIDDEN (but may trigger a human review request)
+    examples: [downstream_harm_exposure]
+
+required_yaml_fields:
+  - name
+  - label
+  - description
+  - type
+  - grain
+  - computation_logic
+  - applicable_filters
+  - dimensions
+  - owner
+  - policy_rationale
+  - known_limitations
+  - judgment_mechanism
+  - version_history
+
+version: "1.0.0"

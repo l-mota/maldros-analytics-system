@@ -1,0 +1,93 @@
+name: downstream_harm_exposure
+label: Downstream Harm Exposure
+description: >
+  Estimated total financial exposure from downstream harm events — the indirect
+  costs, reputational damage, and third-party liability arising from AI-generated
+  content that caused harm beyond the immediate platform interaction. This metric
+  aggregates: indirect_cost_usd, regulatory_penalty_usd, and legal_liability_usd
+  from the financial_impact table where attack_vector = 'downstream_harm'.
+
+  Downstream harm is the hardest impact category to quantify. This metric is
+  explicitly marked as an estimate with stated confidence intervals, not a
+  point measurement.
+
+type: sum (with confidence interval)
+grain: monthly (default); quarterly (regulatory reporting mode)
+
+computation_logic: |
+  # Python pseudocode — not SQL
+
+  downstream_rows = financial_impact[
+      (financial_impact['attack_vector'] == 'downstream_harm')
+      & (financial_impact['period'] >= period_start)
+      & (financial_impact['period'] <= period_end)
+  ]
+
+  # Point estimate: sum of indirect + regulatory + legal (not direct — direct is
+  # already captured in fraud_loss_direct)
+  downstream_harm_exposure_point = (
+      downstream_rows['indirect_cost_usd'].sum()
+      + downstream_rows['regulatory_penalty_usd'].sum()
+      + downstream_rows['legal_liability_usd'].sum()
+  )
+
+  # Uncertainty: indirect costs have high variance; apply confidence bounds
+  # CI is explicitly stated in the output — not a precision artifact
+  ci_lower = downstream_harm_exposure_point * 0.60   # -40% lower bound
+  ci_upper = downstream_harm_exposure_point * 1.80   # +80% upper bound
+
+  # regulatory_penalty is the most defensible component (actual amounts)
+  regulatory_confirmed = downstream_rows['regulatory_penalty_usd'].sum()
+
+applicable_filters:
+  - time_period (monthly/quarterly/annual)
+  - component (indirect/regulatory/legal — segment by confidence level)
+
+dimensions:
+  - time_period
+  - attack_vector  # fixed to 'downstream_harm' for this metric
+
+owner: analyst
+team: fraud_abuse_analytics
+
+policy_rationale: >
+  Downstream harm exposure is tracked because it drives the largest regulatory
+  risk. EU AI Act GPAI Article 55 requires systemic risk assessment including
+  downstream harm quantification. The regulatory_penalty component is actual
+  (confirmed fines from regulatory_events table cross-reference); the indirect
+  and legal components are estimates.
+
+  All Storyteller outputs must use the confidence interval form, not the point
+  estimate alone. Presenting downstream harm as a precise number is a Storyteller
+  L1 violation (causal language / false precision veto).
+
+  Regulatory lag: observed regulatory events typically trail internal abuse
+  detection by 60-120 days. Cross-reference with regulatory_events table for
+  lag analysis.
+
+known_limitations:
+  - indirect costs (reputational damage, customer churn attributed to harm events)
+    are model estimates, not measured outcomes — treat with low confidence
+  - legal liability is an accrual estimate until litigation is settled; may
+    change significantly if cases settle or are dismissed
+  - regulatory penalties are known (from regulatory_events) only for events that
+    have resulted in a public enforcement action — ongoing investigations are
+    not included
+  - does not capture harm to third parties that was never legally attributed to
+    the platform — true harm likely exceeds measured harm
+
+judgment_mechanism: 3
+  # Mechanism 3: escalation flag. This metric cannot gate phase transitions or
+  # trigger the Confirmation Gate automatically. It flags for human review when
+  # estimated exposure exceeds materiality threshold ($500k monthly). The human
+  # review determines appropriate action. The estimate is too uncertain for
+  # automated gating decisions.
+
+materiality_threshold: 500000  # USD monthly — triggers Confirmation Gate review request
+confidence_class: LOW_CONFIDENCE_ESTIMATE
+
+version_history:
+  - version: "1.0.0"
+    date: "2026-06-08"
+    change: "Initial definition — Phase 0"
+    author: analyst

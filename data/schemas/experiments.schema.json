@@ -1,0 +1,64 @@
+{
+  "table": "experiments",
+  "full_dataset_row_count": 20,
+  "sample_row_count": 20,
+  "note": "Schema derived from the generated dataset. The row sample in data/samples/ is illustrative only and is NOT the dataset the case-study figures were computed from.",
+  "columns": [
+    {
+      "name": "experiment_id",
+      "type": "string"
+    },
+    {
+      "name": "start_date",
+      "type": "timestamp"
+    },
+    {
+      "name": "end_date",
+      "type": "timestamp"
+    },
+    {
+      "name": "metric",
+      "type": "string"
+    },
+    {
+      "name": "control_n",
+      "type": "integer"
+    },
+    {
+      "name": "treatment_n",
+      "type": "integer"
+    },
+    {
+      "name": "effect_size",
+      "type": "number"
+    },
+    {
+      "name": "p_value",
+      "type": "number"
+    },
+    {
+      "name": "ci_lower",
+      "type": "number"
+    },
+    {
+      "name": "ci_upper",
+      "type": "number"
+    },
+    {
+      "name": "srm_detected",
+      "type": "boolean"
+    },
+    {
+      "name": "novelty_effect_suspected",
+      "type": "boolean"
+    },
+    {
+      "name": "ship_decision",
+      "type": "string"
+    },
+    {
+      "name": "analyst_notes",
+      "type": "string"
+    }
+  ]
+}

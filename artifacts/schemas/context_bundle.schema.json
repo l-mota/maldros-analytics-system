@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "maldros/context_bundle/1.0.0",
+  "title": "Context Bundle",
+  "description": "Produced by the Orchestrator after Second Brain query. Contains retrieved prior analyses, metric definitions, external intelligence, and Constraint Register entries. Consumed by all downstream agents.",
+  "type": "object",
+  "required": ["artifact_id","artifact_type","schema_version","phase_of_origin","producing_agent","timestamp_utc","provenance","content_hash","confidence_score","known_limitations","content"],
+  "properties": {
+    "artifact_id": { "type": "string", "format": "uuid" },
+    "artifact_type": { "type": "string", "const": "context_bundle" },
+    "schema_version": { "type": "string", "const": "1.0.0" },
+    "phase_of_origin": { "type": "integer", "minimum": 0, "maximum": 7 },
+    "producing_agent": { "type": "string", "const": "orchestrator" },
+    "timestamp_utc": { "type": "string", "format": "date-time" },
+    "provenance": { "type": "array", "items": { "type": "string", "format": "uuid" }, "minItems": 1 },
+    "content_hash": { "type": "string" },
+    "confidence_score": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+    "known_limitations": { "type": "array", "items": { "type": "string" } },
+    "content": {
+      "type": "object",
+      "required": ["task_id","second_brain_query","similarity_score","prior_analyses","relevant_metrics","external_intelligence","open_constraints","retrieval_mode"],
+      "properties": {
+        "task_id": { "type": "string" },
+        "second_brain_query": { "type": "string" },
+        "similarity_score": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "prior_analyses": {
+          "type": "array",
+          "description": "Retrieved prior analyses from Second Brain above similarity threshold",
+          "items": { "type": "object" }
+        },
+        "relevant_metrics": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "external_intelligence": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "open_constraints": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "retrieval_mode": {
+          "type": "string",
+          "enum": ["keyword", "vector", "hybrid"],
+          "description": "Phase 1: keyword. Phase 2+: vector."
+        }
+      }
+    }
+  }
+}

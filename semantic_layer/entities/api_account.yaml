@@ -1,0 +1,89 @@
+name: api_account
+label: API Account
+description: >
+  The primary entity in the analytics system. An API account is a unique
+  authenticated identity that makes calls to the platform's API. It is the unit
+  of analysis for abuse detection, fraud investigation, account takeover analysis,
+  and financial impact attribution.
+
+primary_key: account_id
+format: "ACC-{5-digit zero-padded integer}"
+
+fields:
+  account_id:
+    type: string
+    format: "ACC-00001 to ACC-02000"
+    required: true
+    unique: true
+
+  created_date:
+    type: timestamp
+    description: Account creation date
+    required: true
+
+  tier:
+    type: categorical
+    values: [free, pro, enterprise, trial]
+    dimension: account_tier
+
+  region:
+    type: categorical
+    values: [US, EU, APAC, LATAM]
+    dimension: region
+
+  is_flagged:
+    type: boolean
+    description: >
+      True if the account has been flagged for suspected abuse. Note: this is
+      the current flag state, not a historical immutable record. An account can
+      be flagged and later cleared.
+
+  flag_reason:
+    type: categorical
+    values: [api_abuse, safety_bypass, platform_fraud, downstream_harm, data_poisoning, null]
+    nullable: true
+
+  total_api_calls:
+    type: integer
+    description: Cumulative API call count from account creation
+
+  total_spend_usd:
+    type: float
+    description: Cumulative spend in USD from account creation
+
+  account_status:
+    type: categorical
+    values: [active, suspended, closed]
+    description: Current account status
+
+  cluster_id:
+    type: categorical
+    values: [cluster_a, cluster_b, cluster_c, null]
+    description: >
+      Validation metadata only — identifies which coordinated abuse cluster
+      the account belongs to. Null for non-cluster accounts. In production,
+      this field would not exist; cluster membership is inferred by graph analysis.
+
+relationships:
+  - entity: fraud_incident
+    relationship: one-to-many
+    join_key: account_id
+    description: An account can have zero or more fraud incidents
+
+  - entity: api_event
+    relationship: one-to-many
+    join_key: account_id
+    description: An account generates many API events
+
+graph_analysis_features:
+  description: >
+    For coordinated abuse detection, accounts are represented as nodes in a graph.
+    Edges are created based on:
+    (1) temporal correlation: two accounts both active in the same 15-minute window
+    (2) behavioral similarity: cosine similarity > 0.8 on [token_count, cost_per_call, content_category_distribution]
+    (3) session correlation: sessions that start within 5 minutes of each other
+    Community detection on this graph surfaces coordinated abuse clusters.
+  graph_library: networkx
+  edge_types: [temporal, behavioral, session]
+
+version: "1.0.0"

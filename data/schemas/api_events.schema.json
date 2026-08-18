@@ -1,0 +1,48 @@
+{
+  "table": "api_events",
+  "full_dataset_row_count": 750000,
+  "sample_row_count": 100,
+  "note": "Schema derived from the generated dataset. The row sample in data/samples/ is illustrative only and is NOT the dataset the case-study figures were computed from.",
+  "columns": [
+    {
+      "name": "event_id",
+      "type": "string"
+    },
+    {
+      "name": "account_id",
+      "type": "string"
+    },
+    {
+      "name": "timestamp",
+      "type": "timestamp"
+    },
+    {
+      "name": "model_used",
+      "type": "string"
+    },
+    {
+      "name": "token_count_input",
+      "type": "integer"
+    },
+    {
+      "name": "token_count_output",
+      "type": "integer"
+    },
+    {
+      "name": "content_category",
+      "type": "string"
+    },
+    {
+      "name": "cost_usd",
+      "type": "number"
+    },
+    {
+      "name": "endpoint",
+      "type": "string"
+    },
+    {
+      "name": "response_time_ms",
+      "type": "integer"
+    }
+  ]
+}

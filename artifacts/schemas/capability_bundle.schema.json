@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "maldros/capability_bundle/1.0.0",
+  "title": "Capability Bundle",
+  "description": "First artifact emitted by the Orchestrator on every task. Snapshot of CDI Layer state for this task context. Must appear in every downstream artifact's provenance chain.",
+  "type": "object",
+  "required": [
+    "artifact_id",
+    "artifact_type",
+    "schema_version",
+    "phase_of_origin",
+    "producing_agent",
+    "timestamp_utc",
+    "provenance",
+    "content_hash",
+    "confidence_score",
+    "known_limitations",
+    "content"
+  ],
+  "properties": {
+    "artifact_id": { "type": "string", "format": "uuid" },
+    "artifact_type": { "type": "string", "const": "capability_bundle" },
+    "schema_version": { "type": "string", "const": "1.0.0" },
+    "phase_of_origin": { "type": "integer", "minimum": 0, "maximum": 7 },
+    "producing_agent": { "type": "string", "const": "orchestrator" },
+    "timestamp_utc": { "type": "string", "format": "date-time" },
+    "provenance": {
+      "type": "array",
+      "description": "Empty for first artifact on a task; non-empty if this is a re-emission.",
+      "items": { "type": "string", "format": "uuid" }
+    },
+    "content_hash": { "type": "string", "description": "SHA-256 of content field" },
+    "confidence_score": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+    "known_limitations": { "type": "array", "items": { "type": "string" } },
+    "content": {
+      "type": "object",
+      "required": [
+        "task_id",
+        "task_description",
+        "cdi_query_timestamp",
+        "active_reasoning_modes",
+        "capabilities_met",
+        "capabilities_not_met",
+        "cdi_lineage_trace",
+        "l1_veto_state",
+        "second_brain_similarity_score",
+        "decomposition"
+      ],
+      "properties": {
+        "task_id": { "type": "string" },
+        "task_description": { "type": "string" },
+        "cdi_query_timestamp": { "type": "string", "format": "date-time" },
+        "active_reasoning_modes": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["MODE_1", "MODE_2", "MODE_3", "MODE_4", "MODE_5", "MODE_6", "MODE_7"] }
+        },
+        "capabilities_met": {
+          "type": "array",
+          "description": "CEP IDs that are active for this task",
+          "items": { "type": "string", "pattern": "^CEP_[0-9]+$" }
+        },
+        "capabilities_not_met": {
+          "type": "array",
+          "description": "CEP IDs evaluated but not triggered — logged, not silently omitted",
+          "items": {
+            "type": "object",
+            "required": ["cep_id", "reason"],
+            "properties": {
+              "cep_id": { "type": "string" },
+              "reason": { "type": "string" }
+            }
+          }
+        },
+        "cdi_lineage_trace": {
+          "type": "object",
+          "description": "Which CDI domains were queried and what was returned",
+          "properties": {
+            "domains_queried": { "type": "array", "items": { "type": "string" } },
+            "key_findings": { "type": "array", "items": { "type": "string" } },
+            "alternative_approaches_surfaced": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "l1_veto_state": {
+          "type": "object",
+          "required": ["nominal", "active_vetoes"],
+          "properties": {
+            "nominal": { "type": "boolean" },
+            "active_vetoes": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "second_brain_similarity_score": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Highest similarity score from Second Brain query. Determines analogical vs. first-principles mode."
+        },
+        "decomposition": {
+          "type": "object",
+          "required": ["tasks"],
+          "properties": {
+            "tasks": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["task_label", "assigned_agent", "description"],
+                "properties": {
+                  "task_label": { "type": "string" },
+                  "assigned_agent": { "type": "string" },
+                  "description": { "type": "string" },
+                  "cdi_influence": { "type": "string", "description": "How CDI query influenced this task" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

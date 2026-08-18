@@ -1,0 +1,101 @@
+{
+  "_meta": {
+    "description": "Operator configuration — Phase 0 deliverable 0.8. All parameters are binding once set. Changes require AIMS Mode A log entry.",
+    "schema_version": "1.0.0",
+    "set_date": "2026-06-08",
+    "set_by": "Luis (operator)",
+    "last_modified": "2026-06-08"
+  },
+
+  "operator": {
+    "name": "Luis",
+    "role": "Single operator — full authority",
+    "notification_email": null,
+    "review_capacity_hours_per_week": 10
+  },
+
+  "operating_windows": {
+    "description": "Hours during which the operator is available to review Confirmation Gate items",
+    "primary_window": {
+      "days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      "hours_utc": "14:00–22:00",
+      "timezone": "US/Central (UTC-6)"
+    },
+    "emergency_window": {
+      "description": "For CRITICAL escalations only — any time",
+      "applicable_severity": ["CRITICAL"]
+    },
+    "unavailability_protocol": {
+      "description": "If operator is unavailable, items queue in Review Queue. No auto-approve on timeout. Silence ≠ approval.",
+      "max_queue_wait_days": 5,
+      "overflow_action": "flag in AIMS Mode A; alert operator at next available window"
+    }
+  },
+
+  "review_capacity_ceiling": {
+    "default": 12,
+    "description": "Maximum Confirmation Gate items in the Review Queue at any time. Phase 7 proposal generation pauses when this is exceeded.",
+    "thresholds": {
+      "green": {"max_items": 4, "phase7_status": "running"},
+      "yellow": {"max_items": 7, "phase7_status": "running", "alert": "operator_notification"},
+      "orange": {"max_items": 10, "phase7_status": "running", "alert": "elevated_notification"},
+      "red": {"max_items": 12, "phase7_status": "PAUSED", "alert": "high_priority_notification"},
+      "critical": {"max_items": null, "phase7_status": "ALL_SUSPENDED", "alert": "critical_notification", "trigger": "team_expansion_flag"}
+    }
+  },
+
+  "materiality_threshold": {
+    "financial_usd": 50000,
+    "description": "Findings with estimated financial impact above this threshold automatically route through Confirmation Gate before AIMS Mode B delivery",
+    "applies_to": ["fraud_loss_direct", "downstream_harm_exposure", "compliance_cost_per_incident"],
+    "special_case_downstream_harm": 500000
+  },
+
+  "dataset_quality_thresholds": {
+    "psi_nominal_max": 0.10,
+    "psi_warning_max": 0.20,
+    "psi_elevated_max": 0.50,
+    "psi_halt_trigger": 0.50,
+    "row_count_delta_warning_pct": 5.0,
+    "row_count_delta_alert_pct": 15.0,
+    "null_rate_warning_pct": 1.0,
+    "null_rate_alert_pct": 5.0,
+    "schema_drift_tolerance": "ZERO"
+  },
+
+  "notification_preferences": {
+    "channel": "in_app",
+    "severity_routing": {
+      "INFO": "in_app_only",
+      "OPERATIONAL": "in_app_only",
+      "HIGH": "in_app_prominent",
+      "CRITICAL": "in_app_prominent"
+    },
+    "review_queue_monitoring": {
+      "enabled": true,
+      "check_interval_minutes": 60,
+      "alert_on_threshold_crossing": true
+    },
+    "note": "HIGH/CRITICAL notification channels cannot be disabled — Design Invariant enforcement"
+  },
+
+  "algorithmic_rule": {
+    "exploration_budget_pct": 10,
+    "description": "10% of all investigation cycles redirected to counter-intuitive hypotheses from Constraint Register. Analyst may adjust percentage. System cannot skip these cycles.",
+    "current_setting": 10,
+    "adjustable_by": "analyst",
+    "floor": 0,
+    "ceiling": 50
+  },
+
+  "model_selection": {
+    "agent_llm": "claude-opus-4-8",
+    "fallback": "NONE — strongest available required",
+    "auto_upgrade": true,
+    "description": "Always use strongest frontier model. Non-negotiable. No fallback to lighter models. Bumped from claude-opus-4-6 to claude-opus-4-8 per C-038 (Session 19), matching lib/llm_wrapper.py REQUIRED_MODEL."
+  },
+
+  "phase_0_accepted": false,
+  "phase_0_dataset_review_decision": null,
+  "config_status": "ACTIVE"
+}

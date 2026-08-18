@@ -1,0 +1,102 @@
+name: account_takeover_volume
+label: Account Takeover Volume
+description: >
+  Count of unique accounts involved in confirmed or suspected takeover events in
+  the period. An "account takeover" is operationally defined as: an account whose
+  behavioral fingerprint changes sharply (>2σ deviation from 30-day rolling baseline
+  on ≥2 behavioral dimensions simultaneously) and which has at least one associated
+  fraud_incident of any type within the same 7-day window.
+
+  This metric surfaces the number of affected users — distinct from the financial
+  impact metric which surfaces the dollar loss.
+
+type: count_distinct
+grain: weekly (default); daily (incident investigation mode)
+
+computation_logic: |
+  # Python pseudocode — not SQL
+
+  # Step 1: identify behavioral change events from api_events
+  # For each account, compute rolling 30-day baselines on:
+  #   - avg_token_count_input
+  #   - content_category_distribution (pct_policy_violation)
+  #   - requests_per_day
+  #   - avg_cost_usd_per_call
+
+  account_baselines = (
+      api_events
+      .sort_values('timestamp')
+      .groupby('account_id')
+      .rolling('30D', on='timestamp')
+      .agg({
+          'token_count_input': ['mean', 'std'],
+          'cost_usd': ['mean', 'std'],
+      })
+  )
+
+  # Step 2: flag accounts with >2σ deviation on >=2 dimensions
+  behavioral_change_flags = compute_behavioral_deviation(
+      api_events, account_baselines, sigma_threshold=2.0, min_dimensions=2
+  )
+
+  # Step 3: join to fraud_incidents within 7-day window
+  takeover_accounts = pd.merge(
+      behavioral_change_flags[behavioral_change_flags['deviation_flag']],
+      fraud_incidents[['account_id', 'detected_date']],
+      on='account_id',
+  )
+  takeover_accounts = takeover_accounts[
+      abs((takeover_accounts['change_date'] - takeover_accounts['detected_date'])
+          .dt.days) <= 7
+  ]
+
+  account_takeover_volume = takeover_accounts['account_id'].nunique()
+
+applicable_filters:
+  - account_tier (free/pro/enterprise/trial)
+  - region (US/EU/APAC/LATAM)
+  - time_period (weekly/monthly)
+  - attack_vector (filter to most common vector for the flagged accounts)
+
+dimensions:
+  - account_tier
+  - region
+  - time_period
+
+owner: analyst
+team: fraud_abuse_analytics
+
+policy_rationale: >
+  Account takeover volume is the user-harm metric. It answers the question "how
+  many of our users were victimized?" rather than "how much money did we lose?"
+  These two questions can diverge significantly — e.g., a platform fraud attack
+  on enterprise accounts may have high direct financial loss but low account
+  takeover volume, while a credential-stuffing campaign may have low per-account
+  financial impact but high takeover volume.
+
+  The 2σ / 2-dimension threshold was chosen to balance precision (avoid flagging
+  ordinary behavioral variation) against recall (catch real takeovers). The
+  Statistician Agent should periodically re-validate this threshold against
+  confirmed takeover cases.
+
+known_limitations:
+  - the behavioral deviation approach misses takeovers where the attacker maintains
+    the victim's behavioral fingerprint (highly sophisticated attacks)
+  - false positive rate increases during product changes that legitimately shift
+    account behavior — apply feature flags or holdout logic during major releases
+  - rolling 30-day baseline requires 30 days of data per account; new accounts
+    (<30 days old) are excluded and tracked separately as "new_account_abuse"
+  - does not distinguish credential-stuffing from session-token theft from API
+    key compromise — all are counted together; annotate by detection_method for
+    breakdown
+
+judgment_mechanism: 2
+  # Mechanism 2: threshold parameters (2σ, 2 dimensions, 7-day window) are
+  # analyst-configurable. The Statistician Agent must validate threshold
+  # choices against confirmed cases at least quarterly.
+
+version_history:
+  - version: "1.0.0"
+    date: "2026-06-08"
+    change: "Initial definition — Phase 0"
+    author: analyst

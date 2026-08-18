@@ -1,0 +1,167 @@
+{
+  "_meta": {
+    "domain": "exemplar_surface",
+    "description": "Current Few-Shot Bank state: active exemplars, their query classes, recency scores, and relevance scores. Accessible to all agents without routing through the Orchestrator.",
+    "schema_version": "1.0.0",
+    "last_updated": "2026-06-19T23:27:56.015837+00:00",
+    "update_policy": "Updated via cdi_update.py when Promotion Gate approves a new exemplar. Requires Promotion Gate authorization — not direct write."
+  },
+  "bank_state": {
+    "total_exemplars": 3,
+    "query_classes_covered": [
+      "api_abuse_investigation",
+      "experiment_analysis",
+      "pipeline_diagnosis"
+    ],
+    "last_promotion": "2026-06-19T23:27:56.015837+00:00",
+    "promotion_gate_status": "ACTIVE"
+  },
+  "exemplars": [
+    {
+      "id": "7164d535-0b21-4e12-b24d-757ad77da70e",
+      "query_class": "api_abuse_investigation",
+      "input": {
+        "query_class": "api_abuse_investigation",
+        "task_id": "compound-cycle-01",
+        "agent_name": "analyst",
+        "original_hash": "127e3e527d41fb08"
+      },
+      "output": {
+        "accepted_output": "Investigation of coordinated multi-account API abuse should always start from a graph-topology query before falling back to per-account rates. The rule is: never recommend population-wide rate limits when the elevated signal is concentrated in fewer than 5% of accounts; recommend targeted cluster action instead. Going forward, every investigation in this class must report cluster share, rate ratio, and financial concentration together.",
+        "diff_summary": [
+          {
+            "op": "delete",
+            "original": "It might be that",
+            "edited": ""
+          },
+          {
+            "op": "insert",
+            "original": "",
+            "edited": "should always"
+          },
+          {
+            "op": "replace",
+            "original": "rates, possibly.",
+            "edited": "rates."
+          },
+          {
+            "op": "insert",
+            "original": "",
+            "edited": "never recommend"
+          },
+          {
+            "op": "replace",
+            "original": "a few percent",
+            "edited": "5%"
+          }
+        ]
+      },
+      "justification": "Strong rule language introduced (4 signal(s), e.g. 'always start'); distance 0.16",
+      "source_triple_id": "2198911e-b083-43a4-a7c5-583205f132da",
+      "edit_pattern": "factual",
+      "promoted_at": "2026-06-19T23:27:55.941637+00:00",
+      "promoted_by": "promotion_gate",
+      "task_id": "compound-cycle-01",
+      "recency_score": 1.0
+    },
+    {
+      "id": "b12cbdb6-14b8-4051-803d-aa162bab77a6",
+      "query_class": "experiment_analysis",
+      "input": {
+        "query_class": "experiment_analysis",
+        "task_id": "compound-cycle-01",
+        "agent_name": "analyst",
+        "original_hash": "2f52f756dd429620"
+      },
+      "output": {
+        "accepted_output": "Experiment analysis should always check SRM before reading the effect estimate. The rule is: never propose a ship decision when chi-square SRM test rejects assignment balance, regardless of nominal effect size. For all experiments below 80% power, report MDE alongside the point estimate, and by convention flag novelty effect risk when treatment ramp is under 7 days.",
+        "diff_summary": [
+          {
+            "op": "delete",
+            "original": "It might be that",
+            "edited": ""
+          },
+          {
+            "op": "insert",
+            "original": "",
+            "edited": "should always"
+          },
+          {
+            "op": "replace",
+            "original": "estimate, possibly.",
+            "edited": "estimate."
+          },
+          {
+            "op": "insert",
+            "original": "",
+            "edited": "never propose"
+          },
+          {
+            "op": "replace",
+            "original": "size, possibly.",
+            "edited": "size."
+          }
+        ]
+      },
+      "justification": "Strong rule language introduced (4 signal(s), e.g. 'always check'); distance 0.20",
+      "source_triple_id": "92ffe563-b0b9-494f-b5e4-4d9530b16c38",
+      "edit_pattern": "factual",
+      "promoted_at": "2026-06-19T23:27:55.968526+00:00",
+      "promoted_by": "promotion_gate",
+      "task_id": "compound-cycle-01",
+      "recency_score": 1.0
+    },
+    {
+      "id": "b16e0bb4-7ab7-4995-8da2-bad9cd4ca32c",
+      "query_class": "pipeline_diagnosis",
+      "input": {
+        "query_class": "pipeline_diagnosis",
+        "task_id": "compound-cycle-01",
+        "agent_name": "analyst",
+        "original_hash": "03aa78122e510d75"
+      },
+      "output": {
+        "accepted_output": "Pipeline diagnosis should always check PSI before output-drift assertions. The rule is: never escalate to L3 when L2 healing cycles have not exhausted the cross-domain repair catalogue. For all gradual-degradation cases, the minimum causal chain must be logged before remediation, and going forward every cycle records the analogue domain used.",
+        "diff_summary": [
+          {
+            "op": "delete",
+            "original": "It might be that",
+            "edited": ""
+          },
+          {
+            "op": "insert",
+            "original": "",
+            "edited": "should always"
+          },
+          {
+            "op": "replace",
+            "original": "assertions, possibly.",
+            "edited": "assertions."
+          },
+          {
+            "op": "insert",
+            "original": "",
+            "edited": "never escalate"
+          },
+          {
+            "op": "replace",
+            "original": "catalogue, possibly.",
+            "edited": "catalogue."
+          }
+        ]
+      },
+      "justification": "Strong rule language introduced (4 signal(s), e.g. 'always check'); distance 0.18",
+      "source_triple_id": "3e47764b-2cdd-42fe-ae13-523265934738",
+      "edit_pattern": "stylistic",
+      "promoted_at": "2026-06-19T23:27:56.015837+00:00",
+      "promoted_by": "promotion_gate",
+      "task_id": "compound-cycle-01",
+      "recency_score": 1.0
+    }
+  ],
+  "promotion_gate": {
+    "description": "Exemplars are promoted from analyst corrections/approvals to the Few-Shot Bank only when: (1) the correction is unambiguous, (2) the Statistician Agent validates the exemplar's correctness, (3) the exemplar generalizes beyond the single case that prompted it.",
+    "ambiguous_queue": [],
+    "quarantine_queue": []
+  }
+}

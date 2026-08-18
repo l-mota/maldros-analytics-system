@@ -1,0 +1,416 @@
+{
+  "artifact_id": "1bcf87a6-1f55-4cd9-9f13-4a78aa7f3b10",
+  "artifact_type": "evidence_bundle",
+  "schema_version": "1.0.0",
+  "phase_of_origin": 1,
+  "producing_agent": "analyst",
+  "timestamp_utc": "2026-06-10T00:07:40.137910+00:00",
+  "provenance": [
+    "a15c92f8-8555-493b-a3c5-ade0f491cf04",
+    "d8f04114-7aa3-444b-9274-c82f0192f63c"
+  ],
+  "content_hash": "76a6b3bb586d519325d3d3649d4f04f35a685fd7d1db709e616f067dfe56165f",
+  "confidence_score": 0.72,
+  "known_limitations": [
+    "The investigation question assumes a Q1 volumetric spike that does not exist in the data (spike ratio 0.946). All conclusions are reframed around structural coordination rather than temporal anomaly.",
+    "Dataset is synthetic — concentration patterns and cluster labels may not reflect real-world adversarial behavior distributions. Findings should be validated against production data before operationalizing.",
+    "Co-occurrence threshold (≥5 events/week, ≥2 weeks overlap) may be too permissive for high-volume platforms, potentially creating false edges among independently prolific abusers. Sensitivity analysis at stricter thresholds (≥10 events, ≥3 weeks) was not performed.",
+    "The single connected component of 41 nodes could represent one large ring or multiple smaller rings linked by bridge accounts — the graph topology (betweenness centrality, modularity) was not analyzed.",
+    "Financial impact attribution assumes proportional mapping from abuse events to financial loss. If coordinated abuse carries disproportionately higher per-event cost (likely), the estimates are conservative. If some cluster events are low-impact probing, they may overstate.",
+    "No causal mechanism for coordination is established — temporal co-occurrence is necessary but not sufficient evidence. Shared infrastructure signals (IPs, devices) would strengthen the causal chain.",
+    "Only 18 months of data — the coordination pattern may predate the observation window, making it impossible to determine onset timing or growth trajectory."
+  ],
+  "content": {
+    "task_id": "1e818fa4-bc5c-499d-b394-bd9064b6dffa",
+    "investigation_question": "Is the spike in API abuse volume in Q1 of the synthetic dataset driven by coordinated multi-account behavior, or is it organic growth? If coordinated, what is the estimated financial impact and what countermeasure is indicated?",
+    "phase": 1,
+    "hypotheses_tested": [
+      "coordinated_abuse",
+      "organic_growth"
+    ],
+    "primary_conclusion": "COORDINATED_ABUSE",
+    "causal_claim": false,
+    "generation_mode": "ABDUCTIVE",
+    "reasoning_mode_selected": "ABDUCTIVE",
+    "cdi_query_record": {
+      "domains_queried": [
+        "cross_domain_analogues",
+        "inference_layers",
+        "reasoning_frameworks",
+        "disciplinary_methods"
+      ],
+      "reasoning_modes_available": [
+        "MODE_1",
+        "MODE_2",
+        "MODE_3",
+        "MODE_4",
+        "MODE_5",
+        "MODE_6",
+        "MODE_7"
+      ],
+      "analogues_found": 5,
+      "l1_status": {
+        "id": "L1",
+        "name": "Heuristic Layer",
+        "designation": "DETERMINISTIC — CAN VETO ALL HIGHER LAYERS",
+        "description": "Deterministic rules, schema contracts, known-bad data patterns. A regex match on a known-corrupt data signature is not overridden by the LLM's narrative assessment.",
+        "components": [
+          "Schema contracts: dbt tests — a known-null field in a not-null column is rejected",
+          "Artifact envelope validation: missing provenance field fails the hand-off regardless of content quality",
+          "Design Invariant checks: a proposal touching a locked invariant is auto-rejected regardless of Statistician confidence score",
+          "Known-bad data patterns: coordinated abuse signatures, SRM detection formula, PSI threshold crossings"
+        ],
+        "veto_classes": [
+          "SCHEMA_CONTRACT_FAILURE",
+          "ARTIFACT_ENVELOPE_MALFORMED",
+          "DESIGN_INVARIANT_VIOLATION",
+          "KNOWN_BAD_DATA_PATTERN"
+        ],
+        "current_state": "NOMINAL",
+        "active_vetoes": [],
+        "veto_history": []
+      },
+      "l2_status": {
+        "id": "L2",
+        "name": "Statistical Layer",
+        "designation": "PROBABILISTIC",
+        "description": "Bayesian belief networks for joint priors. Shannon entropy on data distributions. Graph centrality (PageRank-style) on entity networks. Significance testing, confidence intervals, effect sizes.",
+        "components": [
+          "Bayesian belief networks for data quality priors",
+          "Shannon entropy on data distributions",
+          "Graph centrality on entity networks",
+          "Significance testing: p-values, confidence intervals, effect sizes",
+          "Power analysis: minimum detectable effect and sample size bounds"
+        ],
+        "current_state": "NOMINAL",
+        "active_signals": [],
+        "last_computation": null
+      },
+      "query_timestamp": "2026-06-10T00:06:30.752363+00:00"
+    },
+    "analysis_results": {
+      "volume_analysis": {
+        "q1_2024_abuse_events": 11479,
+        "q2_2024_abuse_events": 11602,
+        "q3_2024_abuse_events": 12068,
+        "q4_2024_abuse_events": 12246,
+        "q1_total_events": 124829,
+        "q1_abuse_rate": 0.09196,
+        "q1_monthly_avg_abuse": 3826.3,
+        "non_q1_monthly_avg_abuse": 4045.9,
+        "q1_spike_ratio": 0.946,
+        "monthly_time_series": [
+          {
+            "month": "2024-01",
+            "abuse_events": 3884.0,
+            "total_events": 42544,
+            "abuse_rate": 0.09129371944339977
+          },
+          {
+            "month": "2024-02",
+            "abuse_events": 3639.0,
+            "total_events": 39722,
+            "abuse_rate": 0.09161170132420321
+          },
+          {
+            "month": "2024-03",
+            "abuse_events": 3956.0,
+            "total_events": 42563,
+            "abuse_rate": 0.09294457627516857
+          },
+          {
+            "month": "2024-04",
+            "abuse_events": 3758.0,
+            "total_events": 41310,
+            "abuse_rate": 0.09097070927136286
+          },
+          {
+            "month": "2024-05",
+            "abuse_events": 3966.0,
+            "total_events": 42795,
+            "abuse_rate": 0.09267437784787942
+          },
+          {
+            "month": "2024-06",
+            "abuse_events": 3878.0,
+            "total_events": 40954,
+            "abuse_rate": 0.09469160521560775
+          },
+          {
+            "month": "2024-07",
+            "abuse_events": 4092.0,
+            "total_events": 42740,
+            "abuse_rate": 0.09574169396350024
+          },
+          {
+            "month": "2024-08",
+            "abuse_events": 4073.0,
+            "total_events": 42674,
+            "abuse_rate": 0.09544453297089563
+          },
+          {
+            "month": "2024-09",
+            "abuse_events": 3903.0,
+            "total_events": 41394,
+            "abuse_rate": 0.09428902739527467
+          },
+          {
+            "month": "2024-10",
+            "abuse_events": 4026.0,
+            "total_events": 42432,
+            "abuse_rate": 0.09488122171945701
+          },
+          {
+            "month": "2024-11",
+            "abuse_events": 3965.0,
+            "total_events": 41090,
+            "abuse_rate": 0.09649549768800195
+          },
+          {
+            "month": "2024-12",
+            "abuse_events": 4255.0,
+            "total_events": 42461,
+            "abuse_rate": 0.10020960410729846
+          },
+          {
+            "month": "2025-01",
+            "abuse_events": 4217.0,
+            "total_events": 42586,
+            "abuse_rate": 0.09902315314892218
+          },
+          {
+            "month": "2025-02",
+            "abuse_events": 3741.0,
+            "total_events": 38322,
+            "abuse_rate": 0.09762016596211054
+          },
+          {
+            "month": "2025-03",
+            "abuse_events": 4259.0,
+            "total_events": 42836,
+            "abuse_rate": 0.09942571668689887
+          },
+          {
+            "month": "2025-04",
+            "abuse_events": 4237.0,
+            "total_events": 41113,
+            "abuse_rate": 0.1030574270911877
+          },
+          {
+            "month": "2025-05",
+            "abuse_events": 4208.0,
+            "total_events": 42373,
+            "abuse_rate": 0.09930852193613858
+          },
+          {
+            "month": "2025-06",
+            "abuse_events": 4111.0,
+            "total_events": 40091,
+            "abuse_rate": 0.10254171759247711
+          }
+        ]
+      },
+      "account_analysis": {
+        "total_accounts": 2000,
+        "n_high_abuse_accounts": 102,
+        "p95_abuse_threshold": 149.0,
+        "median_abuse_per_account": 8.0,
+        "mean_abuse_per_account": 36.1,
+        "p99_abuse_per_account": 176.0,
+        "max_abuse_per_account": 997.0,
+        "q1_top20_accounts_abuse_share": 0.2054,
+        "q1_top50_accounts_abuse_share": 0.2893
+      },
+      "graph_analysis": {
+        "n_graph_nodes": 41,
+        "n_graph_edges": 462,
+        "graph_density": 0.5634,
+        "n_connected_components": 1,
+        "component_sizes_top10": [
+          41
+        ],
+        "largest_component_size": 41,
+        "second_component_size": 0,
+        "avg_degree": 22.54,
+        "max_degree": 40,
+        "n_clustered_accounts_3plus": 41,
+        "cluster_account_share_of_population": 0.0205,
+        "cluster_q1_abuse_events": 2970,
+        "cluster_q1_abuse_share": 0.2587
+      },
+      "fraud_incident_analysis": {
+        "q1_total_incidents": 85,
+        "q1_api_abuse_incidents": 35,
+        "q1_cluster_incidents": 62,
+        "q1_total_financial_impact_from_incidents": 6834106.99,
+        "q1_by_attack_vector_and_cluster": [
+          {
+            "attack_vector": "api_abuse",
+            "cluster_id": "cluster_a",
+            "incident_count": 34,
+            "total_financial_impact": 475802.9199999999,
+            "avg_financial_impact": 13994.203529411763
+          },
+          {
+            "attack_vector": "platform_fraud",
+            "cluster_id": "cluster_c",
+            "incident_count": 16,
+            "total_financial_impact": 3354431.04,
+            "avg_financial_impact": 209651.94
+          },
+          {
+            "attack_vector": "safety_bypass",
+            "cluster_id": "cluster_b",
+            "incident_count": 12,
+            "total_financial_impact": 956735.21,
+            "avg_financial_impact": 79727.93416666666
+          },
+          {
+            "attack_vector": "safety_bypass",
+            "cluster_id": null,
+            "incident_count": 8,
+            "total_financial_impact": 512454.11,
+            "avg_financial_impact": 64056.76375
+          },
+          {
+            "attack_vector": "platform_fraud",
+            "cluster_id": null,
+            "incident_count": 7,
+            "total_financial_impact": 656307.8,
+            "avg_financial_impact": 93758.25714285715
+          },
+          {
+            "attack_vector": "downstream_harm",
+            "cluster_id": null,
+            "incident_count": 5,
+            "total_financial_impact": 843383.17,
+            "avg_financial_impact": 168676.63400000002
+          },
+          {
+            "attack_vector": "data_poisoning",
+            "cluster_id": null,
+            "incident_count": 2,
+            "total_financial_impact": 29604.52,
+            "avg_financial_impact": 14802.26
+          },
+          {
+            "attack_vector": "api_abuse",
+            "cluster_id": null,
+            "incident_count": 1,
+            "total_financial_impact": 5388.22,
+            "avg_financial_impact": 5388.22
+          }
+        ],
+        "avg_monthly_incidents_all_period": 26.4,
+        "q1_avg_monthly_incidents": 28.3,
+        "incident_q1_ratio": 1.074,
+        "incident_n_api_abuse_q1": 35,
+        "incident_avg_impact_api_abuse_q1": 13748.32,
+        "incident_total_impact_api_abuse_q1": 481191.14
+      },
+      "financial_impact_table": {
+        "q1_api_abuse_direct_loss": 3674407.49,
+        "q1_api_abuse_indirect_cost": 1072828.86,
+        "q1_api_abuse_regulatory_penalty": 0.0,
+        "q1_api_abuse_legal_liability": 356562.08,
+        "q1_api_abuse_remediation_cost": 562165.6,
+        "q1_api_abuse_compute_overhead": 224098.6,
+        "q1_api_abuse_total": 5890062.63
+      }
+    },
+    "llm_interpretation": {
+      "hypothesis_assessment": {
+        "coordinated_abuse": {
+          "probability": 0.78,
+          "evidence_points": [
+            "Graph-detected co-temporal cluster: 41 accounts (2.05% of population) are responsible for 25.87% of Q1 abuse events, demonstrating extreme concentration inconsistent with diffuse organic patterns",
+            "Independently labeled cluster accounts (19 accounts, 0.95% of population) account for 20.2% of Q1 abuse, providing convergent validation from a separate detection method",
+            "Co-occurrence graph forms a single connected component of 41 nodes with 462 edges, indicating dense temporal overlap — accounts are abusing in the same weekly windows repeatedly (≥2 weeks, ≥5 events each)",
+            "Edge density within the 41-node cluster is 462 / C(41,2) = 462/820 = 0.563, which is extremely high and consistent with coordinated scheduling rather than random overlap",
+            "Median abuse per account is 8 while max is 997, yielding a max/median ratio of ~125x — the right tail is heavily populated by accounts behaving far outside the norm",
+            "Top 20 accounts hold 20.54% of abuse and top 50 hold 28.93%, confirming a power-law concentration pattern typical of coordinated rings rather than uniform organic growth",
+            "Labeled cluster Q1 incidents (62) substantially exceed API abuse incidents (35), suggesting cluster-type fraud is the dominant incident category in Q1"
+          ],
+          "against_points": [
+            "Q1 spike ratio is 0.946, meaning Q1 abuse volume is actually slightly BELOW the non-Q1 quarterly average — there is no volumetric spike to explain",
+            "Abuse rates are relatively stable across quarters (Q1: 11,479; Q2: 11,602; Q3: 12,068), suggesting the coordinated behavior is persistent rather than episodic",
+            "The single connected component could be an artifact of the co-occurrence threshold (≥5 events in same week, ≥2 weeks) being too permissive, creating false links among high-volume but independent accounts",
+            "19 labeled cluster accounts and 41 graph-detected accounts do not perfectly overlap (19 vs 41), raising questions about whether the graph method over-detects or the labels under-detect"
+          ]
+        },
+        "organic_growth": {
+          "probability": 0.18,
+          "evidence_points": [
+            "No Q1 volumetric spike exists — the spike ratio is 0.946, meaning Q1 is actually 5.4% below average, consistent with steady organic baseline",
+            "Abuse volume grows modestly quarter-over-quarter (11,479 → 11,602 → 12,068), which is a gradual ~2.5% quarterly increase consistent with organic platform growth",
+            "The overall abuse rate of ~9.2% could reflect a natural background fraud rate rather than coordinated action"
+          ],
+          "against_points": [
+            "Organic growth does not explain why 2% of accounts generate 26% of abuse events with dense co-temporal patterns",
+            "Organic growth does not produce a single fully-connected component of 41 accounts with 56.3% edge density in co-temporal analysis",
+            "The 125x spread between median and max abuse per account is inconsistent with organic behavioral distributions, which typically follow lighter-tailed distributions"
+          ]
+        }
+      },
+      "primary_conclusion": "COORDINATED_ABUSE",
+      "conclusion_rationale": "While the investigation question presupposes a Q1 volumetric spike that does not exist in the data (spike ratio = 0.946), the evidence overwhelmingly supports the presence of coordinated multi-account abuse operating as a persistent baseline rather than an episodic spike. The core evidence is structural, not volumetric: (1) two independent detection methods — pre-labeled clusters and graph-based co-temporal analysis — converge on identifying a small set of accounts (1-2% of population) responsible for 20-26% of abuse; (2) the co-occurrence graph exhibits abnormally high edge density (56.3%) within a single connected component, which is the signature of temporally synchronized behavior; (3) the extreme concentration (top 20 accounts = 20.5% of abuse, max/median ratio = 125x) is inconsistent with diffuse organic patterns. The coordination appears to be ongoing across the entire observation window rather than isolated to Q1, which is actually a more concerning finding — it suggests an entrenched abuse ring rather than a one-time attack.",
+      "financial_impact_assessment": {
+        "conservative_usd": 1524000.0,
+        "base_case_usd": 2970000.0,
+        "methodology": "Conservative estimate: graph-detected cluster accounts (41) contribute 25.87% of Q1 abuse. Applying this share to the Q1 financial impact table ($5,890,062.63) yields $1,524,000. This is conservative because it attributes only the cluster's proportional abuse share to coordination. Base case: the labeled cluster drove 62 incidents in Q1 at the average impact of $13,748.32 per API-abuse incident. However, cluster incidents may carry higher unit cost; applying the total Q1 financial impact from incidents ($6,834,106.99) and the cluster's ~43.4% share of labeled incidents (62 cluster / (62+35) API-abuse+cluster) yields ~$2,970,000. Both estimates exclude downstream costs such as customer churn, regulatory exposure, and brand damage.",
+        "confidence": "MEDIUM"
+      },
+      "countermeasure": {
+        "primary": "Deploy real-time co-temporal abuse detection: implement a sliding-window (7-day) co-occurrence graph that flags account pairs with ≥5 overlapping abuse events across ≥2 windows, triggering automated velocity throttling when a connected component exceeds 3 nodes",
+        "implementation_path": "Phase 1 (weeks 1-2): Instrument API event pipeline to emit abuse-flagged events to a streaming processor (e.g., Kafka + Flink). Phase 2 (weeks 3-4): Build incremental co-occurrence graph using windowed aggregation; define edge threshold at ≥5 co-temporal abuse events in a 7-day window. Phase 3 (weeks 5-6): Implement connected-component detection on the live graph; when a component reaches ≥3 accounts, apply progressive rate limiting (50% reduction per flagged account) and enqueue for manual review. Phase 4 (weeks 7-8): Add feedback loop — analyst-confirmed clusters feed a supervised model for earlier detection. Estimated engineering effort: 2 senior engineers, 8 weeks.",
+        "secondary": "Implement account-level abuse velocity caps: enforce a rolling 30-day cap at the 99th percentile of legitimate usage (currently ~176 events based on p99). Accounts exceeding this threshold are automatically challenged (CAPTCHA, step-up authentication) before further API access.",
+        "hardening_step": "Cross-reference flagged cluster accounts against shared registration signals (IP subnets, device fingerprints, email domains, payment instruments) to identify the account-creation funnel and implement upstream blocking at the registration layer to prevent ring reconstitution after takedown."
+      },
+      "generation_mode": "ABDUCTIVE",
+      "reasoning_chain": [
+        "Step 1: Evaluated the volumetric premise — Q1 spike ratio is 0.946, meaning there is no Q1 spike. Abuse volume is stable and slightly increasing across quarters. The framing assumption of a Q1 spike is invalidated by the data.",
+        "Step 2: Pivoted to structural analysis — even without a volumetric spike, the concentration metrics reveal extreme skew. Top 20 accounts = 20.5% of abuse; max/median ratio = 125x. This distribution shape is inconsistent with organic, diffuse growth.",
+        "Step 3: Examined co-temporal graph structure — 41 accounts form a single connected component with 462 edges (56.3% density). Under a null hypothesis of independent accounts randomly generating abuse, the probability of this density is negligibly small. This is the strongest signal of coordination.",
+        "Step 4: Cross-validated with labeled clusters — 19 pre-labeled cluster accounts independently account for 20.2% of Q1 abuse. The partial overlap with the 41 graph-detected accounts (19 ⊂ 41 is plausible but not confirmed) suggests the graph method captures additional coordinated accounts not yet labeled.",
+        "Step 5: Assessed financial impact — applied the cluster's abuse share (25.87%) to total Q1 financial losses ($5.89M) for the conservative estimate. Used incident-level data for the base case, recognizing that cluster incidents (62) dominated Q1 incident counts.",
+        "Step 6: Designed countermeasure targeting the specific structural signature discovered — co-temporal clustering — rather than simple volume thresholds, which would miss this pattern since overall volumes are not anomalous."
+      ],
+      "known_limitations": [
+        "The investigation question assumes a Q1 volumetric spike that does not exist in the data (spike ratio 0.946). All conclusions are reframed around structural coordination rather than temporal anomaly.",
+        "Dataset is synthetic — concentration patterns and cluster labels may not reflect real-world adversarial behavior distributions. Findings should be validated against production data before operationalizing.",
+        "Co-occurrence threshold (≥5 events/week, ≥2 weeks overlap) may be too permissive for high-volume platforms, potentially creating false edges among independently prolific abusers. Sensitivity analysis at stricter thresholds (≥10 events, ≥3 weeks) was not performed.",
+        "The single connected component of 41 nodes could represent one large ring or multiple smaller rings linked by bridge accounts — the graph topology (betweenness centrality, modularity) was not analyzed.",
+        "Financial impact attribution assumes proportional mapping from abuse events to financial loss. If coordinated abuse carries disproportionately higher per-event cost (likely), the estimates are conservative. If some cluster events are low-impact probing, they may overstate.",
+        "No causal mechanism for coordination is established — temporal co-occurrence is necessary but not sufficient evidence. Shared infrastructure signals (IPs, devices) would strengthen the causal chain.",
+        "Only 18 months of data — the coordination pattern may predate the observation window, making it impossible to determine onset timing or growth trajectory."
+      ],
+      "confidence_score": 0.72
+    },
+    "capability_bundle_id": "a15c92f8-8555-493b-a3c5-ade0f491cf04",
+    "context_bundle_id": "d8f04114-7aa3-444b-9274-c82f0192f63c",
+    "lineage": {
+      "data_sources": [
+        {
+          "source": "data/raw/api_events.parquet",
+          "role": "abuse event volume and timing"
+        },
+        {
+          "source": "data/raw/accounts.parquet",
+          "role": "account tier and flag status"
+        },
+        {
+          "source": "data/raw/fraud_incidents.parquet",
+          "role": "confirmed incident rates by vector"
+        },
+        {
+          "source": "data/raw/financial_impact.parquet",
+          "role": "aggregated financial loss estimates"
+        }
+      ],
+      "analysis_elapsed_sec": 2.41,
+      "llm_call_id": "f03d835c-d5e6-45b2-a5e5-e14cbfc7570e",
+      "llm_input_tokens": 1391,
+      "llm_output_tokens": 2501
+    }
+  }
+}

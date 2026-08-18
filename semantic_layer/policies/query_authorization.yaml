@@ -1,0 +1,92 @@
+name: query_authorization
+label: Query Authorization Policy
+description: >
+  Governs which agents can query which data tables, metrics, and dimensions.
+  SQL is not the default interface — this policy governs natural-language metric
+  queries routed through the semantic layer. Direct SQL access is sandboxed and
+  requires explicit invocation.
+
+query_interface_hierarchy:
+  default: "Natural language → semantic layer → execution plan → result"
+  sandboxed_sql: "Explicit invocation only. Agent must state reason for SQL mode. Logged to AIMS Mode A."
+  direct_table_access: "Data Architect Agent and Diagnostic Agent only, for schema validation."
+
+agent_permissions:
+  orchestrator:
+    can_query: [all_metrics, all_dimensions, second_brain, capability_registry, cdi_index]
+    cannot_write: [data_tables, metric_definitions]
+    sandboxed_sql: false
+
+  analyst:
+    can_query: [all_metrics, all_dimensions, all_tables_via_semantic_layer, external_sources]
+    can_execute: [python_code, sandboxed_sql]
+    sandboxed_sql: true
+    sandboxed_sql_scope: "Read-only queries on staging and mart layers. No DDL. No raw layer."
+
+  statistician:
+    can_query: [all_metrics, all_dimensions, experiment_data, pipeline_health]
+    can_execute: [python_code_statistical_only, sandboxed_sql_statistical_only]
+    sandboxed_sql: true
+    sandboxed_sql_scope: "Statistical validation queries only. Read-only. No DDL."
+
+  storyteller:
+    can_query: [all_metrics, all_dimensions, all_artifacts]
+    can_execute: [visualization_only]
+    sandboxed_sql: false
+    note: "Storyteller does not query raw data. It consumes artifacts produced by Analyst and Statistician."
+
+  data_architect:
+    can_query: [schema_information, dbt_run_artifacts, all_metrics_yaml, pipeline_health]
+    can_execute: [dbt_model_generation_draft, dbt_test_execution]
+    sandboxed_sql: true
+    sandboxed_sql_scope: "Schema inspection and dbt test execution. Draft model writes only."
+
+  diagnostic:
+    can_query: [all_artifacts, dbt_test_results, pipeline_health, schema_information, cdi_inference_layers]
+    can_execute: []
+    sandboxed_sql: false
+    write_access: NONE
+    note: "Diagnostic Agent is read-only in all systems. No write access to any production system."
+
+  healing:
+    can_query: [pipeline_health, dbt_run_artifacts, all_artifacts, cdi_cross_domain_analogues]
+    can_execute: [python_remediation_scripts, dbt_model_draft_write]
+    sandboxed_sql: false
+    write_access: "Draft PR only — no production merge without operator approval"
+
+  red_team:
+    can_query: [artifacts_under_test, cdi_adversarial_frameworks]
+    can_execute: [python_sandbox_only]
+    sandboxed_sql: false
+    live_data_access: NONE
+    production_system_access: NONE
+    note: "Red Team operates on artifacts (copies), never live data or production systems."
+
+data_access_tiers:
+  raw:
+    description: "Raw ingested data — accounts, api_events, fraud_incidents (unaggregated)"
+    access: [data_architect, analyst via semantic layer only]
+    pii_risk: MEDIUM (account_id is pseudonymous but linkable)
+    logging_required: true
+
+  staging:
+    description: "Cleaned, cast, deduplicated data"
+    access: [analyst via semantic layer, statistician via semantic layer, data_architect direct]
+    logging_required: true
+
+  intermediate:
+    description: "Enriched, joined, feature-engineered tables"
+    access: [analyst, statistician]
+    logging_required: true
+
+  mart:
+    description: "Analysis-ready tables for Analyst and Statistician Agents"
+    access: [analyst, statistician, diagnostic (metadata only)]
+    logging_required: true
+
+audit_requirements:
+  - Every sandboxed SQL execution logged to AIMS Mode A with: agent, query, timestamp, row count returned
+  - Every metric query logged with: agent, metric, filters applied, timestamp, artifact_id produced
+  - Diagnostic Agent validates artifact provenance on every hand-off — malformed provenance is L1 failure
+
+version: "1.0.0"

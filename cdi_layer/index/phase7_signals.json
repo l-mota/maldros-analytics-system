@@ -1,0 +1,17 @@
+{
+  "_meta": {
+    "domain": "phase7_signals",
+    "description": "Current bottleneck candidates and cross-phase patterns identified by Phase 7 telemetry analysis. Continuously surfaced to all agents. Phase 7 not yet active — this index will be populated starting Phase 6.",
+    "schema_version": "1.0.0",
+    "last_updated": "2026-06-08T00:00:00Z",
+    "update_policy": "Updated via cdi_update.py when Phase 7 telemetry analysis identifies a new bottleneck or improvement signal."
+  },
+  "phase7_status": "NOT_YET_ACTIVE",
+  "bottleneck_candidates": [],
+  "cross_phase_patterns": [],
+  "improvement_proposals": [],
+  "telemetry_coverage": {
+    "phases_active": [],
+    "phases_pending": [0, 1, 2, 3, 4, 5, 6]
+  }
+}

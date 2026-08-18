@@ -1,0 +1,80 @@
+{
+  "artifact_id": "95389987-1123-413a-811a-12dd1ca60ca1",
+  "artifact_type": "capability_bundle",
+  "schema_version": "1.0.0",
+  "phase_of_origin": 0,
+  "producing_agent": "orchestrator",
+  "timestamp_utc": "2026-06-20T01:56:22.242637+00:00",
+  "provenance": [],
+  "content_hash": "d795aa7fedbec9904f6166bde7e993c41f0b1a5cca6816e6f34a0900a5ad4251",
+  "confidence_score": 0.9,
+  "known_limitations": [
+    "Phase 0 prototype — LLM-powered CDI queries not yet active; using keyword matching"
+  ],
+  "content": {
+    "task_id": "1c67023e-ca52-4c4e-8edb-24f5ee1f8415",
+    "task_description": "Across all investigation cycles completed so far, where is the Maldros system spending the most tokens and producing the most variance in output quality? Identify the top structural bottleneck and propose a concrete improvement that would reduce unnecessary token consumption without compromising output accuracy or governance compliance.",
+    "cdi_query_timestamp": "2026-06-20T01:56:22.242637+00:00",
+    "active_reasoning_modes": [
+      "MODE_1",
+      "MODE_5"
+    ],
+    "capabilities_met": [],
+    "capabilities_not_met": [
+      {
+        "cep_id": "CEP_1",
+        "reason": "Not applicable in Phase 0 (applicable: [5, 6, 7])"
+      },
+      {
+        "cep_id": "CEP_2",
+        "reason": "Not applicable in Phase 0 (applicable: [1, 2, 3, 4, 5, 6, 7])"
+      },
+      {
+        "cep_id": "CEP_3",
+        "reason": "Not applicable in Phase 0 (applicable: [2, 3, 4, 5, 6, 7])"
+      },
+      {
+        "cep_id": "CEP_4",
+        "reason": "Not applicable in Phase 0 (applicable: [2, 3, 4, 5, 6, 7])"
+      },
+      {
+        "cep_id": "CEP_5",
+        "reason": "Not applicable in Phase 0 (applicable: [1, 2, 3, 4, 5, 6, 7])"
+      }
+    ],
+    "cdi_lineage_trace": {
+      "domains_queried": [
+        "inference_layers",
+        "reasoning_frameworks",
+        "cross_domain_analogues",
+        "second_brain_signal"
+      ],
+      "key_findings": [
+        "The Algorithmic Rule's 10% exploration budget is this mechanism. Exploration cycles draw from Constraint Register (currently-disbelieved hypotheses). Specified design target, not a measured result: the model projects capability plateauing at ~1.65x without exploration versus ~11.5x at cycle 50 with it. Projection only — not an observed outcome.",
+        "Healing Agent: when a primary data path fails (parquet read, semantic-layer dimension resolution), fall back to a secondary path (older snapshot, alternate dimension) with reduced fidelity but functional output. Mark the output as degraded so downstream consumers can decide. Run the failure-detection loop faster than failure propagation rate.",
+        "Monitor autocorrelation in pipeline PSI scores. Increasing autocorrelation is an early warning of impending structural break — detectable weeks before PSI threshold is crossed."
+      ],
+      "alternative_approaches_surfaced": [
+        "The Algorithmic Rule's 10% exploration budget is this mechanism. Exploration cycles draw from Constraint Register (currently-disbelieved hypotheses). Specified design target, not a measured result: the model projects capability plateauing at ~1.65x without exploration versus ~11.5x at cycle 50 with it. Projection only — not an observed outcome.",
+        "Healing Agent: when a primary data path fails (parquet read, semantic-layer dimension resolution), fall back to a secondary path (older snapshot, alternate dimension) with reduced fidelity but functional output. Mark the output as degraded so downstream consumers can decide. Run the failure-detection loop faster than failure propagation rate.",
+        "Monitor autocorrelation in pipeline PSI scores. Increasing autocorrelation is an early warning of impending structural break — detectable weeks before PSI threshold is crossed."
+      ]
+    },
+    "l1_veto_state": {
+      "nominal": true,
+      "active_vetoes": []
+    },
+    "second_brain_similarity_score": 0.8,
+    "decomposition": {
+      "tasks": []
+    },
+    "algorithmic_rule": {
+      "cycle_number": 12,
+      "is_exploration_cycle": false,
+      "exploration_percent": 10.0,
+      "cycles_until_next_exploration": 8,
+      "diversion": null,
+      "original_question_if_diverted": null
+    }
+  }
+}

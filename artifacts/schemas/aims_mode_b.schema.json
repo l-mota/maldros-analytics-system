@@ -1,0 +1,306 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "maldros/aims_mode_b/1.0.0",
+  "title": "AIMS Mode B — Stakeholder Briefing",
+  "$comment": "CORRECTED. The prior revision of this file was the pre-expansion Phase-0 standard: it declared 15 required assets under field names largely disjoint from what the Storyteller Agent actually emits, and it modelled the 18 assets as direct children of `content` rather than as members of `content.assets`. Neither shipped example validated against it. The asset list below is transcribed from AIMS_MODE_B_REQUIRED_ASSETS in agents/storyteller/storyteller.py, and the object shape from the artifacts in artifacts/examples/. Where a nested field was documented in the agent's output contract but not directly observed in a shipped example, it is defined as an optional property rather than required — this schema is deliberately permissive about asset internals and strict about asset presence, which is what the L1 omission audit actually enforces. See docs/engineering_process.md, entry E-6.",
+  "description": "Human sign-off required. 18 required assets. Emitted by the Storyteller Agent when system output routes to Mode B rather than Mode A — novel analytical findings, first-principles inventions, a Brittle Red-Team verdict, an A/B ship/no-ship recommendation, a new data product, an architectural change, or an L3+ escalation. Mode B output is never auto-approved.",
+  "type": "object",
+  "required": [
+    "artifact_id",
+    "artifact_type",
+    "schema_version",
+    "phase_of_origin",
+    "producing_agent",
+    "timestamp_utc",
+    "provenance",
+    "content_hash",
+    "confidence_score",
+    "known_limitations",
+    "content"
+  ],
+  "properties": {
+    "artifact_id": { "type": "string", "format": "uuid" },
+    "artifact_type": { "type": "string", "const": "aims_mode_b" },
+    "schema_version": { "type": "string", "const": "1.0.0" },
+    "phase_of_origin": { "type": "integer", "minimum": 0, "maximum": 7 },
+    "producing_agent": { "type": "string", "const": "storyteller" },
+    "timestamp_utc": { "type": "string", "format": "date-time" },
+    "provenance": {
+      "type": "array",
+      "description": "Upstream artifact IDs. A Mode B briefing is derived from at least a Capability Bundle and an Evidence Bundle.",
+      "items": { "type": "string", "format": "uuid" },
+      "minItems": 2
+    },
+    "content_hash": { "type": "string" },
+    "confidence_score": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+    "known_limitations": { "type": "array", "items": { "type": "string" } },
+
+    "content": {
+      "type": "object",
+      "required": [
+        "task_id",
+        "investigation_question",
+        "phase",
+        "routing",
+        "status",
+        "assets",
+        "assets_present",
+        "assets_missing",
+        "l1_compliance_summary",
+        "discovery_report_id",
+        "human_approval_gate",
+        "lineage"
+      ],
+      "properties": {
+        "task_id": { "type": "string", "format": "uuid" },
+        "investigation_question": { "type": "string" },
+        "phase": { "type": "integer", "minimum": 0, "maximum": 7 },
+        "routing": { "type": "string", "const": "MODE_B" },
+        "status": {
+          "type": "string",
+          "enum": ["READY_FOR_REVIEW", "BLOCKED"],
+          "description": "BLOCKED means one or more deterministic L1 checks failed. A blocked briefing is still written to the artifact store, with its violations attached, so the Diagnostic Agent can observe the failure. It is not deleted and it is not shipped."
+        },
+
+        "assets": {
+          "type": "object",
+          "description": "The 18 required Mode B assets. Presence of all 18 is enforced at runtime by the L1 omission audit; absence blocks the briefing.",
+          "required": [
+            "executive_narrative",
+            "technical_deep_dive",
+            "discovery_path",
+            "financial_projection",
+            "recommended_action",
+            "confidence_and_uncertainty",
+            "known_limitations",
+            "statistical_verdict",
+            "visualizations_spec",
+            "scale_impact_declaration",
+            "revision_log",
+            "generation_mode_declaration",
+            "lineage_trace",
+            "role_responsibility_mapping",
+            "addressed_constraints",
+            "footnotes",
+            "external_dependencies",
+            "human_approval_gate"
+          ],
+          "properties": {
+            "executive_narrative": {
+              "type": "string",
+              "description": "1. Plain-language stakeholder brief. Non-technical, no statistical notation, no UUIDs. Must pass the non-technical comprehensibility test or the output is returned rather than shipped."
+            },
+            "technical_deep_dive": {
+              "type": "string",
+              "description": "2. Full methodology, reproducible."
+            },
+            "discovery_path": {
+              "type": "array",
+              "description": "3. Every step from question to finding, replayable.",
+              "items": { "type": "string" }
+            },
+            "financial_projection": {
+              "type": "object",
+              "description": "4. Cost of inaction versus cost of countermeasure deployment.",
+              "required": [
+                "cost_of_inaction_usd",
+                "cost_of_countermeasure_usd",
+                "net_benefit_usd",
+                "methodology"
+              ],
+              "properties": {
+                "cost_of_inaction_usd": { "type": "number" },
+                "cost_of_countermeasure_usd": { "type": "number" },
+                "net_benefit_usd": { "type": "number" },
+                "methodology": {
+                  "type": "string",
+                  "description": "Plain language. No UUIDs. Citation markers in [^N] form."
+                },
+                "confidence": { "type": "string", "enum": ["LOW", "MEDIUM", "HIGH"] }
+              }
+            },
+            "recommended_action": {
+              "type": "object",
+              "description": "5. Plain-language decision first; technical parameters confined to the annex.",
+              "required": ["primary"],
+              "properties": {
+                "primary": {
+                  "type": "string",
+                  "description": "The business decision, in plain language. Algorithm names, thresholds and parameters do not belong here."
+                },
+                "technical_annex": { "type": "string" },
+                "implementation_path": { "type": "string" },
+                "timeline": { "type": "string" },
+                "secondary": { "type": "string" }
+              }
+            },
+            "confidence_and_uncertainty": {
+              "type": "object",
+              "description": "6. Confidence score plus uncertainty bounds.",
+              "required": ["overall_confidence"],
+              "properties": {
+                "overall_confidence": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+                "uncertainty_description": { "type": "string" }
+              }
+            },
+            "known_limitations": {
+              "type": "array",
+              "description": "7. Concrete observations that would invalidate the finding.",
+              "items": { "type": "string" }
+            },
+            "statistical_verdict": {
+              "type": "string",
+              "description": "8. Statistician verdict and test summaries. Technical layer — statistical notation is permitted here."
+            },
+            "visualizations_spec": {
+              "type": "array",
+              "description": "9. Chart specifications. The Storyteller renders these to PNG; specifying without rendering is a system failure.",
+              "items": {
+                "type": "object",
+                "required": ["title", "chart_type", "purpose", "insights"],
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "Narrative conclusion, not a description, per the visual design system."
+                  },
+                  "chart_type": { "type": "string" },
+                  "axes": { "type": "string" },
+                  "data_source": { "type": "string" },
+                  "purpose": { "type": "string" },
+                  "insights": {
+                    "type": "string",
+                    "description": "Canonical field name for the visualization narrative."
+                  },
+                  "rendered_path": { "type": "string" }
+                }
+              }
+            },
+            "scale_impact_declaration": {
+              "type": "string",
+              "description": "10. Per-axis improvement claim. No composite multiplier."
+            },
+            "revision_log": {
+              "type": "array",
+              "description": "11. Readiness-checklist iteration log. Initialised empty; the system appends entries."
+            },
+            "generation_mode_declaration": {
+              "type": "string",
+              "description": "12. Which reasoning modes were used — analogical, first-principles, extended."
+            },
+            "lineage_trace": {
+              "type": "string",
+              "description": "13. Agents invoked, data sources, content hashes, compute consumed. UUIDs are permitted here and only here."
+            },
+            "role_responsibility_mapping": {
+              "type": "string",
+              "description": "14. Which analytics-engineering responsibility this output fulfils."
+            },
+            "addressed_constraints": {
+              "type": "string",
+              "description": "15. Which Constraint Register entries this output resolves."
+            },
+            "footnotes": {
+              "type": "array",
+              "description": "16. Numbered citations referenced by [^N] markers in the narrative. The L1 citation-coverage check resolves every factual claim against this index.",
+              "items": {
+                "type": "object",
+                "required": ["n", "source"],
+                "properties": {
+                  "n": { "type": "integer", "minimum": 1 },
+                  "source": { "type": "string" },
+                  "note": { "type": "string" }
+                }
+              }
+            },
+            "external_dependencies": {
+              "type": "array",
+              "description": "17. External decision gates: security, legal, budget, regulatory.",
+              "items": {
+                "type": "object",
+                "required": ["gate", "owner"],
+                "properties": {
+                  "gate": { "type": "string" },
+                  "owner": { "type": "string" }
+                }
+              }
+            },
+            "human_approval_gate": {
+              "$ref": "#/$defs/human_approval_gate",
+              "description": "18. Explicit operator decision required. No auto-approve."
+            }
+          }
+        },
+
+        "assets_present": {
+          "type": "array",
+          "description": "Names of the assets actually assembled. A briefing may be BLOCKED with all 18 present — asset completeness and L1 compliance are independent conditions.",
+          "items": { "type": "string" }
+        },
+        "assets_missing": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+
+        "l1_compliance_summary": {
+          "type": "object",
+          "description": "Result of the deterministic checks. These are not advisory. overall_passed false blocks the briefing, and the LLM orchestrator cannot override it.",
+          "required": [
+            "overall_passed",
+            "causal_check",
+            "citation_check",
+            "omission_check"
+          ],
+          "properties": {
+            "overall_passed": { "type": "boolean" },
+            "causal_check": {
+              "type": "boolean",
+              "description": "Veto 1 — no causal assertion without causal evidence in the upstream analysis."
+            },
+            "citation_check": {
+              "type": "boolean",
+              "description": "Veto 2 — factual claims must resolve to the citation index."
+            },
+            "omission_check": {
+              "type": "boolean",
+              "description": "Veto 3 — every finding flagged material upstream must appear in the output."
+            },
+            "c020_executive_layer": { "type": "boolean" },
+            "c020_readiness_checklist": { "type": "boolean" }
+          }
+        },
+
+        "discovery_report_id": { "type": "string", "format": "uuid" },
+        "human_approval_gate": { "$ref": "#/$defs/human_approval_gate" },
+
+        "lineage": {
+          "type": "object",
+          "description": "Upstream artifacts this briefing was derived from.",
+          "required": ["capability_bundle_id", "evidence_bundle_id"],
+          "properties": {
+            "capability_bundle_id": { "type": "string", "format": "uuid" },
+            "evidence_bundle_id": { "type": "string", "format": "uuid" },
+            "statistical_result_id": { "type": "string", "format": "uuid" },
+            "red_team_report_id": { "type": "string", "format": "uuid" }
+          }
+        }
+      }
+    }
+  },
+
+  "$defs": {
+    "human_approval_gate": {
+      "type": "object",
+      "required": ["decision_required", "no_auto_approve", "routing"],
+      "properties": {
+        "decision_required": { "type": "boolean", "const": true },
+        "no_auto_approve": {
+          "type": "boolean",
+          "const": true,
+          "description": "Permanently locked. No auto-approve under any condition — not on timeout, not on operator absence. Silence is not approval."
+        },
+        "routing": { "type": "string", "const": "CONFIRMATION_GATE" },
+        "decision_type": { "type": "string" }
+      }
+    }
+  }
+}

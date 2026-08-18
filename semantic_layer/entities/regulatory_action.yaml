@@ -1,0 +1,95 @@
+name: regulatory_action
+label: Regulatory Action
+description: >
+  An external regulatory event that has relevance to the Financial Impact
+  Analysis domain. Regulatory actions are external events that lag internal abuse
+  patterns — they are a consequence of the platform's incident profile, not a
+  cause. Cross-referencing internal incidents with regulatory events is a key
+  analytical use case.
+
+primary_key: event_id
+format: "REG-{3-digit zero-padded integer}"
+source_table: regulatory_events
+
+fields:
+  event_id:
+    type: string
+    required: true
+    unique: true
+
+  date:
+    type: date
+    description: Date of the regulatory event
+    required: true
+
+  jurisdiction:
+    type: categorical
+    values: [EU, US, UK, APAC, LATAM, GLOBAL]
+    required: true
+
+  regulatory_body:
+    type: string
+    description: e.g., FTC, EDPB, ICO, AI_Office
+    required: true
+
+  event_type:
+    type: categorical
+    values: [investigation_opened, fine_issued, enforcement_action, guidance_published]
+    required: true
+
+  company_affected:
+    type: string
+    description: Platform or company subject to the regulatory event
+
+  fine_amount_usd:
+    type: float
+    description: Fine amount if applicable; 0.0 for guidance and investigations
+    default: 0.0
+
+  relevance_to_fia:
+    type: categorical
+    values: [high, medium, low]
+    description: >
+      High: directly affects the platform or sets strong precedent for the domain.
+      Medium: indirect relevance (competitor enforcement, guidance that may apply).
+      Low: background regulatory activity, tangential relevance.
+
+  related_attack_vector:
+    type: categorical
+    values: [api_abuse, safety_bypass, platform_fraud, downstream_harm, data_poisoning, null]
+    nullable: true
+    description: The attack vector most associated with this regulatory event
+
+lag_correlation:
+  description: >
+    The regulatory events dataset contains injected lag-correlation signals:
+    (1) March 2024 internal api_abuse spike → June 2024 EU EDPB investigation (REG-001)
+    (2) August 2024 internal safety_bypass escalation → November 2024 FTC inquiry (REG-007)
+    These pairs are the primary signals for the regulatory lag analysis demonstration.
+  lag_pairs:
+    - internal_event: "March 2024 cluster_a api_abuse spike"
+      regulatory_event: "REG-001: EDPB investigation opened 2024-06-12"
+      lag_days: 102
+    - internal_event: "August 2024 cluster_b safety_bypass escalation peak"
+      regulatory_event: "REG-007: FTC inquiry opened 2024-11-07"
+      lag_days: 99
+
+analytical_use_cases:
+  - name: "Regulatory Exposure Forecasting"
+    description: >
+      Given current internal incident trends, forecast regulatory events 60-120
+      days out using the historical lag relationship. Uses Mode 7 (Bayesian Updating)
+      with a prior derived from the observed lag distribution.
+
+  - name: "Benchmark Comparison"
+    description: >
+      Compare platform incident rates against regulatory actions against competitors.
+      High-relevance regulatory events against competitors indicate what the platform
+      should monitor to avoid similar actions.
+
+relationships:
+  - entity: fraud_incident
+    relationship: many-to-many (temporal lag join)
+    join_logic: "regulatory_events.date ≈ fraud_incidents.detected_date + 60-120 days (lag)"
+
+version: "1.0.0"

@@ -1,0 +1,72 @@
+name: region
+label: Region
+description: >
+  Geographic region of the API account (based on account registration, not
+  IP address). Region affects regulatory applicability, fraud pattern prevalence,
+  and benchmark comparisons. Regulatory exposure varies significantly by region
+  (EU AI Act, FTC, FCA enforcement jurisdictions).
+
+type: categorical
+grain: per-account
+
+values:
+  - value: US
+    label: United States
+    regulatory_bodies: [FTC, CISA, DOJ, SEC, CFPB, OSTP]
+    regulatory_framework: US federal + state (CCPA, CPRA) — enforcement through FTC consent decrees
+    proportion_of_accounts: 0.40
+    fraud_pattern_notes: >
+      Highest volume of api_abuse and platform_fraud. FTC enforcement risk is
+      highest here due to jurisdiction over deceptive AI practices.
+
+  - value: EU
+    label: European Union
+    regulatory_bodies: [EC, EDPB, ENISA, ECB, EBA, AI_Office, national_DPAs]
+    regulatory_framework: EU AI Act + GDPR — most complex regulatory environment
+    proportion_of_accounts: 0.30
+    fraud_pattern_notes: >
+      GPAI provisions of EU AI Act apply here. Incident reporting obligations
+      are strictest. Regulatory lag (internal detection to enforcement) averages
+      90 days for GPAI-tier providers. GDPR Article 22 applies to automated
+      decision-making including fraud detection decisions.
+
+  - value: APAC
+    label: Asia-Pacific
+    regulatory_bodies: [PDPC_Singapore, JFSA_Japan, MAS_Singapore, ASIC_Australia]
+    regulatory_framework: Fragmented; Singapore PDPC AI Governance Framework most advanced
+    proportion_of_accounts: 0.20
+    fraud_pattern_notes: >
+      Safety bypass incidents are concentrated here in the dataset (cluster_b
+      accounts). Pattern may reflect regulatory arbitrage — weaker enforcement
+      makes sustained exploitation less risky.
+
+  - value: LATAM
+    label: Latin America
+    regulatory_bodies: [Brazil_ANPD, Mexico_INAI]
+    regulatory_framework: Brazil LGPD is most developed; other jurisdictions variable
+    proportion_of_accounts: 0.10
+    fraud_pattern_notes: >
+      Lowest proportion but growing. Platform fraud pattern is most prevalent.
+      cluster_c (platform_fraud) accounts are concentrated here.
+
+applicable_metrics:
+  - api_abuse_rate
+  - fraud_loss_direct
+  - account_takeover_volume
+  - safety_bypass_incidents
+  - downstream_harm_exposure
+  - compliance_cost_per_incident
+
+tables_containing_this_dimension:
+  - accounts (direct field: region)
+  - api_events (joined via account_id → accounts.region)
+  - fraud_incidents (joined via account_id → accounts.region)
+  - regulatory_events (direct field: jurisdiction — not identical to region; requires mapping)
+
+region_to_jurisdiction_mapping:
+  US: [US, GLOBAL]
+  EU: [EU, UK, GLOBAL]
+  APAC: [APAC, GLOBAL]
+  LATAM: [LATAM, GLOBAL]
+
+version: "1.0.0"

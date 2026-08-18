@@ -1,0 +1,48 @@
+{
+  "table": "pipeline_health",
+  "full_dataset_row_count": 7500,
+  "sample_row_count": 100,
+  "note": "Schema derived from the generated dataset. The row sample in data/samples/ is illustrative only and is NOT the dataset the case-study figures were computed from.",
+  "columns": [
+    {
+      "name": "pipeline_id",
+      "type": "string"
+    },
+    {
+      "name": "run_id",
+      "type": "string"
+    },
+    {
+      "name": "run_timestamp",
+      "type": "timestamp"
+    },
+    {
+      "name": "status",
+      "type": "string"
+    },
+    {
+      "name": "psi_score",
+      "type": "number"
+    },
+    {
+      "name": "schema_drift_detected",
+      "type": "boolean"
+    },
+    {
+      "name": "failure_class",
+      "type": "string"
+    },
+    {
+      "name": "healing_cycles",
+      "type": "integer"
+    },
+    {
+      "name": "rows_processed",
+      "type": "integer"
+    },
+    {
+      "name": "duration_seconds",
+      "type": "integer"
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "_meta": {
+    "domain": "reasoning_frameworks",
+    "description": "Seven reasoning modes available to all agents. Each mode carries an activation state and usage log.",
+    "schema_version": "1.0.0",
+    "last_updated": "2026-06-08T00:00:00Z",
+    "update_policy": "Updated via cdi_update.py only. Direct writes forbidden."
+  },
+  "modes": [
+    {
+      "id": "MODE_1",
+      "name": "Analogical",
+      "label": "DERIVATIVE",
+      "description": "We have seen a structurally similar problem before. Retrieve the most similar prior analysis from the Second Brain and adapt it.",
+      "activation_condition": "Second Brain similarity score >= 0.75 on a retrieved prior analysis",
+      "output_label": "DERIVATIVE — precedent cited, adaptation rationale stated",
+      "risk": "Analogy may be superficial; Red-Team tests for structural validity",
+      "required_lineage_entry": "Prior analysis artifact_id cited; adaptation delta stated",
+      "activation_state": "AVAILABLE",
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "id": "MODE_2",
+      "name": "First-Principles",
+      "label": "FIRST-PRINCIPLES",
+      "description": "No prior precedent applies. Derive from foundational truths. Full derivation chain must be attached to output.",
+      "activation_condition": "Second Brain returns no high-similarity prior, OR problem is explicitly novel",
+      "output_label": "FIRST-PRINCIPLES — full derivation chain attached",
+      "risk": "Derivation may contain hidden assumptions; Statistician validates",
+      "required_lineage_entry": "Derivation chain with each step justified from foundational axioms",
+      "activation_state": "AVAILABLE",
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "id": "MODE_3",
+      "name": "Abductive",
+      "label": "ABDUCTIVE",
+      "description": "What generative process most economically explains this observed pattern? Identify the simplest causal model consistent with observations.",
+      "activation_condition": "An anomaly appears with no typology match in the Second Brain",
+      "output_label": "ABDUCTIVE — generative process named, competing hypotheses ranked",
+      "risk": "Most parsimonious explanation is not always correct; competing hypotheses must be ranked, not suppressed",
+      "required_lineage_entry": "Candidate generative processes listed; ranked by parsimony and evidential fit",
+      "example": "340 accounts with unusual behavioral fingerprint — what underlying process most parsimoniously explains it?",
+      "activation_state": "AVAILABLE",
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "id": "MODE_4",
+      "name": "Counterfactual Simulation",
+      "label": "COUNTERFACTUAL",
+      "description": "What would have happened if variable X had been different? Evaluate whether a proposed metric or rule would have changed a known historical outcome.",
+      "activation_condition": "Evaluating a proposed change against a historical outcome is relevant to the question",
+      "output_label": "COUNTERFACTUAL — intervention and outcome delta stated with assumptions",
+      "risk": "Counterfactuals require untestable assumptions; assumptions must be made explicit",
+      "required_lineage_entry": "Counterfactual variable named; assumption set stated; sensitivity to assumptions reported",
+      "example": "If this experiment design had been live last quarter, how many false positives would it have produced?",
+      "activation_state": "AVAILABLE",
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "id": "MODE_5",
+      "name": "Cross-Domain Analogy",
+      "label": "CROSS-DOMAIN",
+      "description": "A solved problem in another field has the same underlying structure. Import the solution and adapt it.",
+      "activation_condition": "No in-domain precedent exists; problem shape matches an adjacent-field solution",
+      "output_label": "CROSS-DOMAIN — source domain named, structural mapping stated, adaptation rationale given",
+      "risk": "Field-level analogies can be loose; structural isomorphism must be demonstrated, not asserted",
+      "required_lineage_entry": "Source domain and source solution named; structural isomorphism argument stated; adaptation delta documented",
+      "examples": [
+        "Import SEIR epidemiological models for viral growth analysis of abuse spread",
+        "Romer endogenous growth framing for compounding capability accumulation"
+      ],
+      "activation_state": "AVAILABLE",
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "id": "MODE_6",
+      "name": "Adversarial Game Trees",
+      "label": "ADVERSARIAL",
+      "description": "Model the stakeholder and the system as players in a sequential game. Identify equilibrium behavior under the proposed metric or rule.",
+      "activation_condition": "Designing a metric or product under conditions where parties will optimize against it",
+      "output_label": "ADVERSARIAL — game structure named, equilibrium characterized, gaming resistance assessed",
+      "risk": "Game-theoretic models require specifying utility functions that may be wrong; sensitivity analysis required",
+      "required_lineage_entry": "Game structure (players, action sets, payoffs) stated; equilibrium computed or bounded; gaming attack vectors enumerated",
+      "example": "Stackelberg framing: if we publish this KPI, what behavior does it incentivize and what is the equilibrium?",
+      "activation_state": "AVAILABLE",
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "id": "MODE_7",
+      "name": "Bayesian Updating",
+      "label": "BAYESIAN",
+      "description": "Begin with a prior. Update sequentially as evidence arrives. Surface posterior at decision threshold.",
+      "activation_condition": "Signals accumulate slowly; combining heterogeneous evidence with calibrated uncertainty",
+      "output_label": "BAYESIAN — prior stated, likelihood model stated, posterior at each update step shown",
+      "risk": "Prior choice can dominate if data is sparse; prior sensitivity analysis required",
+      "required_lineage_entry": "Prior distribution stated with justification; likelihood model specified; posterior trajectory shown",
+      "example": "Prior of 8% that this cluster is coordinated abuse. Update posterior with each new observation. Surface at P > 0.90.",
+      "activation_state": "AVAILABLE",
+      "usage_count": 0,
+      "last_used": null
+    }
+  ]
+}

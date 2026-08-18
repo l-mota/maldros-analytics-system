@@ -1,0 +1,57 @@
+{
+  "_meta": {
+    "domain": "second_brain_signal",
+    "description": "Current state of the Second Brain — recent additions, high-similarity clusters, open constraints — continuously reflected in the CDI Layer without requiring a fresh Second Brain query per task.",
+    "schema_version": "1.0.0",
+    "last_updated": "2026-06-08T00:00:00Z",
+    "update_policy": "Updated via cdi_update.py whenever a new entry is added to the Second Brain vault."
+  },
+  "vault_state": {
+    "total_notes": 1,
+    "last_addition": "2026-06-08",
+    "folders": {
+      "agents": 0,
+      "metrics": 0,
+      "analyses": 0,
+      "experiments": 0,
+      "pipelines": 0,
+      "postmortems": 0,
+      "products": 0,
+      "discoveries": 0,
+      "aims": 0,
+      "constraints": 0,
+      "external_intel": 0
+    }
+  },
+  "high_similarity_clusters": [],
+  "open_constraints": [
+    {
+      "constraint_id": "CR-001",
+      "title": "External relationship-building is human-only",
+      "summary": "The system cannot build trust relationships with external stakeholders, product managers, or cross-functional teams. This is a permanent constraint — not closable by the system.",
+      "status": "OPEN_PERMANENT",
+      "relevance": "Affects all outputs intended for external stakeholders — dual-layer output standard partially addresses this"
+    },
+    {
+      "constraint_id": "CR-002",
+      "title": "The dataset generator has no live query API",
+      "summary": "Diagnostic Agent monitors generated file outputs, not live results. DuckDB mitigates by reading Parquet exports.",
+      "status": "OPEN_MITIGATED",
+      "relevance": "Data ingestion layer only — does not affect Phase 1+ operations after dataset is loaded into DuckDB"
+    },
+    {
+      "constraint_id": "CR-003",
+      "title": "Claude Code sequential execution limits Phase 4+ concurrency",
+      "summary": "Architecture abstractions allow Claude Agent SDK swap when needed. Not blocking for Phases 0-3.",
+      "status": "OPEN_DEFERRED",
+      "relevance": "Phase 4+ only — not a current blocker"
+    }
+  ],
+  "recent_additions": [],
+  "coverage_gaps": [
+    "No analysis records yet — Second Brain not yet populated with investigations",
+    "No postmortems yet — no pipeline failures investigated",
+    "No experiment records yet — experiments not yet analyzed",
+    "FIA not yet decomposed into external_intel/ and constraints/ notes"
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "table": "regulatory_events",
+  "full_dataset_row_count": 50,
+  "sample_row_count": 50,
+  "note": "Schema derived from the generated dataset. The row sample in data/samples/ is illustrative only and is NOT the dataset the case-study figures were computed from.",
+  "columns": [
+    {
+      "name": "event_id",
+      "type": "string"
+    },
+    {
+      "name": "event_date",
+      "type": "timestamp"
+    },
+    {
+      "name": "jurisdiction",
+      "type": "string"
+    },
+    {
+      "name": "event_type",
+      "type": "string"
+    },
+    {
+      "name": "fine_amount_usd",
+      "type": "number"
+    },
+    {
+      "name": "company_affected",
+      "type": "string"
+    },
+    {
+      "name": "relevance_to_fia",
+      "type": "string"
+    },
+    {
+      "name": "notes",
+      "type": "string"
+    },
+    {
+      "name": "lag_from_internal_event",
+      "type": "string"
+    },
+    {
+      "name": "lag_days",
+      "type": "number"
+    }
+  ]
+}

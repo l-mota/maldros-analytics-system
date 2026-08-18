@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "maldros/evidence_bundle/1.0.0",
+  "title": "Evidence Bundle",
+  "description": "Produced by the Analyst Agent. Contains the findings, data queries, Python execution results, and hypotheses from an investigation. Input to Statistician Agent validation.",
+  "type": "object",
+  "required": ["artifact_id","artifact_type","schema_version","phase_of_origin","producing_agent","timestamp_utc","provenance","content_hash","confidence_score","known_limitations","content"],
+  "properties": {
+    "artifact_id": { "type": "string", "format": "uuid" },
+    "artifact_type": { "type": "string", "const": "evidence_bundle" },
+    "schema_version": { "type": "string", "const": "1.0.0" },
+    "phase_of_origin": { "type": "integer", "minimum": 0, "maximum": 7 },
+    "producing_agent": { "type": "string", "const": "analyst" },
+    "timestamp_utc": { "type": "string", "format": "date-time" },
+    "provenance": { "type": "array", "items": { "type": "string", "format": "uuid" }, "minItems": 1 },
+    "content_hash": { "type": "string" },
+    "confidence_score": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+    "known_limitations": { "type": "array", "items": { "type": "string" } },
+    "content": {
+      "type": "object",
+      "required": ["task_id","hypotheses","data_queries","python_executions","findings","reasoning_mode","cdi_lineage_trace","alternative_approaches_considered"],
+      "properties": {
+        "task_id": { "type": "string" },
+        "hypotheses": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["hypothesis_id", "statement", "supported", "evidence_strength"],
+            "properties": {
+              "hypothesis_id": { "type": "string" },
+              "statement": { "type": "string" },
+              "supported": { "type": "boolean" },
+              "evidence_strength": { "type": "string", "enum": ["weak", "moderate", "strong", "conclusive"] },
+              "evidence_refs": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        },
+        "data_queries": {
+          "type": "array",
+          "description": "Metric queries executed via semantic layer interface",
+          "items": {
+            "type": "object",
+            "required": ["query_id", "metric", "filters", "result_summary"],
+            "properties": {
+              "query_id": { "type": "string" },
+              "metric": { "type": "string" },
+              "filters": { "type": "object" },
+              "result_summary": { "type": "string" },
+              "row_count": { "type": "integer" }
+            }
+          }
+        },
+        "python_executions": {
+          "type": "array",
+          "description": "Python code blocks executed via Claude Code tool",
+          "items": {
+            "type": "object",
+            "required": ["execution_id", "purpose", "libraries_used", "output_summary"],
+            "properties": {
+              "execution_id": { "type": "string" },
+              "purpose": { "type": "string" },
+              "libraries_used": { "type": "array", "items": { "type": "string" } },
+              "output_summary": { "type": "string" },
+              "artifacts_produced": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["finding_id", "statement", "materiality", "causal_claim", "citation_index"],
+            "properties": {
+              "finding_id": { "type": "string" },
+              "statement": { "type": "string" },
+              "materiality": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+              "causal_claim": { "type": "boolean", "description": "True if this finding makes a causal assertion — triggers Storyteller L1 causal language check" },
+              "causal_evidence_ref": { "type": "string", "description": "Required if causal_claim is true" },
+              "citation_index": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        },
+        "reasoning_mode": {
+          "type": "string",
+          "enum": ["MODE_1", "MODE_2", "MODE_3", "MODE_4", "MODE_5", "MODE_6", "MODE_7"]
+        },
+        "cdi_lineage_trace": {
+          "type": "object",
+          "required": ["domains_queried", "approach_selected", "alternatives_rejected"],
+          "properties": {
+            "domains_queried": { "type": "array", "items": { "type": "string" } },
+            "approach_selected": { "type": "string" },
+            "alternatives_rejected": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["alternative", "rejection_reason"],
+                "properties": {
+                  "alternative": { "type": "string" },
+                  "rejection_reason": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "alternative_approaches_considered": {
+          "type": "array",
+          "description": "CEP_2 requirement: alternatives surfaced by CDI Layer before approach commitment",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

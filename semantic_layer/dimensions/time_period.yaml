@@ -1,0 +1,65 @@
+name: time_period
+label: Time Period
+description: >
+  Temporal aggregation grain for metric computation. The default grain is
+  specified per metric. Time period is always relative to UTC timestamps.
+
+type: temporal
+base_unit: UTC timestamp
+
+grains:
+  - name: hourly
+    label: Hourly
+    use_case: Incident investigation; real-time monitoring
+    cadence: Every hour
+    rolling_window: 24 hours
+
+  - name: daily
+    label: Daily
+    use_case: Operational monitoring; api_abuse_rate default grain
+    cadence: Midnight UTC cutoff
+    rolling_window: 7-day, 30-day
+
+  - name: weekly
+    label: Weekly
+    use_case: Trend analysis; account_takeover_volume default grain
+    cadence: Monday midnight UTC
+    rolling_window: 4-week, 13-week
+
+  - name: monthly
+    label: Monthly
+    use_case: Executive reporting; financial_impact default grain; safety_bypass_incidents default
+    cadence: Calendar month (first to last day)
+    rolling_window: 3-month, 12-month
+
+  - name: quarterly
+    label: Quarterly
+    use_case: Regulatory reporting; downstream_harm_exposure reporting mode
+    cadence: "Calendar quarter (Q1: Jan-Mar, Q2: Apr-Jun, Q3: Jul-Sep, Q4: Oct-Dec)"
+    rolling_window: 4-quarter
+
+  - name: annual
+    label: Annual
+    use_case: Strategic review; year-over-year comparison
+    cadence: Calendar year
+
+time_range:
+  simulation_start: "2024-01-01"
+  simulation_end: "2025-12-31"
+  total_days: 730
+
+applicable_metrics:
+  - api_abuse_rate
+  - fraud_loss_direct
+  - account_takeover_volume
+  - safety_bypass_incidents
+  - downstream_harm_exposure
+  - compliance_cost_per_incident
+
+notes:
+  - All timestamps in the dataset are UTC
+  - For accounts in APAC and LATAM, business-hours analysis requires local timezone
+    conversion — compute in UTC and annotate the timezone offset
+  - Weekly grain uses ISO week numbering (Monday = first day)
+
+version: "1.0.0"

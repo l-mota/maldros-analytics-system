@@ -1,0 +1,100 @@
+name: compliance_cost_per_incident
+label: Compliance Cost per Incident
+description: >
+  Average total cost to the platform per confirmed fraud incident, including
+  all components: direct loss, indirect costs, allocated regulatory and legal
+  exposure, remediation costs, and compute overhead. This is the fully-loaded
+  cost per incident — the number that reflects the true operational cost of
+  allowing an incident to occur versus investing in prevention.
+
+  Used for: (1) investment justification for detection improvements,
+  (2) cost-benefit analysis of new safety measures, (3) prioritization of
+  attack vectors by per-incident cost.
+
+type: ratio (mean with percentile distribution)
+grain: per-incident (default); monthly average (trend mode)
+
+computation_logic: |
+  # Python pseudocode — not SQL
+
+  # Join fraud_incidents with financial_impact on attack_vector + period
+  # to allocate monthly aggregate costs to individual incidents
+
+  # Step 1: incident counts per attack_vector per month
+  incident_counts = (
+      fraud_incidents
+      .assign(period=lambda df: pd.to_datetime(df['detected_date']).dt.to_period('M').astype(str))
+      .groupby(['attack_vector', 'period'])
+      .size()
+      .reset_index(name='incident_count')
+  )
+
+  # Step 2: join to financial_impact
+  cost_allocation = pd.merge(
+      financial_impact[financial_impact['period_type'] == 'monthly'],
+      incident_counts,
+      on=['attack_vector', 'period'],
+      how='left'
+  )
+  cost_allocation['total_cost'] = (
+      cost_allocation['direct_loss_usd']
+      + cost_allocation['indirect_cost_usd']
+      + cost_allocation['regulatory_penalty_usd']
+      + cost_allocation['legal_liability_usd']
+      + cost_allocation['remediation_cost_usd']
+      + cost_allocation['compute_overhead_usd']
+  )
+  cost_allocation['cost_per_incident'] = (
+      cost_allocation['total_cost'] / cost_allocation['incident_count']
+  )
+
+  # Step 3: aggregate to the desired grain
+  compliance_cost_per_incident_mean = cost_allocation['cost_per_incident'].mean()
+  compliance_cost_per_incident_p50 = cost_allocation['cost_per_incident'].median()
+  compliance_cost_per_incident_p95 = cost_allocation['cost_per_incident'].quantile(0.95)
+
+applicable_filters:
+  - attack_vector (compute per-vector to prioritize prevention investment)
+  - severity (compute per-severity to validate detection threshold calibration)
+  - time_period (trend the metric to detect cost escalation)
+  - resolved vs. unresolved
+
+dimensions:
+  - attack_vector
+  - time_period
+
+owner: analyst
+team: fraud_abuse_analytics
+
+policy_rationale: >
+  Compliance cost per incident is the decision-support metric for investment
+  prioritization. A detection improvement that costs $50,000 to implement and
+  prevents 10 incidents per year is justified if compliance_cost_per_incident
+  exceeds $5,000. This metric makes that calculation tractable.
+
+  The Statistician Agent must report confidence intervals on this metric when
+  it is used to support investment decisions — the allocation methodology
+  introduces uncertainty that must be visible to the decision-maker.
+
+known_limitations:
+  - the cost allocation method (divide monthly aggregate by incident count)
+    assumes uniform cost per incident within attack_vector × period — this is
+    false for high-severity incidents which drive disproportionate costs
+  - always report with the distribution (p50, p95, max) alongside the mean —
+    the mean is misleading for fat-tailed cost distributions
+  - remediation costs are partially fixed (investigation overhead regardless
+    of incident count) and partially variable — this creates economies of scale
+    that the per-incident metric does not capture
+  - compute overhead allocation to incidents is approximate — actual compute
+    overhead is mostly from detection infrastructure, not per-incident cost
+
+judgment_mechanism: 2
+  # Mechanism 2: computable, but the cost allocation methodology requires
+  # analyst validation that the uniform-cost-per-incident assumption is
+  # acceptable for the use case. Document the assumption in each use.
+
+version_history:
+  - version: "1.0.0"
+    date: "2026-06-08"
+    change: "Initial definition — Phase 0"
+    author: analyst

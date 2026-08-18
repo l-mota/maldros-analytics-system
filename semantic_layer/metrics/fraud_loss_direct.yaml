@@ -1,0 +1,76 @@
+name: fraud_loss_direct
+label: Fraud Loss (Direct)
+description: >
+  Confirmed direct financial losses attributable to fraud incidents in the period.
+  Direct losses only — excludes indirect costs, regulatory penalties, legal liability,
+  remediation costs, and compute overhead. See downstream_harm_exposure for indirect
+  financial impact and compliance_cost_per_incident for fully-loaded per-incident cost.
+
+type: sum
+grain: monthly (default); per-incident (forensic investigation mode)
+
+computation_logic: |
+  # Python pseudocode — not SQL
+
+  # From financial_impact table (pre-aggregated monthly by attack_vector)
+  fraud_loss_direct = financial_impact[
+      (financial_impact['period'] >= period_start)
+      & (financial_impact['period'] <= period_end)
+      & (financial_impact['period_type'] == 'monthly')
+  ]['direct_loss_usd'].sum()
+
+  # Per-incident mode: from fraud_incidents table directly
+  fraud_loss_direct_per_incident = fraud_incidents[
+      fraud_incidents['incident_id'] == incident_id
+  ]['financial_impact_usd'].iloc[0]
+
+applicable_filters:
+  - attack_vector (api_abuse/safety_bypass/platform_fraud/downstream_harm/data_poisoning)
+  - time_period (monthly/quarterly/annual)
+  - severity (low/medium/high/critical)
+  - resolved (True/False — resolved vs. ongoing)
+  - region (inferred from account_id join)
+
+dimensions:
+  - attack_vector
+  - time_period
+  - region
+
+owner: analyst
+team: fraud_abuse_analytics
+
+policy_rationale: >
+  Direct loss is the most defensible number for executive reporting because it
+  reflects confirmed, attributed losses with documented evidence trails. It is
+  deliberately conservative — indirect costs, which are often 2-5x direct costs
+  in severe abuse scenarios, are reported separately to avoid conflating confidence
+  levels. The Storyteller Agent must clearly distinguish "direct loss (confirmed)"
+  from "total financial exposure (estimated)" in every AIMS Mode B output.
+
+known_limitations:
+  - estimates for unresolved incidents have high uncertainty; mark with confidence
+    interval rather than point estimate
+  - financial_impact table is aggregated monthly — per-incident resolution available
+    only from fraud_incidents table
+  - indirect costs (reputational damage, opportunity cost, churn attribution) are
+    not included here; see downstream_harm_exposure
+  - cross-border incidents may have financial impact allocated to wrong region if
+    account region does not match incident jurisdiction
+
+judgment_mechanism: 2
+  # Mechanism 2: computable, but allocation of multi-vector incidents requires
+  # analyst judgment call on primary attack vector attribution.
+  # Resolution: follow the primary detection method; log the judgment in AIMS Mode A.
+
+benchmark:
+  # From FIA benchmarks
+  low_severity_avg: 1050    # USD per incident
+  medium_severity_avg: 8500
+  high_severity_avg: 47500
+  critical_severity_avg: 290000
+
+version_history:
+  - version: "1.0.0"
+    date: "2026-06-08"
+    change: "Initial definition — Phase 0"
+    author: analyst

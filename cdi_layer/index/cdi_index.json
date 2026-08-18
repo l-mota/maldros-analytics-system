@@ -1,0 +1,81 @@
+{
+  "_meta": {
+    "description": "Master CDI Layer index. Points to all 10 domain files. Updated via cdi_update.py only.",
+    "schema_version": "1.1.0",
+    "last_updated": "2026-06-17T00:00:00Z",
+    "uptime_requirement": "≥ 99.9% — this is a continuously running system-wide layer, not a per-task evaluation",
+    "update_policy": "All updates route through cdi_update.py. Direct writes to any index file are forbidden and will trigger a Diagnostic Agent L1 failure."
+  },
+  "domains": {
+    "reasoning_frameworks": {
+      "file": "reasoning_frameworks.json",
+      "description": "7 reasoning modes with activation states and usage counts",
+      "agents_with_access": ["orchestrator", "analyst", "statistician", "storyteller", "data_architect", "diagnostic", "healing", "red_team"]
+    },
+    "disciplinary_methods": {
+      "file": "disciplinary_methods.json",
+      "description": "8 cross-disciplinary knowledge domains with analytics translations",
+      "agents_with_access": ["orchestrator", "analyst", "statistician", "data_architect", "healing", "red_team"]
+    },
+    "inference_layers": {
+      "file": "inference_layers.json",
+      "description": "Real-time L1-L5 status, current veto states, active signals",
+      "agents_with_access": ["orchestrator", "analyst", "statistician", "diagnostic"]
+    },
+    "cross_domain_analogues": {
+      "file": "cross_domain_analogues.json",
+      "description": "Problem-structure-keyed index of solved problems from adjacent fields",
+      "agents_with_access": ["orchestrator", "analyst", "statistician", "storyteller", "data_architect", "healing", "red_team"]
+    },
+    "external_knowledge": {
+      "file": "external_knowledge.json",
+      "description": "Live external intelligence signals indexed by topic and relevance",
+      "agents_with_access": ["orchestrator", "analyst", "statistician", "storyteller"]
+    },
+    "second_brain_signal": {
+      "file": "second_brain_signal.json",
+      "description": "Current Second Brain state — recent additions, high-similarity clusters, open constraints",
+      "agents_with_access": ["orchestrator", "analyst", "statistician", "storyteller", "data_architect"]
+    },
+    "exemplar_surface": {
+      "file": "exemplar_surface.json",
+      "description": "Few-Shot Bank state — active exemplars, query classes, recency/relevance scores",
+      "agents_with_access": ["orchestrator", "analyst", "statistician", "storyteller", "data_architect", "diagnostic", "healing", "red_team"]
+    },
+    "phase7_signals": {
+      "file": "phase7_signals.json",
+      "description": "Phase 7 bottleneck candidates and cross-phase improvement patterns",
+      "agents_with_access": ["orchestrator", "analyst", "statistician", "data_architect"]
+    },
+    "non_activation_log": {
+      "file": "non_activation_log.json",
+      "description": "Log of which CDI capabilities were NOT queried per agent/phase — input to Phase 7 blind spot detection",
+      "agents_with_access": ["diagnostic"]
+    },
+    "design_system": {
+      "file": "design_system.json",
+      "description": "Maldros Visual Design System (C-031) — palette, typography, communication pattern, information hierarchy, chart construction rules. Queried by any agent producing visual output.",
+      "agents_with_access": ["orchestrator", "storyteller", "data_architect", "analyst", "statistician", "diagnostic", "healing", "red_team"],
+      "non_activation_consequence": "Diagnostic Agent L1 failure when the task produces a visual artifact"
+    }
+  },
+  "capability_expansion_properties": {
+    "description": "5 binding operational requirements. Omission of any required CDI query = Diagnostic Agent L1 failure.",
+    "registry_file": "../capability_registry/capability_registry.json",
+    "properties": [
+      "novel_algorithmic_combinations",
+      "alternative_solution_paths",
+      "non_obvious_pattern_identification",
+      "multi_perspective_analytical_depth",
+      "multidimensional_problem_decomposition"
+    ]
+  },
+  "update_triggers": [
+    "New entry added to Second Brain vault",
+    "New Telemetry Exemplar promoted to Few-Shot Bank",
+    "External retrieval produces new cross-domain analogue or external knowledge signal",
+    "New Constraint Register entry opened or closed",
+    "Phase 7 identifies new cross-phase bottleneck pattern",
+    "New model upgrade cycle completes"
+  ]
+}
