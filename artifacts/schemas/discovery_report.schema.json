@@ -148,7 +148,7 @@
         },
         "citation_index": {
           "type": "array",
-          "description": "All citations referenced in the report — 100% coverage required",
+          "description": "All citations referenced in the report. L1 uses an 80% citation coverage threshold at Phase 1 (Phase 2 raises to 100%)",
           "items": {
             "type": "object",
             "required": ["citation_id", "source", "claim_text"],

@@ -9,7 +9,9 @@ Translates Evidence Bundle + Statistical Result into:
 
 Three L1 rules are deterministic vetoes — cannot be overridden:
 1. Causal language veto: no "caused by", "drove", "led to" without causal evidence
-2. Citation coverage: 100% of factual claims linked to artifact citation index
+2. Citation coverage: L1 uses an 80% citation coverage threshold at Phase 1
+   (Phase 2 raises to 100%); factual claims are linked to the artifact
+   citation index. See known_limitations on the emitted Discovery Report.
 3. Omission audit: all material findings in evidence_bundle + statistical_result must appear
 
 An output that fails any L1 check is BLOCKED and returned — not shipped.
