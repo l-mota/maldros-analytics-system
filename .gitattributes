@@ -1,0 +1,46 @@
+# .gitattributes — Maldros analytics system
+#
+# Added Session 110 (P-146).
+#
+# Until now the .pptx and .pdf under case-study/ survived on git's binary
+# detection heuristic alone. A heuristic is not a rule. A compressed container
+# git guesses wrong about gets line-ending conversion applied to its bytes,
+# which corrupts it silently — and the corruption is invisible to every text
+# search, exactly like the Session 108 term that shipped inside the deck.
+#
+# Scope is deliberately limited to binary declarations, matching the queued
+# task. Full text/EOL normalisation (`* text=auto eol=lf`) is NOT set here: it
+# would renormalise the entire tree in a single commit immediately before a
+# publication flip. That is a separate decision, not a side effect of this one.
+
+# --- Office containers and PDFs ---------------------------------------------
+*.pptx      binary
+*.potx      binary
+*.docx      binary
+*.dotx      binary
+*.xlsx      binary
+*.xlsm      binary
+*.pdf       binary
+
+# --- Columnar data ----------------------------------------------------------
+# Not currently tracked. Declared ahead of the BigQuery/DuckDB migration path,
+# where Parquet is the interchange format.
+*.parquet   binary
+*.db        binary
+*.sqlite    binary
+
+# --- Images -----------------------------------------------------------------
+*.png       binary
+*.jpg       binary
+*.jpeg      binary
+*.gif       binary
+*.ico       binary
+*.webp      binary
+
+# --- Archives and fonts -----------------------------------------------------
+*.zip       binary
+*.woff      binary
+*.woff2     binary
+*.ttf       binary
+*.otf       binary
+*.eot       binary
