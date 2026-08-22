@@ -551,6 +551,28 @@ code, .mono { font-family: var(--mono); font-size: 0.88em; }
 .footer-key i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
 
 /* ══════════════════════════════════════════════════════════════════════════
+   8b · Source-check block — the document's closing L4 RECOMMENDATION (P-167)
+   visual_design_system.md conformance:
+     §1 stage 4  every section closes on what the reader should do next
+     §5 L4       interpretation + recommendation at end of document
+     §7 Docs row FOREST headers, PARCHMENT surface, MUTED annotations
+     §2.3       solid fills only — no gradient, no shadow, no decorative color
+   AMBER carries meaning on exactly ONE element: the left rule of the primary
+   action. Link text stays FOREST so the amber is a focal marker rather than a
+   legibility compromise on a parchment surface.
+   ══════════════════════════════════════════════════════════════════════════ */
+.source-check { margin-top: 2.6rem; padding: 1.5rem 1.6rem; background: var(--parchment); border: 1px solid var(--border); }
+.source-check h2 { font-size: var(--t3); font-weight: 700; color: var(--forest); margin: 0 0 0.55rem; line-height: 1.35; }
+.source-check > p { max-width: var(--readw); margin: 0 0 1.2rem; }
+.source-check ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.9rem; }
+.source-check li { padding-left: 0.9rem; border-left: 2px solid var(--neutral); }
+.source-check li.primary { border-left-color: var(--amber); }
+.source-check a { color: var(--forest); font-weight: 700; text-decoration: none; border-bottom: 1px solid var(--neutral); }
+.source-check a:hover { border-bottom-color: var(--forest); }
+.source-check .note { display: block; font-size: var(--t4); font-weight: 400; color: var(--ink-muted); margin-top: 0.25rem; max-width: var(--readw); }
+.source-check .note strong { color: var(--forest); }
+
+/* ══════════════════════════════════════════════════════════════════════════
    9 · Responsive — collapse the TOC rail on narrow viewports
    ══════════════════════════════════════════════════════════════════════════ */
 @media (max-width: 880px) {
@@ -4928,6 +4950,27 @@ function resetSteps() {
                 </div>
             </details>
         </div>
+
+        <!-- ═══ Closing L4 · Source-check block (P-167) ══════════════════════ -->
+        <section class="source-check" aria-labelledby="source-check-title">
+            <h2 id="source-check-title">Every claim on this page traces to a file you can open — and this page is not where you verify it</h2>
+            <p>This page is the argument. The repository is the evidence, and they are deliberately separate: nothing above asks to be taken on trust when the code, the recorded runs and the build history are one link away.</p>
+            <ul>
+                <li class="primary">
+                    <a href="https://github.com/l-mota/maldros-analytics-system">The repository — code, artifacts, semantic layer, governance</a>
+                    <span class="note">Nine agent implementations, the content-hashed artifact store, the YAML semantic layer, and the recorded outputs behind every figure above. Start here if any claim on this page matters to your assessment.</span>
+                </li>
+                <li>
+                    <a href="https://github.com/l-mota/maldros-analytics-system/blob/main/docs/engineering_process.md">How it was built — spec hierarchy, phase gates, continuity layer</a>
+                    <span class="note">The build methodology rather than the build: the three-document spec hierarchy, the mandatory gap-audit before each phase transition, and a public-safe sample of the change log.</span>
+                </li>
+                <li>
+                    <a href="https://github.com/l-mota/maldros-analytics-system/blob/main/docs/why-this-matters.md">Why it was worth building — the longer argument</a>
+                    <span class="note">Why demonstrable evidence of care, rather than raw capability, is becoming the binding constraint on deploying systems like this. Reasoning, not results, and labelled as such throughout.</span>
+                </li>
+            </ul>
+            <p class="note" style="margin-top:1.25rem;"><strong>Recommendation:</strong> if you read only one file, read <code>governance/confirmation_gate/confirmation_gate.py</code>. It is short, and it is where this page's central claim — that no consequential action can be auto-approved, on timeout or otherwise — is either true or false.</p>
+        </section>
 
     </main>
 </div>

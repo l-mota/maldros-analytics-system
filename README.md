@@ -264,7 +264,7 @@ Stated because a reviewer will find them anyway, and finding them stated is the 
 
 **Explicitly out of scope:** real-time streaming ingestion, live external API integration, multi-user access and role-based governance, production SLAs, and model retraining or fine-tuning.
 
-**And one limit that is permanent rather than pending.** The practical value, if this were running against real data, is that an analytics function stops being a bottleneck people route around. Findings arrive with their evidence attached, the routine work never reaches a person at all, and the things that do reach you are the ones where judgment is genuinely required. But there is a constraint in the register I marked permanent and won't close, which is that the system can produce proof and cannot produce agreement. It can establish that an experiment shouldn't ship and write the case so it survives scrutiny, and it still can't sit across from the product manager whose quarter that decision wrecks and find a path they'll accept. Proof isn't persuasion. That part was always the hard part of the job, and it's now the part that has time available for it.
+**And one limit that is permanent rather than pending.** There is a constraint in the register I marked permanent and won't close: the system can produce proof and it cannot produce agreement. It can establish that an experiment shouldn't ship and write the case so it survives scrutiny, and it still can't sit across from the product manager whose quarter that decision wrecks and find a path they'll accept. Proof isn't persuasion, and no amount of governance rigour converts one into the other.
 
 ---
 
