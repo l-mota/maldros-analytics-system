@@ -10,6 +10,44 @@
 
 ---
 
+## What this is
+
+**Maldros is a multi-agent system that carries an analytical investigation from an initial business question through to a validated, evidence-backed briefing, and that blocks the release of its own findings when they fail a governance check.**
+
+Nine agents do the work, each with a single job and a fixed set of tools: decomposing the question, querying the data, running and validating the statistics, adversarially stress-testing the finding, then writing it up in both a technical and a plain-language layer. What makes it unusual is the governance. A layer of ordinary deterministic code sits above the language model and holds a veto over it, and the model has no path to overrule that.
+
+Two layers underneath make the rest possible. A semantic layer holds every metric, dimension and entity as a versioned definition carrying its computation logic, its grain, and the policy reasoning behind it, so a number means the same thing to every agent that touches it. An institutional memory layer records each investigation, correction and governance decision as a linked note, with a vault write required alongside every artifact rather than left to anyone's discipline.
+
+The domain it was built and tested against is fraud, abuse and policy analytics at an AI platform. It is design-complete and validated in simulation against a synthetic dataset. It is not deployed. This repository is the evidence: the agent implementations, the artifact schemas, the governance code, and recorded runs including one the governance stopped.
+
+---
+
+## What it's for
+
+When I started this, my question wasn't which attacks were happening. It was what the digital and physical fraud and defense ecosystem looks like if you step back far enough to see the structure instead of the incidents. What is actually going on underneath.
+
+The answer I kept arriving at was attribution, not detection. Detection gets most of the industry's attention and is solved well enough to be a poor place to compete. What large AI firms and AI deployment companies lack is mature attribution structure: the ability to say which activity was abusive, which cost it caused, which control failed, and on what evidence. A bank has spent decades building that. An AI platform generating billions of interactions a day mostly has not, and the absence propagates outward. Without attribution you cannot target a countermeasure, so you apply population-wide friction that penalises the customers you least want to lose. You cannot size the exposure, so you cannot price it, insure it, or report it credibly. And you cannot demonstrate what care you took, which is the question that arrives after something has gone wrong rather than before.
+
+What the research kept surfacing were problems the industry has not solved, rather than problems particular to any one team.
+
+**No structural guarantee.** Agentic systems stall before consequential work because nothing in them prevents a wrong answer from reaching a person looking exactly like a right one. Confidence scoring is the usual answer, and it is a suggestion rather than a control. Maldros replaces it with deterministic checks holding a veto the model cannot overrule, so a draft that fails one does not exist as output rather than existing with a warning attached to it.
+
+**Review capacity as the ceiling.** Where such a system does get deployed, the person checking its output becomes the limit on its throughput, and a reviewer facing a queue of mostly routine items stops reading carefully, so the review is nominally happening and actually is not. Maldros routes automatically: routine operational events go to a log, and sign-off is reserved for novel findings, architectural changes and ship decisions. In the Phase 6 run it routed 175 artifacts correctly with no human involvement at any intermediate step.
+
+**Metric drift.** Definitions diverge between teams until every cross-functional finding becomes an argument about whose number is right, and that argument happens before anyone can act on the finding. Maldros holds every metric, dimension and entity in a versioned semantic layer carrying its computation logic, its grain and the reasoning behind the policy choice, so a number means the same thing to every agent that touches it and the definition is auditable rather than folkloric.
+
+**Unvalidated interventions.** Countermeasures and product changes ship on tests nobody checked for sample ratio mismatch or novelty effects, so the organisation learns the wrong lesson and repeats it. Maldros requires a statistician to clear a finding before it can be written up. In a blind run of three experiments it returned no-ship on one after detecting a sample ratio mismatch, hold on a second after a novelty effect, and ship on the third, without being told which carried which flaw.
+
+**Knowledge that doesn't compound.** The pattern recognition that makes a good fraud analyst takes years to build and leaves with them, and a standard stack retains the query but not the reasoning behind it. Maldros requires a vault write alongside every artifact rather than leaving documentation to anyone's discipline, and records each investigation, correction and governance decision as a linked note, so the reason a decision was made survives the person who made it.
+
+Inside a fraud or policy analytics team the same gap shows up as several separate frustrations that are really one problem. Coordinated abuse hides from per-account monitoring, because every account in a ring looks ordinary and only the relationship between them does not. Enforcement gets softened because the evidence behind it will not survive a challenge from the customer, from legal, or from a regulator. Analyst attention goes to triage and formatting rather than judgment. And when a pipeline degrades quietly, every decision downstream is made on bad inputs and nobody finds out for weeks.
+
+Maldros is an attempt to build the attribution layer rather than another detector. Every finding traces back to the query that produced it. Every hand-off between agents is sealed and carries its provenance. Every governance decision is logged with its reason. That is what makes an enforcement action defensible and a loss attributable to something you can act on, and it is why the Phase 1 investigation surfaced a coordinated cluster of 41 accounts inside a population whose overall rate was flat.
+
+What exists today is a single-operator build against synthetic data. The directions I think would extend furthest with a real team behind them are cyber-physical systems, where a model's output becomes something that moves and mistakes stop being recoverable; attribution that works across providers rather than one platform at a time, since adversaries already iterate across all of them; and closing the gap between investigation cycles and the speed at which coordinated abuse actually adapts.
+
+---
+
 ## The finding
 
 **A deterministic rule layer that can overrule the language model is the difference between an agent system that produces output and one you can put in front of a regulator.** Maldros implements that layer and then proves it fires. During Phase 1 development the L1 gate blocked 14 of 18 Storyteller runs; the report could not ship until it was rebuilt to satisfy all three vetoes. One of those blocked drafts is included in this repository — complete on all eighteen required assets, zero missing — still carrying its `BLOCKED` status.
@@ -24,25 +62,6 @@ Most agent demos show you the run that worked. This repository ships the run tha
 
 ---
 
-## Eight conclusions a careful reader draws from these documents that are wrong
-
-Before any claim: I ran independent AI summarisers over this project's own documentation to find out what a competent reader with no context actually concludes from it. They agreed on the architecture and got eight things wrong. Every one of those eight is a misreading the documentation *invited*, which makes them my defects rather than the reader's — so they are corrected here, ahead of the evidence, rather than left for you to trip over.
-
-| The conclusion a reader reaches | What the source actually says |
-|---|---|
-| Maldros is a four-agent system. | Nine. Each is a directory under `agents/` holding a system prompt and an implementation. The ninth — the Forge, the invention engine — is easy to miss because it only runs in the last phase. |
-| The Phase 4 self-improvement run went fifty-plus cycles. | Ten. It is a ten-cycle compounding demonstration, and it is described as one everywhere it is described honestly. |
-| Phase 4 measured a capability multiplier. | It measured **edit distance**, which declined across all three tracked query classes. The capability-multiplier figures that appear in the design documents are a stated design *target* and were never measured. They are not reproduced anywhere in this repository, and you should treat any version of this project that quotes them as a measured result as wrong. |
-| The Analyst's primary output is SQL. | SQL is explicitly *not* the default interface — that is a deliberate architectural rule, not an omission. The default path is natural language → execution plan → result, with SQL available as a subordinate capability on explicit invocation, sandboxed. |
-| The Healing Agent autonomously deployed a remediation to production. | It drafts. There is no merge path in it. Nothing it produces reaches a running system without a human in between, and there is no running system for it to reach. |
-| The Storyteller writes the executive summary. | It *translates* one. Deriving a new finding is outside its mandate — everything it renders traces to an upstream artifact, which is the only reason a citation check can be enforced on it at all. |
-| This is a deployed product with customers. | It is a single-operator simulation, run through scripted Python against a synthetic dataset. No live data, no users, no deployment, no revenue. This is the misreading the rest of this README works hardest to prevent. |
-| The omission audit is enforced by a Reviewer Agent that judges what is material. | **There is no Reviewer Agent.** The phrase appears in this project's internal specification text and in zero lines of code — a named actor that was written into a rule and never built. The veto itself is real (`_l1_check_omission_audit`) and derives its material-finding set directly from the upstream artifacts instead. I found this while checking these documents against the code, and it is recorded here rather than quietly deleted. |
-
-**Recommendation:** if any claim below matters to your assessment, open the file named beside it. That is how the two errors that survived into earlier drafts of this README were caught, and it is the only check on this document that does not depend on trusting me.
-
----
-
 ## The numbers
 
 Every figure below is a measured result from a recorded run against the synthetic dataset. None is a projection, and none is production traffic.
@@ -51,7 +70,7 @@ Every figure below is a measured result from a recorded run against the syntheti
 |---|---|---|
 | End-to-end investigation runtime | **288.9 s** | Full Orchestrator → Analyst → Statistician → Storyteller chain, question to written report, no human step in between. Validated via simulation. |
 | Citation coverage on the report that was **blocked** | **97.2%** | 104 of 107 factual claims traced to a source, and the omission audit clean — blocked anyway, by a different veto entirely. The three checks are independent; clearing two is not a pass. |
-| Citation coverage on the report that **shipped** | **97.9%** | 47 of 48 claims sourced, all three vetoes cleared. Recorded 13 June; the blocked run above is 10 June. |
+| Citation coverage on the report that **shipped** | **94.6%** | 88 of 93 claims sourced, all three vetoes cleared — Discovery Report `84c4e728`, the run that AIMS Mode B briefing `41954983` derives from. |
 | Coordinated-cluster concentration | **16.54×** | 41 accounts abusing at 16.54× the non-cluster rate — while the Q1 population-level rate was **0.946×** the non-Q1 average. Concentration, not a volume spike. |
 | Q1 financial exposure attributed to API abuse | **$5.89M** | Across US + EU in the synthetic model. A modelled figure over synthetic data, not a real loss. |
 | Artifacts audited under full AIMS | **175** | 100% correct Mode A / Mode B routing, an 89 / 86 split, no human scaffolding at any intermediate step. |
@@ -245,6 +264,8 @@ Stated because a reviewer will find them anyway, and finding them stated is the 
 
 **Explicitly out of scope:** real-time streaming ingestion, live external API integration, multi-user access and role-based governance, production SLAs, and model retraining or fine-tuning.
 
+**And one limit that is permanent rather than pending.** The practical value, if this were running against real data, is that an analytics function stops being a bottleneck people route around. Findings arrive with their evidence attached, the routine work never reaches a person at all, and the things that do reach you are the ones where judgment is genuinely required. But there is a constraint in the register I marked permanent and won't close, which is that the system can produce proof and cannot produce agreement. It can establish that an experiment shouldn't ship and write the case so it survives scrutiny, and it still can't sit across from the product manager whose quarter that decision wrecks and find a path they'll accept. Proof isn't persuasion. That part was always the hard part of the job, and it's now the part that has time available for it.
+
 ---
 
 ## Stack
@@ -264,6 +285,7 @@ Two components are specified and referenced by the shipped code but are **not** 
 | [Slide deck](https://raw.githubusercontent.com/l-mota/maldros-analytics-system/main/case-study/maldros_case_study_deck.pptx) | Eleven slides, one primary statement each. Downloads on click. |
 | [AIMS Mode B report](https://l-mota.github.io/maldros-analytics-system/case-study/aims_mode_b_report.html) | A real generated output — the actual stakeholder briefing the pipeline produced, not a description of one. |
 | [Engineering process](docs/engineering_process.md) | The build methodology: spec hierarchy, phase gates, the continuity layer, and a public-safe sample of the change log. |
+| [Why this matters](docs/why-this-matters.md) | The longer argument for why auditable evidence of care, rather than raw capability, is becoming the binding constraint on deploying these systems. Reasoning, not results. |
 | [Operator console mockup](https://l-mota.github.io/maldros-analytics-system/case-study/operator_ui_mockup.html) | Approved design reference. Not running software. |
 
 ---
