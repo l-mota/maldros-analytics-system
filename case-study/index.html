@@ -205,6 +205,36 @@ body {
     max-width: var(--readw);
 }
 
+/* Compact proof strip — the masthead's own FINDING-first evidence, ahead of the
+   "In plain terms" front matter, so a fast reader hits a verified number before
+   an orientation paragraph (P-180). Tier 3 values, Tier 4 labels; no AMBER here —
+   that stays reserved for the focal L2 KPI further down the page. */
+.proof-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.6rem;
+    margin-top: 1.4rem;
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--border);
+}
+.proof-item {
+    padding-left: 0.9rem;
+    border-left: 2px solid var(--border);
+}
+.proof-value {
+    display: block;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--forest);
+    line-height: 1.2;
+}
+.proof-label {
+    display: block;
+    font-size: var(--t4);
+    color: var(--ink-muted);
+    margin-top: 0.15rem;
+}
+
 /* Front matter — "In plain terms" / "How to read this" orientation blocks.
    Parchment = supporting/context surface (§2.1 TERTIARY). No focal amber here. */
 .frontmatter {
@@ -656,6 +686,12 @@ code, .mono { font-family: var(--mono); font-size: 0.88em; }
             <div class="doc-eyebrow">Portfolio Case Study</div>
             <h1 class="doc-title">A governed, multi-agent analytics engineering system.</h1>
             <p class="doc-standfirst">Eight narrow-mandate agents that run a full analytics investigation end to end — hypothesis to stakeholder briefing — without bypassing the audit trail or the human sign-off that make the result trustworthy, and a ninth that invents new detection methods outside that chain. Built and validated against a synthetic, analytically rich fraud-and-abuse dataset.</p>
+
+            <div class="proof-strip" aria-label="Key verified results from the validated run">
+                <div class="proof-item"><span class="proof-value">288.9s</span><span class="proof-label">End-to-end runtime</span></div>
+                <div class="proof-item"><span class="proof-value">94.6%</span><span class="proof-label">Citation coverage</span></div>
+                <div class="proof-item"><span class="proof-value">14 of 18</span><span class="proof-label">Prior runs blocked before release</span></div>
+            </div>
 
             <div class="frontmatter">
                 <div class="fm-block">
