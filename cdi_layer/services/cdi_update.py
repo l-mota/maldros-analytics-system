@@ -384,6 +384,44 @@ class CDIUpdater:
         _save("non_activation_log.json", data)
 
     # ─────────────────────────────────────────────────────────────────────────
+    # DESIGN SYSTEM (color tokens)
+    # ─────────────────────────────────────────────────────────────────────────
+
+    def update_color_token(self, slot: str, new_hex: str, justification: str) -> None:
+        """
+        Refine a hex value in the design_system CDI domain (cdi_layer/index/design_system.json).
+        design_system.json's own _meta.update_policy requires this — direct writes to that
+        file are forbidden. Searches data_meaning, infrastructure, and semantic_accents for
+        the slot key (e.g. "TERTIARY", "BORDER", "ACTION_GREEN"); raises if not found.
+        Per the file's own governance field: changes are operator-approved per D-7 and
+        logged as C-NNN entries in the Change Tracker — this call only performs the write
+        and the AIMS Mode A log entry, it does not substitute for that Change Tracker entry.
+        """
+        data = _load("design_system.json")
+        groups = ("data_meaning", "infrastructure", "semantic_accents")
+        found = False
+        old_hex = None
+        for group in groups:
+            slots = data["color_system"].get(group, {})
+            if slot in slots:
+                old_hex = slots[slot]["hex"]
+                slots[slot]["hex"] = new_hex
+                found = True
+                break
+        if not found:
+            raise ValueError(f"Color slot '{slot}' not found in design_system.json color_system")
+        _save("design_system.json", data)
+        _log_to_aims_mode_a("COLOR_TOKEN_REFINED", {
+            "slot": slot,
+            "old_hex": old_hex,
+            "new_hex": new_hex,
+            "justification": justification,
+            "agent": self.agent_name,
+            "task_id": self.task_id,
+        })
+        logger.info(f"Color token refined: {slot} {old_hex} -> {new_hex} by {self.agent_name}")
+
+    # ─────────────────────────────────────────────────────────────────────────
     # CAPABILITY REGISTRY
     # ─────────────────────────────────────────────────────────────────────────
 

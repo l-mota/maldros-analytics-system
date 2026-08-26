@@ -116,7 +116,7 @@ COLOR SEMANTICS (amber = finding; forest = baseline — never swap):
   Focal / finding series: #C8882A warm amber
   Baseline / reference series: #0F2515 forest green
   Background: #FFFAFA snow white
-  Surface (KPI cards, callouts): #EDE8D0 parchment
+  Surface (KPI cards, callouts): #F7F4EA parchment
   Body text: #252525 charcoal
   Neutral (gridlines, spines): #A8A092 warm gray at 0.35 alpha
 

@@ -23,7 +23,7 @@
     /* ── Data-meaning colors (the four) — verbatim from design_tokens.css ── */
     --forest:    #0F2515;   /* PRIMARY:  authority, structure, baseline */
     --amber:     #C8882A;   /* SECONDARY: finding, focal subject (ONE per context) */
-    --parchment: #EDE8D0;   /* TERTIARY: supporting surfaces */
+    --parchment: #F7F4EA;   /* TERTIARY: supporting surfaces (refined from #EDE8D0, C-052 / this project's parchment-refinement session) */
     --neutral:   #A8A092;   /* NEUTRAL:  gridlines, structural lines */
 
     /* ── Canvas / ink infrastructure — verbatim from design_tokens.css ───── */
@@ -53,8 +53,8 @@
     --t3: 1.05rem;                          /* Tier 3 — section/chart titles, KPI labels (bold, medium) */
     --t4: 0.76rem;                          /* Tier 4 — annotations, axis labels, footnotes (regular, small) */
 
-    --maxw: 1180px;      /* outer layout width */
-    --readw: 70ch;       /* readable prose measure */
+    --maxw: 1440px;      /* outer layout width (widened from 1180px on operator request — reduces empty side margins on wide monitors; --toc-w held fixed so the extra width goes to the content column, not the sidebar) */
+    --readw: 94ch;       /* readable prose measure (was 70ch — widened per operator: less blank space, still short of the full container edge) */
     --toc-w: 236px;
 }
 
@@ -196,7 +196,7 @@ body {
     line-height: 1.18;
     color: var(--forest);
     letter-spacing: -0.01em;
-    max-width: 20ch;
+    max-width: 62%;      /* was a fixed 20ch, which doesn't scale with --maxw and reads as squeezed on a wide layout */
 }
 .doc-standfirst {
     font-size: 1.08rem;
@@ -316,7 +316,7 @@ body {
     line-height: 1.28;
     color: var(--forest);
     letter-spacing: -0.005em;
-    max-width: 26ch;
+    max-width: 62%;      /* was a fixed 26ch, which doesn't scale with --maxw and reads as squeezed on a wide layout */
 }
 .finding-body {
     margin-top: 1.1rem;
@@ -863,7 +863,7 @@ code, .mono { font-family: var(--mono); font-size: 0.88em; }
                     <svg class="figure-embed" id="fig-operator" viewBox="0 0 820 540" role="img" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Operator journey map. Four validated workflows — governance review, investigation initiation, pipeline oversight, experiment review — each a mostly autonomous timeline (forest) interrupted by a single operator touch point (amber). The human decision is minimal and specific in every workflow.">
                         <title>The operator's four workflows and their single human touch points</title>
                         <style>
-                            svg#fig-operator{--forest:#0F2515;--amber:#C8882A;--parchment:#EDE8D0;--neutral:#A8A092;--canvas:#FFFAFA;--ink:#252525;--muted:#6B6559;--border:#D6CEB8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
+                            svg#fig-operator{--forest:#0F2515;--amber:#C8882A;--parchment:#F7F4EA;--neutral:#A8A092;--canvas:#FFFAFA;--ink:#252525;--muted:#6B6559;--border:#D6CEB8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
                             svg#fig-operator .cv{fill:var(--canvas);}
                             svg#fig-operator .ey{fill:var(--forest);font-size:11px;font-weight:700;letter-spacing:0.13em;}
                             svg#fig-operator .lg{fill:var(--muted);font-size:10.5px;}
@@ -1098,7 +1098,7 @@ code, .mono { font-family: var(--mono); font-size: 0.88em; }
   :root {
     --forest:    #0F2515;
     --amber:     #C8882A;
-    --parchment: #EDE8D0;
+    --parchment: #F7F4EA;
     --neutral:   #A8A092;
     --canvas:    #FFFAFA;
     --ink:       #252525;
@@ -1545,7 +1545,7 @@ code, .mono { font-family: var(--mono); font-size: 0.88em; }
                     <svg class="figure-embed" id="fig-continuity" viewBox="0 0 820 430" role="img" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Session-continuity lifecycle. A persistent three-file state — Memory, Progression, and the Change Tracker — survives every session. Each session reads it first, runs a gap-audit checkpoint before new work, does scoped work, writes all three files last, and produces a starter message for the next session.">
                         <title>The session-continuity lifecycle around the persistent three-file state</title>
                         <style>
-                            svg#fig-continuity{--forest:#0F2515;--amber:#C8882A;--parchment:#EDE8D0;--neutral:#A8A092;--canvas:#FFFAFA;--ink:#252525;--muted:#6B6559;--border:#D6CEB8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
+                            svg#fig-continuity{--forest:#0F2515;--amber:#C8882A;--parchment:#F7F4EA;--neutral:#A8A092;--canvas:#FFFAFA;--ink:#252525;--muted:#6B6559;--border:#D6CEB8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
                             svg#fig-continuity .cv{fill:var(--canvas);}
                             svg#fig-continuity .ey{fill:var(--forest);font-size:11px;font-weight:700;letter-spacing:0.13em;}
                             svg#fig-continuity .bl{fill:var(--forest);font-size:10.5px;font-weight:700;letter-spacing:0.10em;}
@@ -1776,7 +1776,7 @@ code, .mono { font-family: var(--mono); font-size: 0.88em; }
   :root {
     --forest:    #0F2515;
     --amber:     #C8882A;
-    --parchment: #EDE8D0;
+    --parchment: #F7F4EA;
     --neutral:   #A8A092;
     --canvas:    #FFFAFA;
     --ink:       #252525;
@@ -2245,7 +2245,7 @@ let currentStep = -1;
 const FOREST = &quot;#0F2515&quot;;
 const AMBER  = &quot;#C8882A&quot;;
 const NEUTRAL = &quot;#A8A092&quot;;
-const PARCHMENT = &quot;#EDE8D0&quot;;
+const PARCHMENT = &quot;#F7F4EA&quot;;
 const CANVAS = &quot;#FFFAFA&quot;;
 const BORDER = &quot;#D6CEB8&quot;;
 const ALWAYS_BG = &quot;rgba(15,37,21,0.06)&quot;;
@@ -2474,7 +2474,7 @@ function resetSteps() {
   :root {
     --forest:    #0F2515;
     --amber:     #C8882A;
-    --parchment: #EDE8D0;
+    --parchment: #F7F4EA;
     --neutral:   #A8A092;
     --canvas:    #FFFAFA;
     --ink:       #252525;
@@ -2952,7 +2952,7 @@ function resetSteps() {
                     <svg class="figure-embed" id="fig-route" viewBox="0 0 820 600" role="img" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Output-routing decision. Every system output is classified as Mode A (auto-logged operational output, no human gate) or Mode B (stakeholder briefing requiring human sign-off before delivery). There is no third path: an output that does not clearly qualify for Mode A defaults to Mode B human review.">
                         <title>The Mode A / Mode B output-routing decision</title>
                         <style>
-                            svg#fig-route{--forest:#0F2515;--amber:#C8882A;--parchment:#EDE8D0;--neutral:#A8A092;--canvas:#FFFAFA;--ink:#252525;--muted:#6B6559;--border:#D6CEB8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
+                            svg#fig-route{--forest:#0F2515;--amber:#C8882A;--parchment:#F7F4EA;--neutral:#A8A092;--canvas:#FFFAFA;--ink:#252525;--muted:#6B6559;--border:#D6CEB8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
                             svg#fig-route .cv{fill:var(--canvas);}
                             svg#fig-route .ey{fill:var(--forest);font-size:11px;font-weight:700;letter-spacing:0.13em;}
                             svg#fig-route .node{fill:var(--forest);}
@@ -3158,7 +3158,7 @@ function resetSteps() {
                     <svg class="figure-embed" id="fig-inference" viewBox="0 0 780 582" role="img" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Five-layer inference stack. A deterministic Layer 1 veto propagates straight to the decision output, bypassing Layers 2 through 5 including the LLM Orchestrator at Layer 5.">
                         <title>The five-layer inference stack and its non-overridable L1 veto</title>
                         <style>
-                            svg#fig-inference{--forest:#0F2515;--amber:#C8882A;--parchment:#EDE8D0;--neutral:#A8A092;--canvas:#FFFAFA;--ink:#252525;--muted:#6B6559;--border:#D6CEB8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
+                            svg#fig-inference{--forest:#0F2515;--amber:#C8882A;--parchment:#F7F4EA;--neutral:#A8A092;--canvas:#FFFAFA;--ink:#252525;--muted:#6B6559;--border:#D6CEB8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
                             svg#fig-inference .cv{fill:var(--canvas);}
                             svg#fig-inference .layer{fill:var(--canvas);stroke:var(--neutral);stroke-width:1;}
                             svg#fig-inference .l1{fill:var(--parchment);stroke:var(--forest);stroke-width:2;}
@@ -3327,7 +3327,7 @@ function resetSteps() {
                     <svg class="figure-embed" id="fig-gov" viewBox="0 0 860 600" role="img" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Two-panel governance architecture. Left: structural prevention — three deterministic Storyteller L1 vetoes block a non-compliant draft before it becomes an output. Right: explicit authorization — the Confirmation Gate intercepts a consequential action before it is taken, with no-auto-approve enforced.">
                         <title>Governance architecture: structural prevention on the left, the Confirmation Gate on the right</title>
                         <style>
-                            svg#fig-gov{--forest:#0F2515;--amber:#C8882A;--parchment:#EDE8D0;--neutral:#A8A092;--canvas:#FFFAFA;--ink:#252525;--muted:#6B6559;--border:#D6CEB8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
+                            svg#fig-gov{--forest:#0F2515;--amber:#C8882A;--parchment:#F7F4EA;--neutral:#A8A092;--canvas:#FFFAFA;--ink:#252525;--muted:#6B6559;--border:#D6CEB8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
                             svg#fig-gov .cv{fill:var(--canvas);}
                             svg#fig-gov .ey{fill:var(--forest);font-size:11px;font-weight:700;letter-spacing:0.13em;}
                             svg#fig-gov .sh{fill:var(--forest);font-size:15px;font-weight:800;}
@@ -3382,7 +3382,7 @@ function resetSteps() {
                         <!-- outcome -->
                         <rect class="outn" x="64" y="416" width="250" height="42" rx="5"/>
                         <text class="outt" x="76" y="433">Ships to stakeholder</text>
-                        <text class="gs" x="76" y="448" fill="#EDE8D0">only if all three vetoes pass</text>
+                        <text class="gs" x="76" y="448" fill="#F7F4EA">only if all three vetoes pass</text>
                         <!-- down arrows -->
                         <path class="ar" d="M189,192 L189,207"/><polygon class="arh" points="184,201 194,201 189,208"/>
                         <path class="ar" d="M189,260 L189,275"/><polygon class="arh" points="184,269 194,269 189,276"/>
@@ -3527,7 +3527,7 @@ function resetSteps() {
                     <svg class="figure-embed" id="fig-know" viewBox="0 0 880 462" role="img" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Knowledge architecture. The Second Brain vault stores what the system has learned; the CDI Layer activates which methods are available. A circular compounding loop — artifact write, vault entry, CDI update, next Capability Bundle — closes the two, coupled one-to-one.">
                         <title>Knowledge architecture: the vault stores, the CDI Layer activates, and one write-coupling closes the compounding loop</title>
                         <style>
-                            svg#fig-know{--forest:#0F2515;--amber:#C8882A;--parchment:#EDE8D0;--neutral:#A8A092;--canvas:#FFFAFA;--ink:#252525;--muted:#6B6559;--border:#D6CEB8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
+                            svg#fig-know{--forest:#0F2515;--amber:#C8882A;--parchment:#F7F4EA;--neutral:#A8A092;--canvas:#FFFAFA;--ink:#252525;--muted:#6B6559;--border:#D6CEB8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
                             svg#fig-know .cv{fill:var(--canvas);}
                             svg#fig-know .cont{fill:var(--canvas);stroke:var(--forest);stroke-width:1.5;}
                             svg#fig-know .hdr{fill:var(--forest);}
@@ -3694,7 +3694,7 @@ function resetSteps() {
                     <svg class="figure-embed" id="fig-portability" viewBox="0 0 860 440" role="img" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Portability seams and external dependencies. Left: three component-swap seams — the LLM abstraction wrapper, the typed artifact envelope, and the CDI Layer service interfaces — each preserving something specific unchanged through a Phase 4+ migration; the CDI Layer seam is the hard operational dependency. Right: five external dependencies, each with a documented fallback, with internet loss degrading to a functional vault-and-CDI-only mode.">
                         <title>The three portability seams and five external-dependency fallbacks</title>
                         <style>
-                            svg#fig-portability{--forest:#0F2515;--amber:#C8882A;--parchment:#EDE8D0;--neutral:#A8A092;--canvas:#FFFAFA;--ink:#252525;--muted:#6B6559;--border:#D6CEB8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
+                            svg#fig-portability{--forest:#0F2515;--amber:#C8882A;--parchment:#F7F4EA;--neutral:#A8A092;--canvas:#FFFAFA;--ink:#252525;--muted:#6B6559;--border:#D6CEB8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
                             svg#fig-portability .cv{fill:var(--canvas);}
                             svg#fig-portability .ey{fill:var(--forest);font-size:11px;font-weight:700;letter-spacing:0.13em;}
                             svg#fig-portability .ph{fill:var(--forest);font-size:10.5px;font-weight:800;letter-spacing:0.08em;}
@@ -4787,7 +4787,7 @@ function resetSteps() {
                         </table>
                         <svg class="figure-embed" id="fig-cost-mix" viewBox="0 0 720 380" role="img" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Horizontal bar chart of Base-scenario Layer A annual incremental cash cost by component. Platform maintenance at roughly 300 to 350 thousand dollars dwarfs production integration at 75 thousand, API and tokens at 16 to 33 thousand, the parallel runner at 10 thousand, and the warehouse at approximately zero.">
                             <style>
-                                svg#fig-cost-mix{--forest:#0F2515;--amber:#C8882A;--parch:#EDE8D0;--neutral:#A8A092;--canvas:#FFFAFA;--ink:#252525;--muted:#6B6559;--border:#D6CEB8;}
+                                svg#fig-cost-mix{--forest:#0F2515;--amber:#C8882A;--parch:#F7F4EA;--neutral:#A8A092;--canvas:#FFFAFA;--ink:#252525;--muted:#6B6559;--border:#D6CEB8;}
                                 svg#fig-cost-mix .t3{fill:var(--forest);font-family:'Segoe UI',Arial,sans-serif;font-weight:800;font-size:15px;}
                                 svg#fig-cost-mix .t4{fill:var(--muted);font-family:'Segoe UI',Arial,sans-serif;font-weight:400;font-size:11.5px;}
                                 svg#fig-cost-mix .lbl{fill:var(--ink);font-family:'Segoe UI',Arial,sans-serif;font-weight:600;font-size:11.5px;}

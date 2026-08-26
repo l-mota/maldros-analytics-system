@@ -22,7 +22,7 @@ and a new C-NNN entry in Maldros_Change_Tracker.md.
 
 FOREST    = "#0F2515"   # PRIMARY   — authority, structure, baseline
 AMBER     = "#C8882A"   # SECONDARY — finding, focal subject, anomaly
-PARCHMENT = "#EDE8D0"   # TERTIARY  — supporting surfaces, KPI cards
+PARCHMENT = "#F7F4EA"   # TERTIARY  — supporting surfaces, KPI cards (refined from #EDE8D0, C-052 / Portfolio P-177)
 NEUTRAL   = "#A8A092"   # NEUTRAL   — gridlines, structural lines, idle states
 
 # Slot aliases (semantic names)
