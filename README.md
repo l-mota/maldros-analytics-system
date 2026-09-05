@@ -22,7 +22,7 @@ The domain it was built and tested against is fraud, abuse and policy analytics 
 
 ---
 
-## What it's for
+## Industry-wide constraints I'm trying to solve and insights
 
 When I started this, my question wasn't which attacks were happening. It was what the digital and physical fraud and defense ecosystem looks like if you step back far enough to see the structure instead of the incidents. What is actually going on underneath.
 
