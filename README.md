@@ -33,7 +33,7 @@ What the research kept surfacing were problems the industry has not solved, rath
 
 **No structural guarantee.** Agentic systems stall before consequential work because nothing in them prevents a wrong answer from reaching a person looking exactly like a right one. Confidence scoring is the usual answer, and it is a suggestion rather than a control. Maldros replaces it with deterministic checks holding a veto the model cannot overrule, so a draft that fails one does not exist as output rather than existing with a warning attached to it.
 
-**Review capacity as the ceiling.** Where such a system does get deployed, the person checking its output becomes the limit on its throughput, and a reviewer facing a queue of mostly routine items stops reading carefully, so the review is nominally happening and actually is not. Maldros routes automatically: routine operational events go to a log, and sign-off is reserved for novel findings, architectural changes and ship decisions. In the Phase 6 run it routed 175 artifacts correctly with no human involvement at any intermediate step.
+**Review capacity as the ceiling.** Where such a system does get deployed, the person checking its output becomes the limit on its throughput, and a reviewer facing a queue of mostly routine items stops reading carefully, so the review is nominally happening and actually is not. Maldros routes automatically: routine operational events go to a log, and sign-off is reserved for novel findings, architectural changes and ship decisions. In the Phase 6 audit it routed all 175 artifacts — 89 to the log and 86 to sign-off — with no human involvement at any intermediate step; 167 are emitted artifacts and 8 are JSON Schema definitions.
 
 **Metric drift.** Definitions diverge between teams until every cross-functional finding becomes an argument about whose number is right, and that argument happens before anyone can act on the finding. Maldros holds every metric, dimension and entity in a versioned semantic layer carrying its computation logic, its grain and the reasoning behind the policy choice, so a number means the same thing to every agent that touches it and the definition is auditable rather than folkloric.
 
@@ -51,7 +51,7 @@ What exists today is a single-operator build against synthetic data. The directi
 
 ## The finding
 
-**A deterministic rule layer that can overrule the language model is the difference between an agent system that produces output and one you can put in front of a regulator.** Maldros implements that layer and then proves it fires. During Phase 1 development the L1 gate blocked 14 of 18 Storyteller runs; the report could not ship until it was rebuilt to satisfy all three vetoes. One of those blocked drafts is included in this repository — complete on all eighteen required assets, zero missing — still carrying its `BLOCKED` status.
+**A deterministic rule layer that can overrule the language model is the difference between an agent system that produces output and one you can put in front of a regulator.** Maldros implements that layer and then proves it fires. During Phase 1 development the L1 gate blocked 14 of 18 Storyteller runs; the report could not ship until it was rebuilt to satisfy every L1 check. One of those blocked drafts is included in this repository — complete on all eighteen required assets, zero missing — still carrying its `BLOCKED` status.
 
 Most agent demos show you the run that worked. This repository ships the run that didn't, on purpose.
 
@@ -69,15 +69,15 @@ Every figure below is a measured result from a recorded run against the syntheti
 
 | Metric | Value | What it means, and what it doesn't |
 |---|---|---|
-| End-to-end investigation runtime | **288.9 s** | Full Orchestrator → Analyst → Statistician → Storyteller chain, question to written report, no human step in between. Validated via simulation. |
+| End-to-end investigation runtime | **288.9 s** | Full Orchestrator → Analyst → Statistician → Storyteller chain, question to written report, no human step in between — run `6cf9b15c`, whose own draft the L1 gate then blocked at 10.1% coverage. A measured wall-clock, not a governance result. Validated via simulation. |
 | Citation coverage on the report that was **blocked** | **97.2%** | 104 of 107 factual claims traced to a source, and the omission audit clean — blocked anyway, by a different veto entirely. The three checks are independent; clearing two is not a pass. |
-| Citation coverage on the report that **shipped** | **94.6%** | 88 of 93 claims sourced, all three vetoes cleared — Discovery Report `84c4e728`, the run that AIMS Mode B briefing `41954983` derives from. |
+| Citation coverage on the report approved at the Confirmation Gate | **97.9%** | 47 of 48 claims sourced, all five L1 checks cleared — Discovery Report `1b4f50b2` (run `ff0b6f70`), the run that AIMS Mode B briefing `f3d5a232` derives from. It is the only artifact ever approved at the gate; an earlier run passed all three L1 checks at 94.6% but was never submitted. |
 | Coordinated-cluster concentration | **16.54×** | 41 accounts abusing at 16.54× the non-cluster rate — while the Q1 population-level rate was **0.946×** the non-Q1 average. Concentration, not a volume spike. |
 | Q1 financial exposure attributed to API abuse | **$5.89M** | Across US + EU in the synthetic model. A modelled figure over synthetic data, not a real loss. |
-| Artifacts audited under full AIMS | **175** | 100% correct Mode A / Mode B routing, an 89 / 86 split, no human scaffolding at any intermediate step. |
+| Artifacts audited under full AIMS | **175** | 100% routing coverage — an 89 / 86 Mode A / Mode B split with a default to Mode A, as of the Phase 6 audit; 167 are emitted artifacts and 8 are JSON Schema definitions. The router computes counts, not accuracy: no ground-truth labels exist. No human scaffolding at any intermediate step. |
 | Injected pipeline failures detected and repaired | **3 of 3** | Structural break, gradual degradation, cascade — each classified and remediated using strategies drawn from five analogue disciplines. |
 | Blind experiment verdicts | **3 of 3 correct** | NO_SHIP (sample ratio mismatch), HOLD_FOR_HARDENING (brittle design + novelty effect), SHIP. The system was not told which experiment carried which pathology. |
-| Phase 6 demo wall-clock | **73.6 s** | `scripts/phase6/run_phase6_demo.py`, complete run. |
+| Phase 6 demo wall-clock | *not stated* | `scripts/phase6/run_phase6_demo.py` prints the elapsed time and never persists it, so no figure here is traceable to an artifact. Withdrawn rather than restated. |
 
 **Recommendation for a reader with five minutes:** ignore the runtime. It is the least interesting number here. The one that matters is the 97.2% row: a report sourced that thoroughly, stopped dead anyway. A gate that only fires on obviously bad output is not a gate, and that pairing is what separates this from a faster, less careful build.
 
@@ -263,7 +263,7 @@ Stated because a reviewer will find them anyway, and finding them stated is the 
 - **One self-generated improvement proposal is currently blocked at the Confirmation Gate**, awaiting human sign-off. This is the no-auto-approve rule working exactly as specified, and it is listed here as a limitation only because the alternative — quietly approving it — would have been the actual defect.
 - **Known architectural constraints, named in the system's own design documents.** Sequential script execution becomes a throughput bottleneck as agent count and cycle depth grow. DuckDB over Parquet stands in for the intended production warehouse; the migration path is designed but not exercised. This is a single-operator build with no multi-tenant or role-based access model.
 
-- **The capability-multiplier figures are a design target, not a measurement.** What Phase 4 measured is edit distance, which declined across all three tracked query classes. The fifty-cycle `1.65×` / `11.5×` figures that appear in the design documents are a projection reasoned by cross-domain analogy — they were never measured, and they are labelled as projections at every point they appear in this repository. If you encounter any version of this project that presents them as a measured result, that version is wrong and this line supersedes it.
+- **The capability-multiplier figures are a design target, not a measurement.** What Phase 4 measured is edit distance, which declined across all three tracked query classes. The fifty-cycle `1.65×` / `11.5×` figures that appear in the design documents are a projection reasoned by cross-domain analogy — they were never measured, and they are labelled as projections at every point they appear in this repository. The source is `lib/algorithmic_rule.py` lines 24–25, which mark both figures `(projected)`.
 
 **Explicitly out of scope:** real-time streaming ingestion, live external API integration, multi-user access and role-based governance, production SLAs, and model retraining or fine-tuning.
 
