@@ -76,7 +76,7 @@ Every figure below is a measured result from a recorded run against the syntheti
 | Q1 financial exposure attributed to API abuse | **$5.89M** | Across US + EU in the synthetic model. A modelled figure over synthetic data, not a real loss. |
 | Artifacts audited under full AIMS | **175** | 100% routing coverage — an 89 / 86 Mode A / Mode B split with a default to Mode A, as of the Phase 6 audit; 167 are emitted artifacts and 8 are JSON Schema definitions. The router computes counts, not accuracy: no ground-truth labels exist. No human scaffolding at any intermediate step. |
 | Injected pipeline failures detected and repaired | **3 of 3** | Structural break, gradual degradation, cascade — each classified and remediated using strategies drawn from five analogue disciplines. |
-| Blind experiment verdicts | **3 of 3 correct** | NO_SHIP (sample ratio mismatch), HOLD_FOR_HARDENING (brittle design + novelty effect), SHIP. The system was not told which experiment carried which pathology. |
+| Blind experiment verdicts | **3 of 3, single run** | NO_SHIP (sample ratio mismatch), HOLD_FOR_HARDENING (brittle design + novelty effect), SHIP — each matching the pathology planted in that experiment, on one recorded blind run, the system not told which carried which. **Repeat runs do not reproduce these verdicts:** EXP-003 returned HOLD ×3 and NO_SHIP ×1, EXP-004 SHIP ×2 and HOLD ×2; only EXP-001 is unanimous. Never deterministic, never reproducible. |
 | Phase 6 demo wall-clock | *not stated* | `scripts/phase6/run_phase6_demo.py` prints the elapsed time and never persists it, so no figure here is traceable to an artifact. Withdrawn rather than restated. |
 
 **Recommendation for a reader with five minutes:** ignore the runtime. It is the least interesting number here. The one that matters is the 97.2% row: a report sourced that thoroughly, stopped dead anyway. A gate that only fires on obviously bad output is not a gate, and that pairing is what separates this from a faster, less careful build.
@@ -89,7 +89,7 @@ Four claims, each followed immediately by the source that proves it. These are e
 
 ### Claim 1 — Three deterministic vetoes can block a finished report, and the LLM cannot override them
 
-The Storyteller Agent produces the human-facing output. Before anything ships, three non-LLM checks run — and each is cruder than the phrase "AI guardrail" tends to suggest, which is the point of them.
+The Storyteller Agent produces the human-facing output. Before anything ships, three deterministic vetoes run alongside two C-020 checks — five conditions in all, and the code block below is their conjunction. Each of the three vetoes is cruder than the phrase "AI guardrail" tends to suggest, which is the point of them.
 
 - **The causal-language veto** is a twelve-term banned-phrase list — "caused by", "drove", "led to", "due to", "responsible for" and seven others — matched by word-boundary regex, carrying an exemption list so that methodology language such as *"underpowered due to small sample size"* reads as a statement about a test rather than a causal claim about the data.
 - **The citation check** is a footnote-marker scan. It segments the stakeholder-facing section into factual sentences, looks for a `[^N]` marker in proximity to each, and excludes meta-fields from the denominator.
@@ -234,7 +234,7 @@ The directory structure is the architecture. Each top-level folder maps to a lay
 | **Diagnostic** | Continuous read-only monitoring on an L0–L4 escalation ladder. Deliberately has no write access. |
 | **Healing** | Characterises a failure, retrieves repair strategies across five analogue disciplines, scores, applies, verifies. Drafts only — never merges to production. |
 | **Red-Team** | Adversarial stress testing across twelve evasion categories. Returns Robust / Conditionally Robust / Brittle. No live-data access by design. |
-| **Forge** | The invention engine. Operates all seven reasoning modes under an explicit novelty floor, and is required to survive Red-Team review *before* statistical validation rather than after. |
+| **Forge** | The invention engine. Declares a generation mode per invention cycle from a seven-mode reasoning registry — the declaration is mandatory — under an explicit novelty floor, and is required to survive Red-Team review *before* statistical validation rather than after. |
 
 ---
 
