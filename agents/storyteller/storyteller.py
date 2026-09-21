@@ -1596,7 +1596,7 @@ class StorytellerAgent:
         if not c020_check["passed"]:
             print(f"[Storyteller] C-020 VETO: Executive-layer rule violations — {c020_check['violations']}")
 
-        # Check 5: C-020 Mode B Readiness Checklist (six criteria)
+        # Check 5: C-020 Mode B Readiness Checklist (seven criteria)
         readiness_check = _c020_readiness_checklist(mode_b_section, citation_check)
         if not readiness_check["passed"]:
             print(f"[Storyteller] C-020 READINESS: {readiness_check['failed_criteria']}")
