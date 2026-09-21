@@ -30,7 +30,7 @@ np.random.seed(42)
 RNG = np.random.default_rng(42)
 
 # ── PATHS ─────────────────────────────────────────────────────────────────────
-BASE = Path(__file__).resolve().parents[2]
+BASE = Path(__file__).resolve().parents[1]
 OUT  = BASE / "data" / "raw"
 OUT.mkdir(parents=True, exist_ok=True)
 
