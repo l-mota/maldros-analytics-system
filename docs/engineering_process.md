@@ -20,6 +20,8 @@ Three documents govern the build, in a fixed authority order:
 | 2 | The architectural overview | The seven-layer architecture, technology stack, data flow, the agent interaction map, the eleven-step execution lifecycle, operator interface design |
 | 3 | The implementation plan | Phase-by-phase deliverables, exit criteria, risk register, dependency map, honest scope assessment |
 
+**None of these three documents is published, and neither are the AIMS governance logs:** like the change log described above, the runtime system prompt (`analytics_engineering_system_prompt.md`, which files in this repository cite as spec-authoritative or canonical) and the `aims/` logs (including `confirmation_gate_log.jsonl`, the governance audit log the case study cites) stay internal to the build.
+
 The visual design system sits outside this ranking as a **peer authority for visual decisions**, non-overridable by the other three on any visual matter.
 
 The ordering exists to answer a specific question: when two documents disagree, which one wins? Without a declared rank, a conflict gets resolved by whichever document the implementer happened to read most recently — which is how specifications quietly diverge from the systems built to satisfy them. The rule adopted here is stricter than "pick the higher-ranked document": **conflicts are surfaced to the operator, never silently resolved.** Where a specification is ambiguous or self-contradictory, the correct action is to stop and ask, not to choose.

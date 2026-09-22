@@ -235,7 +235,11 @@ def evaluate_artifact_for_gate(
     Evaluate whether an artifact should be routed through the Confirmation Gate.
     Returns a gate_trigger dict if gating is needed, None if not.
 
-    This is called by the Orchestrator on every artifact before delivery.
+    Not currently called: the Orchestrator imports it (orchestrator.py:31) but
+    never invokes it. The only check_and_gate() call site is the operator CLI
+    in _cli() below. Against the current artifact store only the red_team_report
+    branch can fire; the statistical_result, aims_mode_b and discovery_report
+    branches read fields that no current artifact carries.
     """
     if config is None:
         with open(OPERATOR_CONFIG_FILE, "r", encoding="utf-8") as f:
@@ -247,7 +251,7 @@ def evaluate_artifact_for_gate(
 
     # Red-Team Brittle verdict
     if artifact_type == "red_team_report":
-        if triggers.brittle_red_team_verdict(content.get("verdict", "")):
+        if triggers.brittle_red_team_verdict(content.get("overall_verdict", "")):
             return {
                 "trigger_reason": "Red-Team Agent returned Brittle verdict — do not ship without remediation",
                 "trigger_category": "brittle_red_team_verdict",

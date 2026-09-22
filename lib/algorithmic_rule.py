@@ -197,14 +197,14 @@ class AlgorithmicRule:
             "cycle_number": cycle["cycle_number"],
             "task_id": task_id,
             "constraint_id": constraint.get("constraint_id", constraint.get("id", "CR-UNKNOWN")),
-            "constraint_description": constraint.get("description", ""),
+            "constraint_description": constraint.get("description", constraint.get("summary", constraint.get("title", ""))),
             "hypothesis": hypothesis,
             "justification": (
                 f"Algorithmic Rule cycle (#{cycle['cycle_number']}, every "
                 f"{int(100 / cycle['exploration_percent'])}th cycle). Diverted from "
                 f"standard high-probability investigation queue to test counter-intuitive "
                 f"hypothesis drawn from open Constraint Register entry "
-                f"{constraint.get('id', 'CR-UNKNOWN')}."
+                f"{constraint.get('constraint_id', constraint.get('id', 'CR-UNKNOWN'))}."
             ),
             "timestamp_utc": _now_iso(),
             "outcome": "DIVERTED — awaiting downstream investigation",
@@ -213,7 +213,7 @@ class AlgorithmicRule:
         # Mark fired in persistent state + record constraint usage
         state = self._load_state()
         state["exploration_cycles_fired"] = state.get("exploration_cycles_fired", 0) + 1
-        state["last_constraint_used"] = constraint.get("id")
+        state["last_constraint_used"] = constraint.get("constraint_id", constraint.get("id", "CR-UNKNOWN"))
         cid = constraint.get("constraint_id", constraint.get("id", "CR-UNKNOWN"))
         state.setdefault("constraint_use_counts", {})
         state["constraint_use_counts"][cid] = state["constraint_use_counts"].get(cid, 0) + 1

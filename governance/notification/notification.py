@@ -88,8 +88,8 @@ class NotificationMechanism:
         with open(NOTIFICATION_LOG, "a", encoding="utf-8") as f:
             f.write(json.dumps(notification) + "\n")
 
-        # HIGH/CRITICAL also write to AIMS Mode A
-        if severity in (Severity.HIGH, Severity.CRITICAL):
+        # Design Invariant guard: UNDISABLEABLE_SEVERITIES always write to AIMS Mode A
+        if severity in UNDISABLEABLE_SEVERITIES:
             self._write_to_aims_mode_a(notification)
 
         # Console output for in-app display
