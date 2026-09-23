@@ -9,9 +9,9 @@ Translates Evidence Bundle + Statistical Result into:
 
 Three L1 rules are deterministic vetoes — cannot be overridden:
 1. Causal language veto: no "caused by", "drove", "led to" without causal evidence
-2. Citation coverage: L1 uses an 80% citation coverage threshold at Phase 1
-   (Phase 2 raises to 100%); factual claims are linked to the artifact
-   citation index. See known_limitations on the emitted Discovery Report.
+2. Citation coverage: L1 enforces an 80% citation coverage floor; a Phase 2
+   raise to 100% was specified, never implemented. Factual claims are linked to
+   the artifact citation index. See known_limitations on the emitted Discovery Report.
 3. Omission audit: all material findings in evidence_bundle + statistical_result must appear
 
 An output that fails any L1 check is BLOCKED and returned — not shipped.
@@ -562,7 +562,7 @@ def _l1_check_citation_coverage(text: str, mode_b_section: dict) -> dict:
       - Every [^N] marker used inline must appear as a footnote entry.
       - Every footnote entry must have a recognized "source" value.
 
-    Phase 1 threshold: 80% of factual claims cited; Phase 2 raises to 100%.
+    Phase 1 threshold: 80% of factual claims cited; a Phase 2 raise to 100% was specified, never implemented.
     """
     factual_patterns = [
         r'\d+\.?\d*%',           # percentages: 10%, 10.5%
