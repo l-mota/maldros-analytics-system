@@ -7,7 +7,7 @@ Entry points for the six phase demonstrations, plus the report renderer. Each sc
 | `phase1/run_investigation.py` | The first end-to-end investigation: Orchestrator → Analyst → Statistician → Storyteller, one natural-language question to one governed output. |
 | `phase2/inject_failures.py` | Injects three synthetic failure scenarios — structural break, gradual degradation, cascade — into copies of the baseline tables. |
 | `phase2/run_phase2_demo.py` | The self-healing demonstration: detection, severity classification, and cross-domain remediation of those three failures. |
-| `phase3/run_phase3_demo.py` | Experiment analysis with the Red-Team Agent — three experiments analysed blind, with no advance disclosure of which carried which pathology. |
+| `phase3/run_phase3_demo.py` | Experiment analysis with the Red-Team Agent — three experiments with planted pathologies (the planted flags and notes are part of the agents' input). |
 | `phase4/run_phase4_demo.py` | The self-improving cycle: telemetry capture, promotion gate, few-shot bank, and the exploration rule firing on schedule. |
 | `phase5/run_phase5_demo.py` | The Forge — invention cycles under the novelty floor, with adversarial review preceding statistical validation rather than following it. |
 | `phase6/run_phase6_demo.py` | Full AIMS routing end to end, terminating at the Confirmation Gate. |
