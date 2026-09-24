@@ -1,6 +1,6 @@
 # `data/`
 
-The synthetic dataset layer. Seven tables modelling eighteen months of AI-platform fraud, abuse and financial-impact analytics, generated under a fixed seed. The data is engineered to be analytically difficult rather than merely large: coordinated clusters that graph analysis finds but thresholds do not, gradual escalation detectable only sequentially, and deliberately injected experiment pathologies.
+The synthetic dataset layer. Seven tables modelling eighteen months of AI-platform fraud, abuse and financial-impact analytics, generated under a fixed seed. The data is engineered to be analytically difficult rather than merely large: coordinated clusters that graph analysis finds but aggregate thresholds do not, gradual escalation detectable only sequentially, and deliberately injected experiment pathologies.
 
 | Path | What it is |
 |---|---|
