@@ -42,7 +42,7 @@ relevance: Adversarial stress testing; 12 evasion categories; Robust/Conditional
 
 ## Phase 3 Acceptance Criterion
 
-The Red-Team Agent must find the injected Brittle design in the dataset **without being told which experiment contains it**. Finding it without hints is the Phase 3 exit criterion.
+The Red-Team Agent must find the injected Brittle design in the dataset **without being told which experiment contains it**. Finding it without hints is the Phase 3 exit criterion. As built, the planted flags and analyst notes reach the Red-Team; a recorded run returned the expected Brittle verdict.
 
 ## Artifact Outputs
 

@@ -28,7 +28,7 @@ Start at a finding. End at the agent that stress-tested a different finding, and
 
 **1 · The investigation** → [Analysis — Is the spike in API abuse volume in Q1](analyses/q1-api-abuse-investigation.md)
 
-The Analyst Agent asks whether a Q1 abuse spike is coordinated or organic. It concludes `COORDINATED_ABUSE` — 41 accounts, 25.87% of Q1 abuse events. It also records that the spike it was sent to investigate does not exist (ratio 0.946). Its `## Links` section cites the metric it measured with.
+The Analyst Agent asks whether a Q1 abuse spike is coordinated or organic. It concludes `COORDINATED_ABUSE` — a 41-account graph cluster (19 of them in the dataset's labelled rings), 25.87% of Q1 abuse events. It also records that the spike it was sent to investigate does not exist (ratio 0.946). Its `## Links` section cites the metric it measured with.
 
 **2 · The metric it cites** → [api_abuse_rate](metrics/api_abuse_rate.md)
 
