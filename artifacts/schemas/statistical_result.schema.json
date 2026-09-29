@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "maldros/statistical_result/1.0.0",
   "title": "Statistical Result",
-  "description": "Produced by the Statistician Agent. Validates all inferences from the Evidence Bundle. Includes experiment analysis, SRM/novelty detection, and ship/no-ship verdicts.",
+  "description": "Produced by the Statistician Agent. Checks the Analyst's conclusion against the Evidence Bundle. Includes experiment analysis, an SRM check, a hold rule for suspected novelty effects, and ship/no-ship verdicts.",
   "type": "object",
   "required": ["artifact_id","artifact_type","schema_version","phase_of_origin","producing_agent","timestamp_utc","provenance","content_hash","confidence_score","known_limitations","content"],
   "properties": {

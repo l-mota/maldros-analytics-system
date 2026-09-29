@@ -229,7 +229,7 @@ The directory structure is the architecture. Each top-level folder maps to a lay
 | **Orchestrator** | Decomposes the question, queries the knowledge vault, emits a Capability Bundle as the first artifact of every task, routes to specialists. |
 | **Data Architect** | Designs and validates data models and semantic-layer definitions. |
 | **Analyst** | Hypotheses → query → Python execution → interpretation → recommendations. |
-| **Statistician** | Validates every inference; experiment analysis; sample-ratio-mismatch detection and novelty-effect checks; ship / no-ship verdicts. |
+| **Statistician** | Checks the Analyst's conclusion in a separate pass; experiment analysis; sample-ratio-mismatch detection and novelty-effect checks; ship / no-ship verdicts. |
 | **Storyteller** | Dual-layer output — technical and plain-language. Translates; never derives. Renders its own charts. Subject to the three vetoes above. |
 | **Diagnostic** | Continuous read-only monitoring on an L0–L4 escalation ladder. Deliberately has no write access. |
 | **Healing** | Characterises a failure, retrieves repair strategies across five analogue disciplines, scores, applies, verifies. Drafts only — never merges to production. |

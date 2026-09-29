@@ -2,12 +2,12 @@
 source: Maldros system specification
 created: 2026-06-08
 content_hash: agent/statistician/v1.0.0
-relevance: Validates all inferences; experiment analysis; SRM/novelty detection; ship/no-ship verdicts
+relevance: Checks the Analyst's conclusion; experiment analysis; SRM check; a hold rule for suspected novelty effects; ship/no-ship verdicts
 ---
 
 # Statistician Agent
 
-**Mandate:** Validate all inferences from the `Evidence Bundle`. Experiment analysis. SRM/novelty effect detection. Ship/no-ship verdicts.
+**Mandate:** Check the Analyst's conclusion against the `Evidence Bundle`. Experiment analysis. SRM check; a hold rule for suspected novelty effects. Ship/no-ship verdicts.
 
 **Phase:** Implemented in `Phase 1 — First End-to-End` (experiment analysis in `Phase 3`)
 
